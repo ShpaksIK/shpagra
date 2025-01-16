@@ -1,0 +1,20 @@
+
+.typeFilter > label {
+    font-size: 20px;
+}
+
+.select  {
+    height: 75%;
+    outline: none;
+    border: 1px solid var(--color-blue-light);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+@media screen and (max-width: 800px) {
+    .filter {
+        width: 95%;
+        margin-left: 2.5%;
+    }
+}

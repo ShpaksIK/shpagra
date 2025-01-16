@@ -1,0 +1,23 @@
+.error_block {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 20px;
+}
+.error {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid #fe5d5d;
+    background-color: rgb(255, 194, 194);
+    padding: 20px;
+}
+
+.error > img {
+    width: 40px;
+}
+
+.error > p {
+    color: #000;
+}

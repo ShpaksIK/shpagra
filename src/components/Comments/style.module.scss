@@ -1,0 +1,122 @@
+.comments {
+    width: 100%;
+    border-top: 1px solid var(--color-light);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.comments_send {
+    textarea {
+        width: 100%;
+        max-height: 200px;
+        outline: none;
+        border: 1px solid var(--color-blue-light);
+        border-radius: 5px;
+        padding: 5px;
+    }
+    textarea:focus {
+        border: 1px solid var(--color-blue-dark);
+    }
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        background-color: var(--color-blue-light);
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        height: 35px;
+        color: #fff;
+        cursor: pointer;
+    }
+    button:hover {
+        transition: .2s;
+        background-color: var(--color-blue-dark);
+    }
+}
+
+.error {
+    color: var(--color-error);
+    padding-bottom: 5px;
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.comment_header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment_header_profile {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    img {
+        width: 30px;
+        height: 30px;
+        background-color: var(--color-blue-light);
+        border-radius: 50%;
+    }
+}
+
+.comment_header_date > p {
+    color: var(--color-text-gray);
+    font-size: 14px;
+}
+
+.comment_content {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: space-between;
+
+    img {
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+    }
+}
+
+.comment_content_footer {
+    display: flex;
+    gap: 5px;
+}
+
+.comment_footer_block {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background-color: var(--color-light);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.comment_footer_block_like {
+    background-color: var(--color-like);
+    p {
+        color: red;
+    }
+}
+
+.comment_footer_block_dislike {
+    background-color: var(--color-text);
+    p {
+        color: #fff;
+    }
+}
+
+.dislike img {
+    transform: rotate(180deg);
+}
+
+.comment_footer_block > img {
+    width: 20px;
+}

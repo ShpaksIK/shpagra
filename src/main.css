@@ -1,0 +1,44 @@
+:root {
+    --bgColor-main: #eee;
+
+    --color-text: #222831;
+    --color-text-gray: #808080;
+
+    --color-error: #de5959;
+    --color-like: #ff4c4c46;
+
+    --color-dark: #31363F;
+    --color-light: #eee;
+
+    --color-blue-light: #76ABAE;
+    --color-blue-dark: #5C8374;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: var(--color-text);
+    font-size: 17px;
+}
+
+body {
+    background-color: var(--bgColor-main);
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+h3 {
+    font-size: 30px;
+}
+
+p {
+    word-break: break-all;
+}
