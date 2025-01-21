@@ -40,6 +40,9 @@ main {
 
 .right_blocks {
     width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .block1 {
@@ -47,9 +50,13 @@ main {
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
+    
+    button {
+        margin-top: 10px;
+    }
 }
 
-.block2 {
+.content_block {
     width: 50vw;
     padding: 20px;
     background-color: #fff;
@@ -90,6 +97,10 @@ main {
     padding: 5px;
 }
 
+.post {
+    width: 100%;
+}
+
 .error {
     color: var(--color-error);
 }
@@ -116,18 +127,16 @@ main {
     height: 20px;
 }
 
-.articles_title > b {
+.content_title > b {
     font-size: 40px;
 }
 
-.articles_body {
+.content_body {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    padding-bottom: 50px;
 }
 
 .button {
@@ -149,12 +158,26 @@ main {
     background-color: var(--color-blue-dark);
 }
 
-.article {
-    border: 1px solid var(--color-text-gray);
-    border-radius: 10px;
+.button_insert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid var(--color-blue-light);
+    outline: none;
+    color: var(--color-blue-dark);
+    height: 35px;
+    cursor: pointer;
 }
 
-.articles_body_error {
+.button_insert:hover {
+    transition: .2s;
+    background-color: #f3f3f3;
+}
+
+.content_body_error {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -181,6 +204,9 @@ main {
     .block1 {
         width: 100%;
         min-width: 100px;
+    }
+    .content_block {
+        width: 100%;
     }
 }
 

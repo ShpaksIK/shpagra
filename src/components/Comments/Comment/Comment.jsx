@@ -37,24 +37,26 @@ const Comment = (props) => {
             </div>
             <div className={style.comment_content}>
                 <p>{props.commentData.text}</p>
-                <div className={style.comment_content_footer}>
-                    <div className={classNames(
-                            style.comment_footer_block, 
-                            {[`${style.comment_footer_block_like}`]: isLike}
-                        )} 
-                        onClick={() => likeComment(props.commentData.id, props.id)}>
-                            <img src={likeSVG} />
-                            <p>{props.commentData.likes_count}</p>
+                {props.isAuth && (
+                    <div className={style.comment_content_footer}>
+                        <div className={classNames(
+                                style.comment_footer_block, 
+                                {[`${style.comment_footer_block_like}`]: isLike}
+                            )} 
+                            onClick={() => likeComment(props.commentData.id, props.id)}>
+                                <img src={likeSVG} />
+                                <p>{props.commentData.likes_count}</p>
+                        </div>
+                        <div className={classNames(
+                                style.comment_footer_block, style.dislike, 
+                                {[`${style.comment_footer_block_dislike}`]: isDislike}
+                            )} 
+                            onClick={() => dislikeComment(props.commentData.id, props.id)}>
+                                <img src={likeSVG} />
+                                <p>{props.commentData.dislike_count}</p>
+                        </div>
                     </div>
-                    <div className={classNames(
-                            style.comment_footer_block, style.dislike, 
-                            {[`${style.comment_footer_block_dislike}`]: isDislike}
-                        )} 
-                        onClick={() => dislikeComment(props.commentData.id, props.id)}>
-                            <img src={likeSVG} />
-                            <p>{props.commentData.dislike_count}</p>
-                    </div>
-                </div>
+                )}
             </div>
         </div>
     )
@@ -62,6 +64,7 @@ const Comment = (props) => {
 
 const mapStateToProps = (state) => {
     return {
+        isAuth: state.auth.isAuth,
         id: state.auth.id
     }
 }

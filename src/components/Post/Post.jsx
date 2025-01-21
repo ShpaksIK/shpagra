@@ -22,7 +22,7 @@ const Post = (props) => {
     return (
         <div className={style.post}>
             <div className={style.post_author}>
-                <Link to={`/profile/${props.postData.authorId}`}><img src='https://zornet.ru/_fr/19/0640572.png' /></Link>
+                <Link to={`/profile/${props.postData.author_id}`}><img src='https://zornet.ru/_fr/19/0640572.png' /></Link>
                 <Link className={style.linkAuthor} to={`/profile/${props.postData.author_id}`}>{props.postData.author}</Link>
             </div>
             <div className={style.post_info}>

@@ -74,6 +74,9 @@
 }
 
 .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 300px;
     background-color: var(--color-blue-light);
     border-radius: 5px;
@@ -122,10 +125,13 @@
     color: var(--color-text-red);
 }
 
-
 .success {
     text-align: center;
     margin: 0 10px;
+}
+
+.error {
+    color: var(--color-error);
 }
 
 

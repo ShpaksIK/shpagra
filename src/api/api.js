@@ -13,7 +13,7 @@ import { users, articles, posts, comments } from './../redux/db'
 export const authAPI = {
     me() {
         return new Promise((resolve) => {
-            resolve(users['1'])
+            resolve()
         }).then(data => data)
     }
 }
@@ -23,6 +23,26 @@ export const profileAPI = {
         return new Promise((resolve) => {
             resolve(users[id])
         }).then(data => data)
+    },
+    subscribe(id, authId) {
+        return new Promise((resolve) => {
+            let subscribeType
+            if (users[authId].followeds_id.filter(u => u === id).length === 0) {
+                users[id].followers_count += 1
+                users[id].followers_id = [...users[id].followers_id, authId]
+                users[authId].followeds_id = [...users[authId].followeds_id, id]
+                subscribeType = 'sub'
+            } else {
+                users[id].followers_count -= 1
+                users[id].followers_id = users[id].followers_id.filter(u => u !== authId)
+                users[authId].followeds_id = users[authId].followeds_id.filter(u => u !== id)
+                subscribeType = 'unsub'
+            }
+            resolve({
+                'statusCode': 0,
+                'type': subscribeType
+            })
+        })
     }
 }
 
@@ -57,7 +77,7 @@ export const articlesAPI = {
                 }
             }
             resolve({
-                'statusCode': 10
+                'statusCode': 0
             })
         })
     }
@@ -75,7 +95,7 @@ export const postsAPI = {
     },
     getProfilePosts(profileId) {
         return new Promise((resolve) => {
-            setTimeout(() => resolve(posts[`${profileId}`]), 2000)
+            setTimeout(() => resolve(posts[`${profileId}`]), 0)
             // resolve(posts[`${profileId}`])
         })
     },

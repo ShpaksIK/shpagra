@@ -23,13 +23,13 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className={style.right}>
-                    <h3>NeDoDzen - площадка для размещения постов</h3>
+                    <h3>Shpagra - социальная сеть для общения, размещения статей и постов</h3>
                     <p>Используется только в России.</p>
                 </div>
             </div>
         
             <div className={style.copyright}>
-                <p>Copyright | NeDoDzen | 2024</p>
+                <p>Copyright | Shpagra | 2025</p>
             </div>
         </div>
     )

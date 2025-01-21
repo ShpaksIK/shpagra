@@ -15,8 +15,10 @@ const Article = (props) => {
     const [isOpenComments, setIsOpenComments] = useState(false)
 
     const likeArticle = (profileId, postId) => {
-        setIsLike(!isLike)
-        props.likeArticle(profileId, postId, props.id)
+        if (props.isAuth) {
+            setIsLike(!isLike)
+            props.likeArticle(profileId, postId, props.id)
+        }
     }
     
     const scopesElements = props.articleData.scopes.map((scop) => <div key={scop}>{scop}</div>)
@@ -85,6 +87,7 @@ const Article = (props) => {
 
 const mapStateToProps = (state) => {
     return {
+        isAuth: state.auth.isAuth,
         id: state.auth.id,
         mainArticles: state.article.mainArticles,
         profileArticles: state.article.profileArticles

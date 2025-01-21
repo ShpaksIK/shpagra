@@ -116,9 +116,13 @@ export const getProfileArticles = (profileId) => async (dispatch) => {
 }
 
 export const likeArticle = (profileId, articleId, authId) => async (dispatch) => {
-    const data = await articlesAPI.likeArticle(profileId, articleId, authId)
-    if (data.statusCode !== 1) {
-        setError('Невозможно поставить лайк')
+    if (authId) {     
+        const data = await articlesAPI.likeArticle(profileId, articleId, authId)
+        if (data.statusCode !== 1) {
+            setError('Невозможно поставить лайк')
+        }
+    } else {
+        setError('Войдите в аккаунт, прежде чем ставить лайк')
     }
 }
 

@@ -122,6 +122,7 @@ export const sendPost = (text) => async (dispatch, getState) => {
         'created_at': new Date().getTime(),
         'likes_count': 0,
         'likes_id': [],
+        'comments_count': 0,
         'comments_id': [],
         'author': getState().auth.username,
         'author_id': getState().auth.id
