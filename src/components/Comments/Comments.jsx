@@ -25,6 +25,13 @@ const Comments = (props) => {
         props.setCommentsFilterTypeAC(event.target.value)
     }
 
+    let newComments, oldComments, popularComments
+    if (props.commentsData) {
+        newComments = props.commentsData.slice().sort((a, b) => b.id - a.id)
+        oldComments = newComments.reverse()
+        popularComments = props.commentsData.slice().sort((a, b) => b.likes_count - a.likes_count)
+    }
+
     return (
         <div className={style.comments}>
             {props.commentsData && (
@@ -42,13 +49,13 @@ const Comments = (props) => {
                                 <option value='old'>Старые</option>
                             </select>
                             {selectedFilter === 'popular' && (
-                                props.commentsData ? props.commentsData.map(com => <Comment key={`com-${com.id}`} commentData={com} />) : <Preloader />
+                                popularComments.map(com => <Comment key={`com-${com.id}`} commentData={com} />)
                             )}
                             {selectedFilter === 'new' && (
-                                props.commentsData ? props.commentsData.reverse().map(com => <Comment key={`com-${com.id}`} commentData={com} />) : <Preloader />
+                                newComments.reverse().map(com => <Comment key={`com-${com.id}`} commentData={com} />)
                             )}
                             {selectedFilter === 'old' && (
-                                props.commentsData ? props.commentsData.map(com => <Comment key={`com-${com.id}`} commentData={com} />) : <Preloader />
+                                oldComments.map(com => <Comment key={`com-${com.id}`} commentData={com} />)
                             )}
                         </>
                     )}
@@ -59,6 +66,9 @@ const Comments = (props) => {
                         <Link to='/login'><button className={style.button_insert}>Оставьте комментарий</button></Link>
                     )}
                 </>
+            )}
+            {!props.commentsData && (
+                <Preloader />
             )}
         </div>
     )
