@@ -41,6 +41,28 @@
     }
 }
 
+.comments_none {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+
+    p {
+        color: var(--color-text-gray);
+    }
+}
+
+.comments_filter  {
+    outline: none;
+    border: 1px solid #000;
+    color: #000;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 10px;
+    max-width: 150px;
+    cursor: pointer;
+}
+
 .error {
     color: var(--color-error);
     padding-bottom: 5px;

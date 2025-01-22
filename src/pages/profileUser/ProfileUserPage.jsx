@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import style from './style.module.scss'
@@ -15,6 +16,8 @@ import { subscribe } from '../../redux/reducers/profileReducer'
 
 
 const ProfileUserPage = (props) => {
+    const navigate = useNavigate()
+
     // Состояния для изменения Preloader на надпись об отсутствии статей и постов
     const [loadArticlesBlock, setLoadArticlesBlock] = useState(<Preloader />)
     const [loadPostsBlock, setLoadPostsBlock] = useState(<Preloader />)
@@ -46,7 +49,7 @@ const ProfileUserPage = (props) => {
         if (props.isAuth) {
             props.subscribe(toSubscribeId)
         } else {
-            <Navigate to='/login' />
+            navigate('/login')
         }
     }
 

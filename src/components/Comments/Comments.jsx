@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import style from './style.module.scss'
 import { getArticleComments, getPostComments } from '../../redux/reducers/commentReducer'
+import { setCommentsFilterTypeAC } from '../../redux/reducers/appReducer.js'
 import Comment from './Comment/Comment'
 import Preloader from '../Preloader/Preloader'
 import CommentsForm from './CommentsForm/CommentsForm'
@@ -18,14 +19,46 @@ const Comments = (props) => {
         }
     }, [])
 
+    const [selectedFilter, setSelectedFilter] = useState(props.commentsFilterType)
+    const handleFilterChange = (event) => {
+        setSelectedFilter(event.target.value)
+        props.setCommentsFilterTypeAC(event.target.value)
+    }
+
     return (
         <div className={style.comments}>
-            {props.commentsData ? props.commentsData.map(com => <Comment key={`com-${com.id}`} commentData={com} />) : <Preloader />}
-            {props.isAuth && (
-                <CommentsForm commentsId={props.commentsId} objectId={props.objectId} authorId={props.authorId} objectType={props.objectType} sendType={props.sendType} />
-            )}
-            {!props.isAuth && (
-                <Link to='/login'><button className={style.button_insert}>Оставьте комментарий</button></Link>
+            {props.commentsData && (
+                <>
+                    {props.commentsData.length === 0 && (
+                        <div className={style.comments_none}>
+                            <p>Комментариев нет. Прокомментируйте первым!</p>
+                        </div>
+                    )}
+                    {props.commentsData.length > 0 && (
+                        <>
+                            <select className={style.comments_filter} value={selectedFilter} onChange={handleFilterChange}>
+                                <option value='popular'>Популярные</option>
+                                <option value='new'>Новые</option>
+                                <option value='old'>Старые</option>
+                            </select>
+                            {selectedFilter === 'popular' && (
+                                props.commentsData ? props.commentsData.map(com => <Comment key={`com-${com.id}`} commentData={com} />) : <Preloader />
+                            )}
+                            {selectedFilter === 'new' && (
+                                props.commentsData ? props.commentsData.reverse().map(com => <Comment key={`com-${com.id}`} commentData={com} />) : <Preloader />
+                            )}
+                            {selectedFilter === 'old' && (
+                                props.commentsData ? props.commentsData.map(com => <Comment key={`com-${com.id}`} commentData={com} />) : <Preloader />
+                            )}
+                        </>
+                    )}
+                    {props.isAuth && (
+                        <CommentsForm commentsId={props.commentsId} objectId={props.objectId} authorId={props.authorId} objectType={props.objectType} sendType={props.sendType} />
+                    )}
+                    {!props.isAuth && (
+                        <Link to='/login'><button className={style.button_insert}>Оставьте комментарий</button></Link>
+                    )}
+                </>
             )}
         </div>
     )
@@ -34,7 +67,8 @@ const Comments = (props) => {
 const mapStateToProps = (state) => {
     return {
         isAuth: state.auth.isAuth,
+        commentsFilterType: state.app.commentsFilterType
     }
 }
 
-export default connect(mapStateToProps, {getArticleComments, getPostComments})(Comments)
+export default connect(mapStateToProps, {getArticleComments, getPostComments, setCommentsFilterTypeAC})(Comments)

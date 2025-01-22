@@ -1,7 +1,7 @@
 import { commentsAPI } from "../../api/api"
 import { createComment } from "../../utils/commentCreator"
-import { setCommentsMainArticle, setCommentsProfileArticle } from "./articleReducer"
-import { setCommentsMainPost, setCommentsProfilePost } from "./postReducer"
+import { setCommentsMainArticleAC, setCommentsProfileArticleAC } from "./articleReducer"
+import { setCommentsMainPostAC, setCommentsProfilePostAC } from "./postReducer"
 import { setError } from "./errorReducer"
 
 
@@ -10,9 +10,9 @@ export const getArticleComments = (commentsId, articleId, articleType = 'main') 
     const data = await commentsAPI.getComments(commentsId)
     if (data.statusCode === 1) {
         if (articleType === 'main') {
-            dispatch(setCommentsMainArticle(data.data, articleId))
+            dispatch(setCommentsMainArticleAC(data.data, articleId))
         } else {
-            dispatch(setCommentsProfileArticle(data.data, articleId))
+            dispatch(setCommentsProfileArticleAC(data.data, articleId))
         }
     } else {
         setError('Не удалось получить комментарии')
@@ -23,9 +23,9 @@ export const getPostComments = (commentsId, articleId, postType = 'main') => asy
     const data = await commentsAPI.getComments(commentsId)
     if (data.statusCode === 1) {
         if (postType === 'main') {
-            dispatch(setCommentsMainPost(data.data, articleId))
+            dispatch(setCommentsMainPostAC(data.data, articleId))
         } else {
-            dispatch(setCommentsProfilePost(data.data, articleId))
+            dispatch(setCommentsProfilePostAC(data.data, articleId))
         }
     } else {
         setError('Не удалось получить комментарии')

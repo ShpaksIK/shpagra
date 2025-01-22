@@ -15,8 +15,10 @@ const Post = (props) => {
     const [isOpenComments, setIsOpenComments] = useState(false)
     
     const likePost = (profileId, postId) => {
-        setIsLike(!isLike)
-        props.likePost(profileId, postId, props.id)
+        if (props.isAuth) {
+            setIsLike(!isLike)
+            props.likePost(profileId, postId, props.id)
+        }
     }
 
     return (
@@ -55,6 +57,7 @@ const Post = (props) => {
 
 const mapStateToProps = (state) => {
     return {
+        isAuth: state.auth.isAuth,
         id: state.auth.id,
         mainPosts: state.post.mainPosts,
         profilePosts: state.post.profilePosts

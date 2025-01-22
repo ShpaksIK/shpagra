@@ -13,7 +13,7 @@ import { users, articles, posts, comments } from './../redux/db'
 export const authAPI = {
     me() {
         return new Promise((resolve) => {
-            resolve()
+            resolve(users['1'])
         }).then(data => data)
     }
 }

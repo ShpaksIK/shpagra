@@ -67,7 +67,7 @@ export const getProfileData = (id) => async (dispatch) => {
 export const subscribe = (id) => async (dispatch, getState) => {
     const authId = getState().auth.id
     if (authId) {
-        if (authId !== id) {
+        if (authId != id) {
             const data = await profileAPI.subscribe(id, authId)
             if (data.type === 'sub') {
                 dispatch(addFollowersCountAC())

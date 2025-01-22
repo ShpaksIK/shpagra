@@ -88,17 +88,17 @@ const setProfileArticlesAC = (data) => ({
     payload: data
 })
 
-export const setArticlesFilterType = (type) => ({
+export const setArticlesFilterTypeAC = (type) => ({
     type: SET_FILTER_TYPE,
     payload: type
 })
 
-export const setCommentsMainArticle = (comments, articleId) => ({
+export const setCommentsMainArticleAC = (comments, articleId) => ({
     type: SET_COMMENTS_MAIN_ARTICLE,
     payload: {comments, articleId}
 })
 
-export const setCommentsProfileArticle = (comments, articleId) => ({
+export const setCommentsProfileArticleAC = (comments, articleId) => ({
     type: SET_COMMENTS_PROFILE_ARTICLE,
     payload: {comments, articleId}
 })
