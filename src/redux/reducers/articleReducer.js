@@ -9,12 +9,14 @@ const CHANGE_EDITING_ARTICLES_DATA = 'CHANGE_EDITING_ARTICLES_DATA'
 const SET_FILTER_TYPE = 'SET_FILTER_TYPE'
 const SET_COMMENTS_MAIN_ARTICLE = 'SET_COMMENTS_MAIN_ARTICLE'
 const SET_COMMENTS_PROFILE_ARTICLE = 'SET_COMMENTS_PROFILE_ARTICLE'
+const SET_FULL_ARTICLE_CONTENT = 'SET_FULL_ARTICLE_CONTENT'
 
 let defaultState = {
     mainArticles: [],
     profileArticles: [],
     editingArticle: null,
-    filterType: 'popular'
+    filterType: 'popular',
+    fullArticleContent: {}
 }
 
 
@@ -71,6 +73,11 @@ const articleReducer = (state = defaultState, action) => {
                 ...state,
                 profileArticles: [...filtredProfileArticles]
             }
+        case SET_FULL_ARTICLE_CONTENT:
+            return {
+                ...state,
+                fullArticleContent: action.payload
+            }
         default:
             return state
     }
@@ -103,6 +110,11 @@ export const setCommentsProfileArticleAC = (comments, articleId) => ({
     payload: {comments, articleId}
 })
 
+const setFullArticleContentAC = (fullArticle) => ({
+    type: SET_FULL_ARTICLE_CONTENT,
+    payload: fullArticle
+})
+
 
 // ======== Thunks ========
 export const getMainArticles = (authId = null) => async (dispatch) => {
@@ -123,6 +135,15 @@ export const likeArticle = (profileId, articleId, authId) => async (dispatch) =>
         }
     } else {
         setError('Войдите в аккаунт, прежде чем ставить лайк')
+    }
+}
+
+export const getArticleContent = (articleId) => async (dispatch) => {
+    const data = await articlesAPI.getFullArticle(articleId)
+    if (data.statusCode === 0) {
+        dispatch(setFullArticleContentAC(data.data))
+    } else {
+        setError('Произошла ошибка при загрузке статьи')
     }
 }
 

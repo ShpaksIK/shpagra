@@ -108,6 +108,10 @@
         height: 25px;
         cursor: pointer;
     }
+
+    p {
+        overflow: hidden;
+    }
 }
 
 .comment_content_footer {

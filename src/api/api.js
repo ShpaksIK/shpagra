@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { users, articles, posts, comments } from './../redux/db'
+import { users, articles, posts, comments, articles_content } from './../redux/db'
 
 
 // const instance = axios.create({
@@ -50,8 +50,8 @@ export const articlesAPI = {
     getMainArticles(authId) {
         return new Promise((resolve) => {
             const outputArticles = Object.values(articles)
-            .flatMap(postArray => postArray)
-            .filter(post => post.author_id !== authId)
+            .flatMap(articleArray => articleArray)
+            .filter(article => article.author_id !== authId)
             setTimeout(() => resolve(outputArticles), 0)
             // resolve(outputArticles)
         }).then(data => data)
@@ -78,6 +78,21 @@ export const articlesAPI = {
             }
             resolve({
                 'statusCode': 0
+            })
+        })
+    },
+    getFullArticle(articleId) {
+        return new Promise((resolve) => {
+            const metaArticle = Object.values(articles)
+            .flatMap(articleArray => articleArray)
+            .find(article => article.id == articleId)
+            const fullArticle = {
+                ...metaArticle,
+                ...articles_content[articleId]
+            }
+            resolve({
+                'statusCode': 0,
+                'data': fullArticle
             })
         })
     }

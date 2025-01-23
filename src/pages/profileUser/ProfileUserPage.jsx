@@ -120,6 +120,7 @@ const ProfileUserPage = (props) => {
 const mapStateToProps = (state) => ({
     isAuth: state.auth.isAuth,
     myId: state.auth.id,
+    id: state.profile.id,
     customId: state.profile.customId,
     username: state.profile.username,
     email: state.profile.email,
