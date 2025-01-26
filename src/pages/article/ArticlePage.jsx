@@ -20,12 +20,21 @@ const ArticlePage = (props) => {
         <div className={style.main}>
             <Header />
             
-            <h1>ArticlePage</h1>
-            <ArticleContent />
+            <h2>{props.article.title}</h2>
+            <img src={props.article.banner} />
+            <p>{props.article.description}</p>
+
+            {props.article && (
+                <ArticleContent article={props.article} />
+            )}
 
             <Footer />
         </div>
     )
 }
 
-export default connect(null, {getArticleContent})(ArticlePage)
+const mapStateToProps = (state) => ({
+    article: state.article.fullArticleContent
+})
+
+export default connect(mapStateToProps, {getArticleContent})(ArticlePage)

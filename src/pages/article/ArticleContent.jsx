@@ -2,34 +2,37 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import style from './style.module.scss'
+import Preloader from './../../components/Preloader/Preloader'
 
 
 const ArticleContent = (props) => {
-    // console.log(props.article)
-    // const renderedArticles = props.article.content.map(block => {
-    //     switch (block.type) {
-    //         case 'title':
-    //             <h2>{block.text}</h2>
-    //             break
-    //         case 'text':
-    //             <p>{block.text}</p>
-    //             break
-    //         case 'img':
-    //             <img src={block.src} />
-    //             break
-    //         default:
-    //             break
-    //     }
-    // })
+    const objectLength = Object.keys(props.article).length
+    let renderedArticles
+    if (objectLength != 0) {
+        renderedArticles = props.article.content.map((block, index) => {
+            switch (block.type) {
+                case 'title':
+                    return <h2 key={index}>{block.text}</h2>
+                case 'text':
+                    return <p key={index}>{block.text}</p>
+                case 'img':
+                    return <img key={index} src={block.src} />
+                default:
+                    return
+            }
+        })
+    }
+    
     return (
         <div className={style.content}>
-           {/* {renderedArticles} */}
+            {objectLength > 0 && (
+                renderedArticles
+            )}
+            {objectLength == 0 && (
+                <Preloader />
+            )}
         </div>
     )
 }
 
-const mapStateToProps = (state) => ({
-    article: state.article.fullArticleContent
-})
-
-export default connect(mapStateToProps)(ArticleContent)
+export default connect(null)(ArticleContent)

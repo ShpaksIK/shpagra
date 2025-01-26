@@ -1,3 +1,30 @@
 main {
     width: 100%;   
 }
+
+.title {
+    width: 100%;
+    padding: 10px 0;
+
+    h2 {
+        font-size: 30px;
+    }
+}
+
+.text {
+    width: 100%;
+    padding: 10px 0;
+
+    p {
+        width: 100%;
+    }
+}
+
+.img {
+    max-width: 500px;
+    border-radius: 10px;
+
+    img {
+
+    }
+}
