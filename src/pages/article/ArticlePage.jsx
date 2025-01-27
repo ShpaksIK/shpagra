@@ -19,15 +19,9 @@ const ArticlePage = (props) => {
     return (
         <div className={style.main}>
             <Header />
+
+            <ArticleContent article={props.article} />
             
-            <h2>{props.article.title}</h2>
-            <img src={props.article.banner} />
-            <p>{props.article.description}</p>
-
-            {props.article && (
-                <ArticleContent article={props.article} />
-            )}
-
             <Footer />
         </div>
     )

@@ -6,7 +6,7 @@ import style from '../style.module.scss'
 const Image = (props) => {
     return (
         <div className={style.img}>
-            <h2>{props.img}</h2>
+            <img src={props.src} />
         </div>
     )
 }

@@ -6,7 +6,7 @@ import style from '../style.module.scss'
 const Title = (props) => {
     return (
         <div className={style.title}>
-            <h2>{props.text}</h2>
+            <h2 id={props.hrefId}>{props.text}</h2>
         </div>
     )
 }

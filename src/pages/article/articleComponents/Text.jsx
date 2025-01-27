@@ -6,7 +6,7 @@ import style from '../style.module.scss'
 const Text = (props) => {
     return (
         <div className={style.text}>
-            <h2>{props.text}</h2>
+            <p>{props.text}</p>
         </div>
     )
 }
