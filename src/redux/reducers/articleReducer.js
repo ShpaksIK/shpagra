@@ -1,4 +1,4 @@
-import { articlesAPI } from '../../api/api'
+import { articlesAPI, commentsAPI } from '../../api/api'
 import { setError } from './errorReducer'
 
 
@@ -10,6 +10,7 @@ const SET_FILTER_TYPE = 'SET_FILTER_TYPE'
 const SET_COMMENTS_MAIN_ARTICLE = 'SET_COMMENTS_MAIN_ARTICLE'
 const SET_COMMENTS_PROFILE_ARTICLE = 'SET_COMMENTS_PROFILE_ARTICLE'
 const SET_FULL_ARTICLE_CONTENT = 'SET_FULL_ARTICLE_CONTENT'
+const SET_COMMENTS_FULL_ARTICLE = 'SET_COMMENTS_FULL_ARTICLE'
 
 let defaultState = {
     mainArticles: [],
@@ -78,6 +79,14 @@ const articleReducer = (state = defaultState, action) => {
                 ...state,
                 fullArticleContent: action.payload
             }
+        case SET_COMMENTS_FULL_ARTICLE:
+            return {
+                ...state,
+                fullArticleContent: {
+                    ...state.fullArticleContent,
+                    comments_data: action.payload
+                }
+            }
         default:
             return state
     }
@@ -110,6 +119,11 @@ export const setCommentsProfileArticleAC = (comments, articleId) => ({
     payload: {comments, articleId}
 })
 
+export const setCommentsViewArticleAC = (comments) => ({
+    type: SET_COMMENTS_FULL_ARTICLE,
+    payload: comments
+})
+
 const setFullArticleContentAC = (fullArticle) => ({
     type: SET_FULL_ARTICLE_CONTENT,
     payload: fullArticle
@@ -128,7 +142,7 @@ export const getProfileArticles = (profileId) => async (dispatch) => {
 }
 
 export const likeArticle = (profileId, articleId, authId) => async (dispatch) => {
-    if (authId) {     
+    if (authId) {
         const data = await articlesAPI.likeArticle(profileId, articleId, authId)
         if (data.statusCode !== 1) {
             setError('Невозможно поставить лайк')
@@ -139,9 +153,16 @@ export const likeArticle = (profileId, articleId, authId) => async (dispatch) =>
 }
 
 export const getArticleContent = (articleId) => async (dispatch) => {
+    dispatch(setFullArticleContentAC({}))
     const data = await articlesAPI.getFullArticle(articleId)
-    if (data.statusCode === 0) {
-        dispatch(setFullArticleContentAC(data.data))
+    if (data.statusCode === 1) {
+        const commentsData = await commentsAPI.getComments(data.data.comments_id)
+        if (commentsData.statusCode === 1) {
+            data.data.comments_data = commentsData.data
+            dispatch(setFullArticleContentAC(data.data))
+        } else {
+            setError('Не удалось получить комментарии')
+        }
     } else {
         setError('Произошла ошибка при загрузке статьи')
     }

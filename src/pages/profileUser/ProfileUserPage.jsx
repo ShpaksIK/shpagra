@@ -42,7 +42,7 @@ const ProfileUserPage = (props) => {
     useEffect(() => {
         props.getProfileArticles(props.id)
         props.getProfilePosts(props.id)
-    }, [])
+    }, [props.id])
     
     // Подписка на пользователя
     const subscribe = (toSubscribeId) => {
@@ -120,7 +120,6 @@ const ProfileUserPage = (props) => {
 const mapStateToProps = (state) => ({
     isAuth: state.auth.isAuth,
     myId: state.auth.id,
-    id: state.profile.id,
     customId: state.profile.customId,
     username: state.profile.username,
     email: state.profile.email,

@@ -1,6 +1,6 @@
 import { commentsAPI } from "../../api/api"
 import { createComment } from "../../utils/commentCreator"
-import { setCommentsMainArticleAC, setCommentsProfileArticleAC } from "./articleReducer"
+import { setCommentsMainArticleAC, setCommentsProfileArticleAC, setCommentsViewArticleAC } from "./articleReducer"
 import { setCommentsMainPostAC, setCommentsProfilePostAC } from "./postReducer"
 import { setError } from "./errorReducer"
 
@@ -11,7 +11,11 @@ export const getArticleComments = (commentsId, articleId, articleType = 'main') 
     if (data.statusCode === 1) {
         if (articleType === 'main') {
             dispatch(setCommentsMainArticleAC(data.data, articleId))
-        } else {
+        }
+        else if (articleType === 'view') {
+            dispatch(setCommentsViewArticleAC(data.data))
+        }
+        else {
             dispatch(setCommentsProfileArticleAC(data.data, articleId))
         }
     } else {

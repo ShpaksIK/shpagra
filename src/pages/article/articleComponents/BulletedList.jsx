@@ -6,7 +6,7 @@ import style from '../style.module.scss'
 const BulletedList = (props) => {
     return (
         <ul className={style.ul}>
-            {props.list.map(l => <li>{l}</li>)}
+            {props.list.map((l, i) => <li key={`bl-${i}`}>{l}</li>)}
         </ul>
     )
 }

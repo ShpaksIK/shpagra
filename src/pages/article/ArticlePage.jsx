@@ -20,7 +20,7 @@ const ArticlePage = (props) => {
         <div className={style.main}>
             <Header />
 
-            <ArticleContent article={props.article} />
+            <ArticleContent />
             
             <Footer />
         </div>
@@ -31,4 +31,4 @@ const mapStateToProps = (state) => ({
     article: state.article.fullArticleContent
 })
 
-export default connect(mapStateToProps, {getArticleContent})(ArticlePage)
+export default connect(null, {getArticleContent})(ArticlePage)

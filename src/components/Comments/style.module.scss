@@ -52,6 +52,16 @@
     }
 }
 
+.commentsData_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+        color: gray;
+    }
+}
+
 .comments_filter  {
     outline: none;
     border: 1px solid #000;

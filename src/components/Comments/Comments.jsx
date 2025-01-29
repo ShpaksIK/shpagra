@@ -15,7 +15,7 @@ const Comments = (props) => {
         if (props.sendType === 'post') {
             props.getPostComments(props.commentsId, props.objectId, props.objectType ? 'profile' : 'main')
         } else {
-            props.getArticleComments(props.commentsId, props.objectId, props.objectType ? 'profile' : 'main')
+            props.getArticleComments(props.commentsId, props.objectId, props.objectType)
         }
     }, [])
 
@@ -43,11 +43,14 @@ const Comments = (props) => {
                     )}
                     {props.commentsData.length > 0 && (
                         <>
-                            <select className={style.comments_filter} value={selectedFilter} onChange={handleFilterChange}>
-                                <option value='popular'>Популярные</option>
-                                <option value='new'>Новые</option>
-                                <option value='old'>Старые</option>
-                            </select>
+                            <div className={style.commentsData_header}>
+                                <select className={style.comments_filter} value={selectedFilter} onChange={handleFilterChange}>
+                                    <option value='popular'>Популярные</option>
+                                    <option value='new'>Новые</option>
+                                    <option value='old'>Старые</option>
+                                </select>
+                                <p>{props.commentsData.length} коммент.</p>
+                            </div>
                             {selectedFilter === 'popular' && (
                                 popularComments.map(com => <Comment key={`com-${com.id}`} commentData={com} />)
                             )}

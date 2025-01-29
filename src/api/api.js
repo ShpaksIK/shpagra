@@ -91,7 +91,7 @@ export const articlesAPI = {
                 ...articles_content[articleId]
             }
             resolve({
-                'statusCode': 0,
+                'statusCode': 1,
                 'data': fullArticle
             })
         })
