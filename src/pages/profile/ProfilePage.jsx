@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import style from './style.module.scss'
 import emailSVG from './../../assets/svg/email.svg'
-import likeSVG from './../../assets/svg/like.svg'
+import subscribeSVG from './../../assets/svg/subscribe.svg'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import Article from '../../components/Article/Article'
@@ -16,26 +16,33 @@ import Preloader from '../../components/Preloader/Preloader'
 
 
 const ProfilePage = (props) => {
+    // Состояния для изменения Preloader на надпись об отсутствии статей и постов
+    const [loadArticlesBlock, setLoadArticlesBlock] = useState(<Preloader />)
+    const [loadPostsBlock, setLoadPostsBlock] = useState(<Preloader />)
+    
+    // Тайм-ауты для показа надписи об отсутствии статей и постов после Preloader
+    setTimeout(() => {
+        setLoadArticlesBlock(
+            <div className={style.content_body_error}>
+                <b>Вы ещё ничего не добавили</b>
+                <Link to='/create-article' className={style.button}>Создать статью</Link>
+            </div>
+        )
+    }, 5000)
+    setTimeout(() => {
+        setLoadPostsBlock(
+            <div className={style.content_body_error}>
+                <b>У вас нет постов!</b>
+                <CreatePostForm />
+            </div>
+        )
+    }, 5000)
+
+    // Получение статей и постов пользователя
     useEffect(() => {
         props.getProfileArticles(props.id)
         props.getProfilePosts(props.id)
     }, [])
-    
-    let profileArticlesElements, profilePostsElements
-    let articlesElementsIsLoad = false, postsElementsIsLoad = false
-
-    if (props.articles) {
-        if (props.articles.length > 0) {
-            articlesElementsIsLoad = true
-        }
-        profileArticlesElements = props.articles.map(article => <Article key={`art-${article.id}`} className={style.article} articleData={article} objectType='profile' />)
-    }
-    if (props.posts) {
-        if (props.posts.length > 0) {
-            postsElementsIsLoad = true
-        }
-        profilePostsElements = props.posts.map(post => <div key={post.id} className={style.post}><Post postData={post} objectType='profile' /></div>)
-    }
 
     return (
         <div className={style.main}>
@@ -58,9 +65,12 @@ const ProfilePage = (props) => {
                                 </div>
                                 <div className={style.info_body_block}>
                                     <div className={style.info_body_block_img}>
-                                        <img src={likeSVG} />
+                                        <img src={subscribeSVG} />
                                     </div>
-                                    <p><b>Лайки профиля:</b> {props.likes}</p>
+                                    {props.followersCount ? <p><b>Подписчиков:</b> {props.followersCount}</p> : <p>Подписчиков нет</p>}
+                                </div>
+                                <div className={style.info_body_block}>
+                                    <Link className={style.info_body_block_a} to={`/profile/${props.id}`}>Как другие видят меня?</Link>
                                 </div>
                             </div>
                         </div>
@@ -88,17 +98,9 @@ const ProfilePage = (props) => {
                                 <b>Мои статьи</b>
                             </div>
                             <div className={style.content_body}>
-                                {articlesElementsIsLoad ? <>
-                                    {profileArticlesElements.length > 0 && (
-                                        profileArticlesElements
-                                    )}
-                                    {profileArticlesElements.length === 0 && (
-                                        <div className={style.content_body_error}>
-                                            <b>Вы ещё ничего не добавили</b>
-                                            <Link to='/create-article' className={style.button}>Создать статью</Link>
-                                        </div>
-                                    )}
-                                </> : <Preloader />}
+                                {props.articles ? <>
+                                    {props.articles.map(article => <Article key={`art-${article.id}`} className={style.article} articleData={article} objectType='profile' />)}
+                                </> : loadArticlesBlock}
                             </div>
                         </div>
                         <div className={style.content_block}>
@@ -106,18 +108,9 @@ const ProfilePage = (props) => {
                                 <b>Мои посты</b>
                             </div>
                             <div className={style.content_body}>
-                                {postsElementsIsLoad ? <>
-                                    {profilePostsElements.length > 0 && (
-                                        profilePostsElements
-                                    )}
-                                    {profilePostsElements.length === 0 && (
-                                        <div className={style.content_body_error}>
-                                            <b>У вас нет постов!</b>
-                                            <CreatePostForm />
-                                        </div>
-                                    )}
-                                </> : <Preloader />}
-                                
+                                {props.posts ? <>
+                                    {props.posts.map(post => <div key={post.id} className={style.post}><Post postData={post} objectType='profile' /></div>)}
+                                </> : loadPostsBlock}
                             </div>
                         </div>
                     </div>
@@ -141,7 +134,7 @@ const mapStateToProps = (state) => ({
     id: state.auth.id,
     username: state.auth.username,
     email: state.auth.email,
-    likes: state.auth.likes,
+    followersCount: state.auth.followersCount,
     articles: state.article.profileArticles,
     posts: state.post.profilePosts
 })

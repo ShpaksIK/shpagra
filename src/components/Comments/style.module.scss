@@ -4,6 +4,10 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
+
+    a {
+        width: 100%;
+    }
 }
 
 .comments_send {
@@ -35,6 +39,38 @@
         transition: .2s;
         background-color: var(--color-blue-dark);
     }
+}
+
+.comments_none {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+
+    p {
+        color: var(--color-text-gray);
+    }
+}
+
+.commentsData_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+        color: gray;
+    }
+}
+
+.comments_filter  {
+    outline: none;
+    border: 1px solid #000;
+    color: #000;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 10px;
+    max-width: 150px;
+    cursor: pointer;
 }
 
 .error {
@@ -74,13 +110,17 @@
 .comment_content {
     display: flex;
     gap: 5px;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
 
     img {
         width: 25px;
         height: 25px;
         cursor: pointer;
+    }
+
+    p {
+        overflow: hidden;
     }
 }
 
@@ -90,9 +130,11 @@
 }
 
 .comment_footer_block {
+    min-width: 50px;
     padding: 5px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 3px;
     background-color: var(--color-light);
     border-radius: 5px;
@@ -119,4 +161,23 @@
 
 .comment_footer_block > img {
     width: 20px;
+}
+
+.button_insert {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid var(--color-blue-light);
+    outline: none;
+    color: var(--color-blue-dark);
+    height: 35px;
+    cursor: pointer;
+}
+
+.button_insert:hover {
+    transition: .2s;
+    background-color: #f3f3f3;
 }

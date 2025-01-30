@@ -1,19 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { compose } from 'redux'
+import { useNavigate, Navigate } from 'react-router-dom'
 
 import style from './style.module.scss'
-// import { withAuthRedirect } from '../../hoc/withAuthRedirect'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import CreateArticleForm from './CreateArticleForm/CreateArticleForm'
 import PreviewArticle from './PreviewArticle'
 
 
-const CreateArticlePage = () => {
+const CreateArticlePage = (props) => {
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (!props.isAuth) {
+            navigate('/login')
+        }
+    })
 
     return (
         <div className={style.main}>
+            {!props.isAuth && (
+                <Navigate to='/login' />
+            )}
             <Header />
             <div className={style.createArticle_block}>
                 <h3>Создать новую статью</h3>
@@ -31,7 +39,4 @@ const mapStateToProps = (state) => ({
     isAuth: state.auth.isAuth
 })
 
-export default compose(
-    connect(mapStateToProps),
-    // withAuthRedirect
-)(CreateArticlePage)
+export default connect(mapStateToProps)(CreateArticlePage)

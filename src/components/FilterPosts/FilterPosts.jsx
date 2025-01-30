@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
 import style from './style.module.scss'
-import { setPostsFilterType } from '../../redux/reducers/postReducer'
+import { setPostsFilterTypeAC } from '../../redux/reducers/postReducer'
 
 
 const FilterPosts = (props) => {
     const [selectedFilter, setSelectedFilter] = useState(props.filterType)
     const handleFilterChange = (event) => {
         setSelectedFilter(event.target.value)
-        props.setPostsFilterType(event.target.value)
+        props.setPostsFilterTypeAC(event.target.value)
     }
     
     return (
@@ -26,4 +26,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {setPostsFilterType})(FilterPosts)
+export default connect(mapStateToProps, {setPostsFilterTypeAC})(FilterPosts)

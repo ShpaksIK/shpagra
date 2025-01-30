@@ -105,6 +105,14 @@ main {
     display: flex;
     align-items: center;
     gap: 10px;
+
+    .info_body_block_a {
+        color: var(--color-blue-light);
+    }
+    .info_body_block_a:hover {
+        transition: .2s;
+        color: var(--color-blue-dark);
+    }
 }
 
 .info_body_block_img {
@@ -116,11 +124,11 @@ main {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-}
 
-.info_body_block_img > img {
-    width: 20px;
-    height: 20px;
+    img {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 .content_title > b {

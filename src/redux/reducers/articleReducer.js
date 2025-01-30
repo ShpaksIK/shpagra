@@ -1,4 +1,4 @@
-import { articlesAPI } from '../../api/api'
+import { articlesAPI, commentsAPI } from '../../api/api'
 import { setError } from './errorReducer'
 
 
@@ -9,12 +9,15 @@ const CHANGE_EDITING_ARTICLES_DATA = 'CHANGE_EDITING_ARTICLES_DATA'
 const SET_FILTER_TYPE = 'SET_FILTER_TYPE'
 const SET_COMMENTS_MAIN_ARTICLE = 'SET_COMMENTS_MAIN_ARTICLE'
 const SET_COMMENTS_PROFILE_ARTICLE = 'SET_COMMENTS_PROFILE_ARTICLE'
+const SET_FULL_ARTICLE_CONTENT = 'SET_FULL_ARTICLE_CONTENT'
+const SET_COMMENTS_FULL_ARTICLE = 'SET_COMMENTS_FULL_ARTICLE'
 
 let defaultState = {
     mainArticles: [],
     profileArticles: [],
     editingArticle: null,
-    filterType: 'popular'
+    filterType: 'popular',
+    fullArticleContent: {}
 }
 
 
@@ -71,6 +74,19 @@ const articleReducer = (state = defaultState, action) => {
                 ...state,
                 profileArticles: [...filtredProfileArticles]
             }
+        case SET_FULL_ARTICLE_CONTENT:
+            return {
+                ...state,
+                fullArticleContent: action.payload
+            }
+        case SET_COMMENTS_FULL_ARTICLE:
+            return {
+                ...state,
+                fullArticleContent: {
+                    ...state.fullArticleContent,
+                    comments_data: action.payload
+                }
+            }
         default:
             return state
     }
@@ -88,19 +104,29 @@ const setProfileArticlesAC = (data) => ({
     payload: data
 })
 
-export const setArticlesFilterType = (type) => ({
+export const setArticlesFilterTypeAC = (type) => ({
     type: SET_FILTER_TYPE,
     payload: type
 })
 
-export const setCommentsMainArticle = (comments, articleId) => ({
+export const setCommentsMainArticleAC = (comments, articleId) => ({
     type: SET_COMMENTS_MAIN_ARTICLE,
     payload: {comments, articleId}
 })
 
-export const setCommentsProfileArticle = (comments, articleId) => ({
+export const setCommentsProfileArticleAC = (comments, articleId) => ({
     type: SET_COMMENTS_PROFILE_ARTICLE,
     payload: {comments, articleId}
+})
+
+export const setCommentsViewArticleAC = (comments) => ({
+    type: SET_COMMENTS_FULL_ARTICLE,
+    payload: comments
+})
+
+const setFullArticleContentAC = (fullArticle) => ({
+    type: SET_FULL_ARTICLE_CONTENT,
+    payload: fullArticle
 })
 
 
@@ -116,9 +142,29 @@ export const getProfileArticles = (profileId) => async (dispatch) => {
 }
 
 export const likeArticle = (profileId, articleId, authId) => async (dispatch) => {
-    const data = await articlesAPI.likeArticle(profileId, articleId, authId)
-    if (data.statusCode !== 1) {
-        setError('Невозможно поставить лайк')
+    if (authId) {
+        const data = await articlesAPI.likeArticle(profileId, articleId, authId)
+        if (data.statusCode !== 1) {
+            setError('Невозможно поставить лайк')
+        }
+    } else {
+        setError('Войдите в аккаунт, прежде чем ставить лайк')
+    }
+}
+
+export const getArticleContent = (articleId) => async (dispatch) => {
+    dispatch(setFullArticleContentAC({}))
+    const data = await articlesAPI.getFullArticle(articleId)
+    if (data.statusCode === 1) {
+        const commentsData = await commentsAPI.getComments(data.data.comments_id)
+        if (commentsData.statusCode === 1) {
+            data.data.comments_data = commentsData.data
+            dispatch(setFullArticleContentAC(data.data))
+        } else {
+            setError('Не удалось получить комментарии')
+        }
+    } else {
+        setError('Произошла ошибка при загрузке статьи')
     }
 }
 

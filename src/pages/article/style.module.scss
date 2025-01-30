@@ -1,3 +1,154 @@
-main {
-    width: 100%;   
+.main_article {
+    margin: 50px 10%;
+    display: flex;
+    flex-wrap: wrap-reverse;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.main_article_content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.main_article_content_info {
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 1px solid var(--color-light);
+
+    h2 {
+        font-size: 35px;
+    }
+    
+    img {
+        max-width: 800px;
+        border-radius: 10px;
+    }
+}
+
+.main_article_content_info_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+        color: gray;
+    }
+}
+
+.article_info_nav {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.article_info_nav_title {
+    width: 100%;
+    border-bottom: 1px solid var(--color-light);
+    padding-bottom: 10px;
+
+    b {
+        font-size: 25px;
+    }
+}
+
+.article_info_nav_body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 10px;
+
+    a {
+        text-decoration: underline;
+    }
+
+    a:hover {
+        color: var(--color-blue-dark)
+    }
+}
+
+.title {
+    padding: 5px 0;
+    
+    h2 {
+        font-size: 30px;
+    }
+}
+
+.text {
+    padding: 5px 0;
+
+    p {
+        width: 100%;
+    }
+}
+
+.img {
+    max-width: 500px;
+    padding: 5px 0;
+
+    img {
+        max-width: 500px;
+    }
+}
+
+.indent {
+    padding: 10px 0;
+}
+
+.ol, .ul {
+    padding: 5px 0;
+    list-style-position: inside;
+}
+
+.article_footer {
+    border-top: 1px solid var(--color-light);
+    padding-top: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.article_footer_block {
+    padding: 5px;
+    display: flex;
+    gap: 3px;
+    background-color: var(--color-light);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.article_footer_block_like {
+    background-color: var(--color-like);
+    p {
+        color: red;
+    }
+}
+
+.article_footer_block_comment {
+    background-color: #d6d6d6;
+}
+
+.article_footer_block > img {
+    width: 20px;
+}
+
+.comments_block {
+    margin-top: 10px;
+    border: 1px solid var(--color-text-gray);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.scopes {
+    display: flex;
+    
+    div {
+        padding-left: 5px;
+        color: gray;
+    }
 }

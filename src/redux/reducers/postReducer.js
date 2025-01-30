@@ -90,17 +90,17 @@ export const addProfilePostsAC = (data) => ({
     payload: data
 })
 
-export const setPostsFilterType = (type) => ({
+export const setPostsFilterTypeAC = (type) => ({
     type: SET_FILTER_TYPE,
     payload: type
 })
 
-export const setCommentsMainPost = (comments, postId) => ({
+export const setCommentsMainPostAC = (comments, postId) => ({
     type: SET_COMMENTS_MAIN_POST,
     payload: {comments, postId}
 })
 
-export const setCommentsProfilePost = (comments, postId) => ({
+export const setCommentsProfilePostAC = (comments, postId) => ({
     type: SET_COMMENTS_PROFILE_POST,
     payload: {comments, postId}
 })
@@ -122,6 +122,7 @@ export const sendPost = (text) => async (dispatch, getState) => {
         'created_at': new Date().getTime(),
         'likes_count': 0,
         'likes_id': [],
+        'comments_count': 0,
         'comments_id': [],
         'author': getState().auth.username,
         'author_id': getState().auth.id

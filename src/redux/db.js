@@ -147,6 +147,51 @@ export let articles = {
     }],
 }
 
+export let articles_content = {
+    '1': {
+        'id': 1,
+        'content': [
+            {
+                'type': 'title',
+                'text': 'Заголовок 1'
+            },
+            {
+                'type': 'text',
+                'text': 'Параграф №1. Это текст.'
+            },
+            {
+                'type': 'img',
+                'src': 'https://thumbs.dreamstime.com/b/%D0%BF%D0%BB%D0%BE%D1%81%D0%BA%D0%B8%D0%B9-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B8%D0%B7%D0%BE%D0%B3%D0%BD%D1%83%D1%82%D0%BE%D0%B9-%D0%BA%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B9-%D0%BB%D0%B5%D0%BD%D1%82%D1%8B-%D0%B1%D0%B0%D0%BD%D0%BD%D0%B5%D1%80%D0%B0-%D0%BD%D0%B0-%D0%B1%D0%B5%D0%BB%D0%BE%D0%BC-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F-216494194.jpg'
+            },
+            {
+                'type': 'indent'
+            },
+            {
+                'type': 'title',
+                'text': 'Заголовок 2'
+            },
+            {
+                'type': 'text',
+                'text': 'Параграф №2. Это текст.'
+            },
+            {
+                'type': 'ol',
+                'list': ['Первый случай', 'Второй случай', 'Третий случай']
+            },
+            {
+                'type': 'ul',
+                'list': ['Первый случай', 'Второй случай', 'Третий случай']
+            },
+        ]
+    },
+    '2': {
+        'id': 2,
+    },
+    '3': {
+        'id': 3,
+    },
+}
+
 export let comments = [
     {
         'id': 1,

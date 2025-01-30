@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { users, articles, posts, comments } from './../redux/db'
+import { users, articles, posts, comments, articles_content } from './../redux/db'
 
 
 // const instance = axios.create({
@@ -23,6 +23,26 @@ export const profileAPI = {
         return new Promise((resolve) => {
             resolve(users[id])
         }).then(data => data)
+    },
+    subscribe(id, authId) {
+        return new Promise((resolve) => {
+            let subscribeType
+            if (users[authId].followeds_id.filter(u => u === id).length === 0) {
+                users[id].followers_count += 1
+                users[id].followers_id = [...users[id].followers_id, authId]
+                users[authId].followeds_id = [...users[authId].followeds_id, id]
+                subscribeType = 'sub'
+            } else {
+                users[id].followers_count -= 1
+                users[id].followers_id = users[id].followers_id.filter(u => u !== authId)
+                users[authId].followeds_id = users[authId].followeds_id.filter(u => u !== id)
+                subscribeType = 'unsub'
+            }
+            resolve({
+                'statusCode': 0,
+                'type': subscribeType
+            })
+        })
     }
 }
 
@@ -30,8 +50,8 @@ export const articlesAPI = {
     getMainArticles(authId) {
         return new Promise((resolve) => {
             const outputArticles = Object.values(articles)
-            .flatMap(postArray => postArray)
-            .filter(post => post.author_id !== authId)
+            .flatMap(articleArray => articleArray)
+            .filter(article => article.author_id !== authId)
             setTimeout(() => resolve(outputArticles), 0)
             // resolve(outputArticles)
         }).then(data => data)
@@ -57,7 +77,22 @@ export const articlesAPI = {
                 }
             }
             resolve({
-                'statusCode': 10
+                'statusCode': 0
+            })
+        })
+    },
+    getFullArticle(articleId) {
+        return new Promise((resolve) => {
+            const metaArticle = Object.values(articles)
+            .flatMap(articleArray => articleArray)
+            .find(article => article.id == articleId)
+            const fullArticle = {
+                ...metaArticle,
+                ...articles_content[articleId]
+            }
+            resolve({
+                'statusCode': 1,
+                'data': fullArticle
             })
         })
     }
@@ -75,7 +110,7 @@ export const postsAPI = {
     },
     getProfilePosts(profileId) {
         return new Promise((resolve) => {
-            setTimeout(() => resolve(posts[`${profileId}`]), 2000)
+            setTimeout(() => resolve(posts[`${profileId}`]), 0)
             // resolve(posts[`${profileId}`])
         })
     },

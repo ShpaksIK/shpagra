@@ -8,14 +8,16 @@ import { getProfileData } from '../../redux/reducers/profileReducer'
 
 const ProfileNavigator = (props) => {
     const { profileId } = useParams()
-    props.getProfileData(profileId)
     
     if (profileId) {
-        return (
-            <>
-                <ProfileUserPage {...props} />
-            </>
-        )
+        props.getProfileData(profileId)
+        if (props.id) {
+            return (
+                <>
+                    <ProfileUserPage {...props} id={profileId} />
+                </>
+            )
+        }
     }
     
     return (
@@ -25,4 +27,8 @@ const ProfileNavigator = (props) => {
     )
 }
 
-export default connect(null, {getProfileData})(ProfileNavigator)
+const mapStateToProps = (state) => ({
+    id: state.profile.id,
+})
+
+export default connect(mapStateToProps, {getProfileData})(ProfileNavigator)

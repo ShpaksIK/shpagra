@@ -7,9 +7,11 @@ const SET_USER_DATA = 'SET_USER_DATA'
 let defaultState = {
     isAuth: false,
     id: null,
+    customId: null,
     username: null,
     email: null,
-    likes: null
+    createdAt: null,
+    followersCount: 0
 }
 
 // ======== Reducer ========
@@ -26,17 +28,18 @@ const authReducer = (state = defaultState, action) => {
 }
 
 // ======== Action creators (AC) ========
-export const setAuthUserDataAC = (isAuth, id, username, email, likes) => ({
+export const setAuthUserDataAC = (isAuth, id, customId, username, email, createdAt, followersCount) => ({
     type: SET_USER_DATA,
-    payload: {isAuth, id, username, email, likes}
+    payload: {isAuth, id, customId, username, email, createdAt, followersCount}
 })
 
 // ======== Thunks ========
 export const getAuthUserData = () => async (dispatch) => {
     const data = await authAPI.me()
     if (data) {
-        const {id, login, email, likes} = data
-        dispatch(setAuthUserDataAC(true, id, login, email, likes))
+        dispatch(setAuthUserDataAC(true, data.id, data.custom_id, data.login, data.email, data.created_at, data.followers_count))
+    } else {
+        dispatch(setAuthUserDataAC(false, null, null, null, null, null, 0))
     }
 }
 

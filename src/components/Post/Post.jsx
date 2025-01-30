@@ -15,14 +15,16 @@ const Post = (props) => {
     const [isOpenComments, setIsOpenComments] = useState(false)
     
     const likePost = (profileId, postId) => {
-        setIsLike(!isLike)
-        props.likePost(profileId, postId, props.id)
+        if (props.isAuth) {
+            setIsLike(!isLike)
+            props.likePost(profileId, postId, props.id)
+        }
     }
 
     return (
         <div className={style.post}>
             <div className={style.post_author}>
-                <Link to={`/profile/${props.postData.authorId}`}><img src='https://zornet.ru/_fr/19/0640572.png' /></Link>
+                <Link to={`/profile/${props.postData.author_id}`}><img src='https://zornet.ru/_fr/19/0640572.png' /></Link>
                 <Link className={style.linkAuthor} to={`/profile/${props.postData.author_id}`}>{props.postData.author}</Link>
             </div>
             <div className={style.post_info}>
@@ -55,6 +57,7 @@ const Post = (props) => {
 
 const mapStateToProps = (state) => {
     return {
+        isAuth: state.auth.isAuth,
         id: state.auth.id,
         mainPosts: state.post.mainPosts,
         profilePosts: state.post.profilePosts

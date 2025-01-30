@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import style from './style.module.scss'
@@ -7,8 +7,9 @@ import LoginForm from './LoginForm/LoginForm'
 
 
 const LoginPage = (props) => {
+    const navigate = useNavigate()
     if (props.isAuth) {
-        return <Navigate to='/profile'/>
+        navigate('/')
     }
 
     return (
