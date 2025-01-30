@@ -65,28 +65,33 @@ const ArticleContent = (props) => {
     
     return (
         <div className={style.main_article}>
-            <div className={style.main_article_content}>    
-                <div className={style.main_article_content_info}>
-                    <div className={style.main_article_content_info_title}>
-                        <h2>{props.article.title}</h2>
-                        <p>{props.article.created_at}</p>
+            <div className={style.main_article_content_block}>
+                <div className={style.main_article_content}>    
+                    <div className={style.main_article_content_info}>
+                        <div className={style.main_article_content_info_title}>
+                            <h2>{props.article.title}</h2>
+                            <p>{props.article.created_at}</p>
+                        </div>
+                        <div className={style.scopes}>{scopesElements}</div>
+                        <p>{props.article.description}</p>
+                        <img src={props.article.banner} />
                     </div>
-                    <div className={style.scopes}>{scopesElements}</div>
-                    <p>{props.article.description}</p>
-                    <img src={props.article.banner} />
+                    <div className={style.article_content}> 
+                        <div className={style.content}>
+                            {objectLength > 0 && (
+                                renderedArticles
+                            )}
+                            {objectLength == 0 && (
+                                <Preloader />
+                            )}
+                        </div>
+                    </div>
                 </div>
-                <div className={style.article_content}> 
-                    <div className={style.content}>
-                        {objectLength > 0 && (
-                            renderedArticles
-                        )}
-                        {objectLength == 0 && (
-                            <Preloader />
-                        )}
-                    </div>
+                <div className={style.comments_block_article}>
+                    <Comments sendType='article' objectId={props.article.id} commentsData={props.article.comments_data} commentsId={props.article.comments_id} authorId={props.article.author_id} objectType='view' />
                 </div>
             </div>
-            <div>
+            <div className={style.article_info_nav_block}>
                 <div className={style.article_info_nav}>
                     <div className={style.article_info_nav_title}>
                         <b>Содержание статьи</b>

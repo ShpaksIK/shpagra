@@ -76,6 +76,9 @@ const Article = (props) => {
                             <img src={commentSVG} />
                             <p>{props.articleData.comments_count}</p>
                     </div>
+                    <div className={style.article_createData}>
+                        <p>{props.articleData.created_at}</p>
+                    </div>
                 </div>
                 {isOpenComments && (
                     <Comments sendType='article' objectId={props.articleData.id} commentsData={props.articleData.comments_data} commentsId={props.articleData.comments_id} authorId={props.articleData.author_id} objectType={props.objectType} />

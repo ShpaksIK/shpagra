@@ -72,10 +72,10 @@ const ProfileUserPage = (props) => {
                                     {props.followersCount ? <p><b>Подписчиков:</b> {props.followersCount}</p> : <p>Подписчиков нет</p>}
                                 </div>
                             </div>
-                            {props.myId === props.id && (
+                            {props.myId == props.id && (
                                 <Link to='/profile'><button className={style.button_insert}>Редактировать</button></Link>
                             )}
-                            {props.myId !== props.id && (
+                            {props.myId != props.id && (
                                 <>
                                     {!props.isFollowed && (
                                         <button className={style.button} onClick={() => subscribe(props.id)}>Подписаться</button>
