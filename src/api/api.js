@@ -95,6 +95,21 @@ export const articlesAPI = {
                 'data': fullArticle
             })
         })
+    },
+    isAuthorArticle(articleId, authorId) {
+        return new Promise((resolve) => {
+            let isAuthor = false
+            const metaArticle = Object.values(articles)
+            .flatMap(articleArray => articleArray)
+            .find(article => article.id == articleId && article.author_id == authorId)
+            if (metaArticle.length > 0) {
+                isAuthor = true
+            }
+            resolve({
+                'statusCode': 1,
+                'data': isAuthor
+            })
+        })
     }
 }
 

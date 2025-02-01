@@ -82,7 +82,7 @@ const ProfilePage = (props) => {
                             <div className={style.info_body}>
                                 <CreatePostForm />
                                 <div className={style.info_body_block}>
-                                    <Link to='/create-article' className={style.button}>Создать статью</Link>
+                                    <Link to='/article-creator' className={style.button}>Создать статью</Link>
                                 </div>
                                 <div className={style.info_body_block}>
                                     <label><b>Загрузить фото профиля:</b></label>

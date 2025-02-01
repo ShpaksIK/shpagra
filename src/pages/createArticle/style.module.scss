@@ -1,3 +1,5 @@
+
+
 .createArticle_block {
     margin: 25px 10%;
     display: flex;
@@ -12,19 +14,42 @@
     gap: 20px;
 }
 
-.preview {
+.content {
     background-color: #fff;
     border-radius: 10px;
-    width: 50%;
+    width: 70%;
 }
 
-.preview_title {
+.content_options {
     padding: 20px;
     width: 100%;
     border-bottom: 1px solid var(--color-dark);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.preview_content {
+.content_option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #f3f3f3;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+
+    img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.content_option:hover {
+    transition: .2s;
+    background-color: #e2e2e2;
+}
+
+.content_content {
     padding: 20px;
 }
 
@@ -78,6 +103,24 @@
 .button:hover {
     transition: .2s;
     background-color: var(--color-blue-dark);
+}
+
+.button_insert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid var(--color-blue-light);
+    outline: none;
+    color: var(--color-blue-dark);
+    height: 35px;
+    cursor: pointer;
+}
+
+.button_insert:hover {
+    transition: .2s;
+    background-color: #f3f3f3;
 }
 
 .link {
@@ -208,5 +251,191 @@
     .button {
         margin: 0 5px;
         width: calc(100% - 10px);
+    }
+}
+
+// TEST
+
+.main_article_content_info {
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 1px solid var(--color-light);
+
+    h2 {
+        font-size: 35px;
+        max-width: 600px;
+    }
+    
+    img {
+        max-width: 800px;
+        border-radius: 10px;
+    }
+}
+
+.main_article_content_info_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    p {
+        color: gray;
+    }
+}
+
+.article_info_nav {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    min-width: 400px;
+}
+
+.article_info_nav_title {
+    width: 100%;
+    border-bottom: 1px solid var(--color-light);
+    padding-bottom: 10px;
+
+    b {
+        font-size: 25px;        
+    }
+}
+
+.article_info_nav_body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 10px;
+
+    a {
+        text-decoration: underline;
+    }
+
+    a:hover {
+        color: var(--color-blue-dark)
+    }
+}
+
+.title {
+    padding: 5px 0;
+    
+    h2 {
+        font-size: 30px;
+    }
+}
+
+.text {
+    padding: 5px 0;
+
+    p {
+        width: 100%;
+    }
+}
+
+.img {
+    max-width: 500px;
+    padding: 5px 0;
+
+    img {
+        max-width: 100%;
+    }
+}
+
+.indent {
+    padding: 10px 0;
+}
+
+.ol, .ul {
+    padding: 5px 0;
+    list-style-position: inside;
+}
+
+.article_footer {
+    border-top: 1px solid var(--color-light);
+    padding-top: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.article_footer_block {
+    padding: 5px;
+    display: flex;
+    gap: 3px;
+    background-color: var(--color-light);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.article_footer_block_like {
+    background-color: var(--color-like);
+    p {
+        color: red;
+    }
+}
+
+.article_footer_block_comment {
+    background-color: #d6d6d6;
+}
+
+.article_footer_block > img {
+    width: 20px;
+}
+
+.comments_block {
+    margin-top: 10px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+}
+
+.comments_block_article {
+    display: none;
+    width: 100%;
+    margin-top: 10px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.main_article_content_block {
+    width: 100%;
+}
+
+.scopes {
+    display: flex;
+    
+    div {
+        padding-left: 5px;
+        color: gray;
+    }
+}
+
+
+@media screen and (max-width: 1570px) {
+    .main_article {
+        flex-wrap: wrap-reverse;
+        margin: 50px 2%;
+    }
+    .article_info_nav {
+        min-width: 0;
+        width: 100%;
+    }
+    .comments_block {
+        display: none;
+    }
+    .comments_block_article {
+        display: block;
+    }
+    .main_article_content {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 815px) {
+    .article_info_nav_block {
+        width: 100%;
     }
 }

@@ -4,7 +4,6 @@ import { TextareaAutosize } from '@mui/material'
 import * as Yup from 'yup'
 
 import style from '../style.module.scss'
-import { Link } from 'react-router-dom'
 import removeSVG from './../../../assets/svg/remove.svg'
 
 
@@ -12,7 +11,7 @@ const CreateArticleForm = () => {
     // Схема ошибок формы
     const CreateArticleSchema = Yup.object().shape({
         title: Yup.string().min(1, 'Мин. длина заголовка - 1 символ').max(100, 'Макс. длина заголовка - 100 символов').required('Обязательное поле'),
-        description: Yup.string().min(5, 'Мин. длина содержимого - 5 символов').max(10000, 'Макс. длина содержимого - 10000 символов').required('Обязательное поле'),
+        description: Yup.string().min(5, 'Мин. длина описания - 5 символов').max(2000, 'Макс. длина описания - 2000 символов').required('Обязательное поле'),
     })
 
     // Хранение ошибки хештега
@@ -70,10 +69,9 @@ const CreateArticleForm = () => {
                         <ErrorMessage name='title' component='div' className={style.error} />
                     </div>
                     <div className={style.input_block}>
-                        <p>Что будете писать?</p>
+                        <p>Краткое описание</p>
                         <Field className={style.textarea} name='description' as={TextareaAutosize} />
                         <ErrorMessage name='description' component='div' className={style.error} />
-                        <Link className={style.link} to='/create-article/instruction'>Инструкция по написанию</Link>
                     </div>
                     <div className={style.input_block}>
                         <p>#Хештег</p>
@@ -91,7 +89,8 @@ const CreateArticleForm = () => {
                             ))}
                         </div>
                     </div>
-                    <button className={style.button} type='submit'>Опубликовать</button>
+                    <button className={style.button_insert} type='submit'>Сохранить в черновики</button>
+                    <button className={style.button} type='submit'>Запрос на публикацию</button>
                 </Form>
             )}
         </Formik>

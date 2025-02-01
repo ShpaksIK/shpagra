@@ -15,7 +15,7 @@ const SET_COMMENTS_FULL_ARTICLE = 'SET_COMMENTS_FULL_ARTICLE'
 let defaultState = {
     mainArticles: [],
     profileArticles: [],
-    editingArticle: null,
+    editingArticle: {},
     filterType: 'popular',
     fullArticleContent: {}
 }
@@ -109,6 +109,11 @@ export const setArticlesFilterTypeAC = (type) => ({
     payload: type
 })
 
+export const setEditingArticleAC = (article) => ({
+    type: CHANGE_EDITING_ARTICLES_DATA,
+    payload: article
+})
+
 export const setCommentsMainArticleAC = (comments, articleId) => ({
     type: SET_COMMENTS_MAIN_ARTICLE,
     payload: {comments, articleId}
@@ -166,6 +171,24 @@ export const getArticleContent = (articleId) => async (dispatch) => {
     } else {
         setError('Произошла ошибка при загрузке статьи')
     }
+}
+
+export const getArticleForEditing = (articleId, authId) => async (dispatch) => {
+    const isAuthor = await articlesAPI.isAuthorArticle(articleId, authId)
+    if (isAuthor.data) {     
+        if (Number.isInteger(articleId)) {
+            
+        } else {
+            setError('Такой статьи не должно существовать')
+        }
+    } else {
+        console.log("gqeg")
+        setError('Вы не можете редактировать эту статью')
+    }
+}
+
+export const createArticle = (articleId) => async (dispatch) => {
+    // Добавление в БД новой статьи под редакцией
 }
 
 
