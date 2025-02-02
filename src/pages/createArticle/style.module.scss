@@ -216,6 +216,15 @@
     cursor: pointer;
 }
 
+.createArticle_noPerm {
+    display: flex;
+    height: calc(100vh - 385px);
+
+    p {
+        font-size: 25px;
+    }
+}
+
 
 @media screen and (max-width: 1000px) {
     .preview {

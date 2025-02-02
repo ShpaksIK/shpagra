@@ -102,12 +102,28 @@ export const articlesAPI = {
             const metaArticle = Object.values(articles)
             .flatMap(articleArray => articleArray)
             .find(article => article.id == articleId && article.author_id == authorId)
-            if (metaArticle.length > 0) {
+            if (metaArticle) {
                 isAuthor = true
             }
             resolve({
                 'statusCode': 1,
                 'data': isAuthor
+            })
+        })
+    },
+    saveArticleToDraft(article, authId) {
+        return new Promise((resolve) => {
+            
+            resolve({
+                'statusCode': 1
+            })
+        })
+    },
+    requestArticle(article) {
+        return new Promise((resolve) => {
+            
+            resolve({
+                'statusCode': 1
             })
         })
     }

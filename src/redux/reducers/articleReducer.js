@@ -1,4 +1,5 @@
 import { articlesAPI, commentsAPI } from '../../api/api'
+import { articleCreator } from '../../utils/articleCreator'
 import { setError } from './errorReducer'
 
 
@@ -175,20 +176,49 @@ export const getArticleContent = (articleId) => async (dispatch) => {
 
 export const getArticleForEditing = (articleId, authId) => async (dispatch) => {
     const isAuthor = await articlesAPI.isAuthorArticle(articleId, authId)
-    if (isAuthor.data) {     
-        if (Number.isInteger(articleId)) {
-            
+    if (isAuthor.data) {
+        const fullArticleData = await articlesAPI.getFullArticle(articleId)
+        if (fullArticleData.statusCode === 1) {
+            dispatch(setEditingArticleAC(fullArticleData.data))
         } else {
-            setError('Такой статьи не должно существовать')
+            setError('Произошла ошибка при загрузке статьи')
         }
     } else {
-        console.log("gqeg")
         setError('Вы не можете редактировать эту статью')
+        dispatch(setEditingArticleAC({
+            'status_code': '403'
+        }))
     }
 }
 
-export const createArticle = (articleId) => async (dispatch) => {
-    // Добавление в БД новой статьи под редакцией
+export const createArticle = () => async (dispatch, getState) => {
+    dispatch(setEditingArticleAC({
+        ...articleCreator(getState().auth.username, getState().auth.id),
+        'content': [{
+            'type': 'title',
+            'text': 'Начните писать'
+        },]
+    }))
+}
+
+export const requestArticle = (articleId) => async (dispatch, getState) => {
+    // Добавление в БД новой статьи на проверку модерацией
+    const data = await articlesAPI.requestArticle(getState().article.editingArticle)
+    if (data.statusCode === 1) {
+        
+    } else {
+        setError('Произошла ошибка при запросе на публикацию')
+    }
+}
+
+export const saveArticleToDraft = (authId) => async (dispatch, getState) => {
+    // Сохранение статьи в черновик пользователя (запрос в БД)
+    const data = await articlesAPI.saveArticleToDraft(getState().article.editingArticle, authId)
+    if (data.statusCode === 1) {
+        
+    } else {
+        setError('Произошла ошибка при сохранении статьи')
+    }
 }
 
 

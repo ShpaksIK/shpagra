@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -7,7 +7,7 @@ import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import CreateArticleForm from './CreateArticleForm/CreateArticleForm'
 import CreateArticleContent from './CreateArticleContent'
-import { getArticleForEditing } from '../../redux/reducers/articleReducer'
+import { getArticleForEditing, createArticle } from '../../redux/reducers/articleReducer'
 
 
 const CreateArticlePage = (props) => {
@@ -21,13 +21,10 @@ const CreateArticlePage = (props) => {
             if (articleId) {
                 props.getArticleForEditing(articleId, props.id)
             } else {
-                
+                props.createArticle()
             }
         }
-    })
-
-    // Состояние окна 
-    const [previewWindow, setPreviewWindow] = useState(false)
+    })    
 
     return (
         <div className={style.main}>
@@ -49,7 +46,7 @@ const CreateArticlePage = (props) => {
 
 const mapStateToProps = (state) => ({
     isAuth: state.auth.isAuth,
-    id: state.auth.id
+    id: state.auth.id,
 })
 
-export default connect(mapStateToProps, {getArticleForEditing})(CreateArticlePage)
+export default connect(mapStateToProps, {getArticleForEditing, createArticle})(CreateArticlePage)

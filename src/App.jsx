@@ -24,7 +24,7 @@ const App = (props) => {
           <Route path='/forgot-password' element={<ResetPasswordPage />} />
           <Route path='/profile/:profileId?' element={<ProfileNavigator />} />
           <Route path='/article/:articleId' element={<ArticlePage />} />
-          <Route path='/article-creator' element={<CreateArticlePage />} exact />
+          <Route path='/article-creator/:articleId?' element={<CreateArticlePage />} />
           <Route path='/' element={<MainPage />} exact />
         </Routes>
       </>

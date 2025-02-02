@@ -14,6 +14,10 @@ import Preloader from '../../components/Preloader/Preloader'
 
 
 const CreateArticleContent = (props) => {
+    if (props.article.status_code == 403) {
+        return <div className={style.createArticle_noPerm}><p>Вы не владелец данной статьи! Она принадлежит другому пользователю. Если это не так, то обратитесь в поддержку.</p></div>
+    }
+
     if (!props.article.content) {
         return <Preloader />
     }
