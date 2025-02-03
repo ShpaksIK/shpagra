@@ -145,10 +145,11 @@ export let articles_to_moderation = [
 // Будет отдельная таблица, чтобы не нагружать таблицу articles
 // и эффективнее использовать ресурсы.
 // Id статьи не связано с id в таблице articles. Id будет перезаписан в будущем.
+// Также id имеет префикс 'r', чтобы отличаться при вводе в URL адресс id статьи.
 export let articles_draft = {
     '1': [
         {
-            'id': 1,
+            'id': 'r1',
             'title': 'Моя вторая статья!',
             'description': 'Что же написать во второй статье...',
             'banner': 'https://png.pngtree.com/thumb_back/fh260/background/20201015/pngtree-christmas-banner-background-with-black-snowflakes-and-green-pine-tree-merry-image_417517.jpg',

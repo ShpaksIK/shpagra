@@ -13,6 +13,7 @@ import CreatePostForm from './CreatePostForm/CreatePostForm'
 import { getProfileArticles } from '../../redux/reducers/articleReducer'
 import { getProfilePosts } from '../../redux/reducers/postReducer'
 import Preloader from '../../components/Preloader/Preloader'
+import ArticleDraft from '../../components/ArticleDraft/ArticleDraft'
 
 
 const ProfilePage = (props) => {
@@ -109,7 +110,7 @@ const ProfilePage = (props) => {
                                     <b>Черновик</b>
                                 </div>
                                 <div className={style.content_body}>
-                                    {props.draft.map(article => <div key={article.id}>{article.title}</div>)}
+                                    {props.draft.map(article => <ArticleDraft key={`art-draft-${article.id}`} articleDraftData={article} />)}
                                 </div>
                             </div>
                         )}

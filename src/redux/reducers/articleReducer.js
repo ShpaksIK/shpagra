@@ -165,12 +165,14 @@ export const getMainArticles = (authId = null) => async (dispatch) => {
     dispatch(setMainArticlesAC(data))
 }
 
-export const getProfileArticles = (profileId) => async (dispatch) => {
-    const data = await articlesAPI.getProfileArticles(profileId)
+export const getProfileArticles = (profileId) => async (dispatch, getState) => {
+    const data = await articlesAPI.getProfileArticles(profileId, getState().auth.id)
     if (data.statusCode === 1) {
         dispatch(setProfileArticlesAC(data.profileArticles))
-        dispatch(setDraftArticles(data.draftArticles))
-        dispatch(setModerationArticles(data.moderationArticles))
+        if (profileId === getState().auth.id) {
+            dispatch(setDraftArticles(data.draftArticles))
+            dispatch(setModerationArticles(data.moderationArticles))
+        }
     } else {
         dispatch(setError('Произошла ошибка при загрузке профиля'))
     }
@@ -205,8 +207,13 @@ export const getArticleContent = (articleId) => async (dispatch) => {
 
 export const getArticleForEditing = (articleId, authId) => async (dispatch) => {
     const isAuthor = await articlesAPI.isAuthorArticle(articleId, authId)
-    if (isAuthor.data) {
-        const fullArticleData = await articlesAPI.getFullArticle(articleId)
+    if (isAuthor.data.isAuthor) {
+        let fullArticleData
+        if (isAuthor.data.isDraft) {
+            fullArticleData = await articlesAPI.getArticleForEditing(articleId)
+        } else {
+            fullArticleData = await articlesAPI.getFullArticle(articleId)
+        }
         if (fullArticleData.statusCode === 1) {
             dispatch(setEditingArticleAC(fullArticleData.data))
         } else {
@@ -230,7 +237,7 @@ export const createArticle = () => async (dispatch, getState) => {
     }))
 }
 
-export const requestArticle = (articleId) => async (dispatch, getState) => {
+export const requestArticle = () => async (dispatch, getState) => {
     // Добавление в БД новой статьи на проверку модерацией
     const data = await articlesAPI.requestArticle(getState().article.editingArticle)
     if (data.statusCode === 1) {
