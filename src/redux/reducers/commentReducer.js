@@ -19,7 +19,7 @@ export const getArticleComments = (commentsId, articleId, articleType = 'main') 
             dispatch(setCommentsProfileArticleAC(data.data, articleId))
         }
     } else {
-        setError('Не удалось получить комментарии')
+        dispatch(setError('Не удалось получить комментарии'))
     }
 }
 
@@ -32,7 +32,7 @@ export const getPostComments = (commentsId, articleId, postType = 'main') => asy
             dispatch(setCommentsProfilePostAC(data.data, articleId))
         }
     } else {
-        setError('Не удалось получить комментарии')
+        dispatch(setError('Не удалось получить комментарии'))
     }
 }
 
@@ -43,10 +43,10 @@ export const commentArticle = (text, commentsId, articleId, authorId, articleTyp
         if (data.statusCode === 1) {
             dispatch(getArticleComments(commentsId, articleId, articleType))
         } else {
-            setError('Не удалось прокомментировать')
+            dispatch(setError('Не удалось прокомментировать'))
         }
     } else {
-        setError('Войдите в аккаунт, прежде чем комментировать')
+        dispatch(setError('Войдите в аккаунт, прежде чем комментировать'))
     }
 }
 
@@ -57,10 +57,10 @@ export const commentPost = (text, commentsId, postId, authorId, postType = 'main
         if (data.statusCode === 1) {
             dispatch(getPostComments(commentsId, postId, postType))
         } else {
-            setError('Не удалось прокомментировать')
+            dispatch(setError('Не удалось прокомментировать'))
         } 
     } else {
-        setError('Войдите в аккаунт, прежде чем комментировать')
+        dispatch(setError('Войдите в аккаунт, прежде чем комментировать'))
     }
 }
 
@@ -68,10 +68,10 @@ export const likeComment = (commentId, likeAuthorId) => async (dispatch, getStat
     if (getState().auth.isAuth) {
         const data = await commentsAPI.likeComment(commentId, likeAuthorId)
         if (data.statusCode !== 1) {
-            setError('Невозможно поставить лайк')
+            dispatch(setError('Невозможно поставить лайк'))
         }
     } else {
-        setError('Войдите в аккаунт, прежде чем ставить лайк')
+        dispatch(setError('Войдите в аккаунт, прежде чем ставить лайк'))
     }
 }
 
@@ -79,9 +79,9 @@ export const dislikeComment = (commentId, dislikeAuthorId) => async (dispatch, g
     if (getState().auth.isAuth) {
         const data = await commentsAPI.dislikeComment(commentId, dislikeAuthorId)
         if (data.statusCode !== 1) {
-            setError('Невозможно поставить дизлайк')
+            dispatch(setError('Невозможно поставить дизлайк'))
         } 
     } else {
-        setError('Войдите в аккаунт, прежде чем ставить дизлайк')
+        dispatch(setError('Войдите в аккаунт, прежде чем ставить дизлайк'))
     }
 }

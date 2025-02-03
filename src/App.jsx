@@ -10,6 +10,7 @@ import ProfileNavigator from './components/ProfileNavigator/ProfileNavigator'
 import CreateArticlePage from './pages/createArticle/CreateArticlePage'
 import ArticlePage from './pages/article/ArticlePage'
 import Preloader from './components/Preloader/Preloader'
+import Error from './components/Error/Error'
 
 
 const App = (props) => {
@@ -27,6 +28,7 @@ const App = (props) => {
           <Route path='/article-creator/:articleId?' element={<CreateArticlePage />} />
           <Route path='/' element={<MainPage />} exact />
         </Routes>
+        <Error />
       </>
     )
   } else {

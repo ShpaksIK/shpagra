@@ -10,7 +10,9 @@ export let users = {
         'posts_id': [1],
         'followers_id': [3],
         'followers_count': 1,
-        'followeds_id': [5]
+        'followeds_id': [5],
+        'draft_articles': [1],
+        'moderation_articles': [1]
     },
     '2': {
         'id': 2,
@@ -23,7 +25,9 @@ export let users = {
         'posts_id': [],
         'followers_id': [],
         'followers_count': 0,
-        'followeds_id': []
+        'followeds_id': [],
+        'draft_articles': [],
+        'moderation_articles': []
     },
     '3': {
         'id': 3,
@@ -36,7 +40,9 @@ export let users = {
         'posts_id': [2, 3],
         'followers_id': [],
         'followers_count': 0,
-        'followeds_id': [1]
+        'followeds_id': [1],
+        'draft_articles': [],
+        'moderation_articles': []
     },
     '4': {
         'id': 4,
@@ -49,12 +55,14 @@ export let users = {
         'posts_id': [],
         'followers_id': [],
         'followers_count': 0,
-        'followeds_id': []
+        'followeds_id': [],
+        'draft_articles': [],
+        'moderation_articles': []
     },
     '5': {
         'id': 5,
         'custom_id': '5',
-        'login': 'Яша Лава',
+        'login': 'Sigma boy',
         'password': '123456',
         'email': 'yashalava@xui.ru',
         'created_at': '01.01.2007',
@@ -62,7 +70,9 @@ export let users = {
         'posts_id': [],
         'followers_id': [1],
         'followers_count': 1,
-        'followeds_id': []
+        'followeds_id': [],
+        'draft_articles': [],
+        'moderation_articles': []
     }
 }
 
@@ -80,7 +90,7 @@ export let posts = {
     }],
     '3': [{
         'id': 2,
-        'text': 'Гыга гага у меня дцп',
+        'text': 'Hello world!',
         'created_at': '09.01.2025 в 23:52',
         'likes_count': 1,
         'likes_id': [5],
@@ -91,7 +101,7 @@ export let posts = {
     },
     {
         'id': 3,
-        'text': 'Я дцп №2',
+        'text': 'Мой пост №2',
         'created_at': '09.01.2025 в 23:52',
         'likes_count': 0,
         'likes_id': [],
@@ -102,6 +112,67 @@ export let posts = {
     },],
 }
 
+// Таблица articles_to_moderation (массив статей на проверку)
+// Данная таблица содержит массив со статьями, которые были
+// запрошены пользователями на публикацию.
+// При дальнейшем раскладе они будут либо удалены, либо опубликованы
+// и перенесуться в таблицу articles к пользователю.
+// Id статьи не имеет отношений к другим id.
+export let articles_to_moderation = [
+    {
+        'id': 1,
+        'title': 'Статья на проверку',
+        'description': 'Что же написать во этой статье...',
+        'banner': 'https://png.pngtree.com/thumb_back/fh260/background/20201015/pngtree-christmas-banner-background-with-black-snowflakes-and-green-pine-tree-merry-image_417517.jpg',
+        'created_at': '09.01.2025 в 23:52',
+        'content': [
+            {
+                'type': 'title',
+                'text': 'Заголовок 1'
+            },
+            {
+                'type': 'text',
+                'text': 'Параграф 1'
+            },
+        ],
+        'scopes': ['#рек'],
+        'author': 'Shpaks',
+        'author_id': 1
+    }
+]
+
+// Таблица articles_draft (id пользователя : массив его статей в черновиках)
+// Будет отдельная таблица, чтобы не нагружать таблицу articles
+// и эффективнее использовать ресурсы.
+// Id статьи не связано с id в таблице articles. Id будет перезаписан в будущем.
+export let articles_draft = {
+    '1': [
+        {
+            'id': 1,
+            'title': 'Моя вторая статья!',
+            'description': 'Что же написать во второй статье...',
+            'banner': 'https://png.pngtree.com/thumb_back/fh260/background/20201015/pngtree-christmas-banner-background-with-black-snowflakes-and-green-pine-tree-merry-image_417517.jpg',
+            'created_at': '09.01.2025 в 23:52',
+            'content': [
+                {
+                    'type': 'title',
+                    'text': 'Заголовок 1'
+                },
+                {
+                    'type': 'text',
+                    'text': 'Параграф 1'
+                },
+            ],
+            'scopes': ['#первый', '#рек'],
+            'author': 'Shpaks',
+            'author_id': 1
+        }
+    ]
+}
+
+// Таблица articles (id пользователя : массив его статей)
+// Сделал таким образом, чтобы система быстро получала доступ
+// к статьям конкретного пользователя.
 export let articles = {
     '2': [{
         'id': 1,
@@ -147,6 +218,12 @@ export let articles = {
     }],
 }
 
+// Таблица articles_content (id статьи : данные контента статьи)
+// Создал отдельную таблицу с контентом статей, чтобы не нагружать
+// таблицу articles, для эффективного использования ресурсов (память, тафик).
+// Иначе, при просмотре главной ленты, статьи грузились бы вместе с контентом,
+// что не эффективно, так как пользователь, вероятней всего, не будет смотреть
+// содержимое данной статьи.
 export let articles_content = {
     '1': {
         'id': 1,
@@ -244,6 +321,9 @@ export let articles_content = {
     },
 }
 
+// Таблица comments (массив всех комментариев)
+// Данная таблица содержит массив абсолютно всех комментариев пользователей
+// на сайте (статей и постов).
 export let comments = [
     {
         'id': 1,

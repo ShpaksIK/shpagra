@@ -12,10 +12,14 @@ const SET_COMMENTS_MAIN_ARTICLE = 'SET_COMMENTS_MAIN_ARTICLE'
 const SET_COMMENTS_PROFILE_ARTICLE = 'SET_COMMENTS_PROFILE_ARTICLE'
 const SET_FULL_ARTICLE_CONTENT = 'SET_FULL_ARTICLE_CONTENT'
 const SET_COMMENTS_FULL_ARTICLE = 'SET_COMMENTS_FULL_ARTICLE'
+const SET_DRAFT_ARTICLES = 'SET_DRAFT_ARTICLES'
+const SET_MODERATION_ARTICLES = 'SET_MODERATION_ARTICLES'
 
 let defaultState = {
     mainArticles: [],
     profileArticles: [],
+    draftArticles: [],
+    moderationArticles: [],
     editingArticle: {},
     filterType: 'popular',
     fullArticleContent: {}
@@ -88,6 +92,16 @@ const articleReducer = (state = defaultState, action) => {
                     comments_data: action.payload
                 }
             }
+        case SET_DRAFT_ARTICLES:
+            return {
+                ...state,
+                draftArticles: action.payload
+            }
+        case SET_MODERATION_ARTICLES:
+            return {
+                ...state,
+                moderationArticles: action.payload
+            }
         default:
             return state
     }
@@ -135,6 +149,15 @@ const setFullArticleContentAC = (fullArticle) => ({
     payload: fullArticle
 })
 
+const setDraftArticles = (draftArticles) => ({
+    type: SET_DRAFT_ARTICLES,
+    payload: draftArticles
+})
+
+const setModerationArticles = (moderationArticles) => ({
+    type: SET_MODERATION_ARTICLES,
+    payload: moderationArticles
+})
 
 // ======== Thunks ========
 export const getMainArticles = (authId = null) => async (dispatch) => {
@@ -144,17 +167,23 @@ export const getMainArticles = (authId = null) => async (dispatch) => {
 
 export const getProfileArticles = (profileId) => async (dispatch) => {
     const data = await articlesAPI.getProfileArticles(profileId)
-    dispatch(setProfileArticlesAC(data))
+    if (data.statusCode === 1) {
+        dispatch(setProfileArticlesAC(data.profileArticles))
+        dispatch(setDraftArticles(data.draftArticles))
+        dispatch(setModerationArticles(data.moderationArticles))
+    } else {
+        dispatch(setError('Произошла ошибка при загрузке профиля'))
+    }
 }
 
 export const likeArticle = (profileId, articleId, authId) => async (dispatch) => {
     if (authId) {
         const data = await articlesAPI.likeArticle(profileId, articleId, authId)
         if (data.statusCode !== 1) {
-            setError('Невозможно поставить лайк')
+            dispatch(setError('Невозможно поставить лайк'))
         }
     } else {
-        setError('Войдите в аккаунт, прежде чем ставить лайк')
+        dispatch(setError('Войдите в аккаунт, прежде чем ставить лайк'))
     }
 }
 
@@ -167,10 +196,10 @@ export const getArticleContent = (articleId) => async (dispatch) => {
             data.data.comments_data = commentsData.data
             dispatch(setFullArticleContentAC(data.data))
         } else {
-            setError('Не удалось получить комментарии')
+            dispatch(setError('Не удалось получить комментарии'))
         }
     } else {
-        setError('Произошла ошибка при загрузке статьи')
+        dispatch(setError('Произошла ошибка при загрузке статьи'))
     }
 }
 
@@ -181,10 +210,10 @@ export const getArticleForEditing = (articleId, authId) => async (dispatch) => {
         if (fullArticleData.statusCode === 1) {
             dispatch(setEditingArticleAC(fullArticleData.data))
         } else {
-            setError('Произошла ошибка при загрузке статьи')
+            dispatch(setError('Произошла ошибка при загрузке статьи'))
         }
     } else {
-        setError('Вы не можете редактировать эту статью')
+        dispatch(setError('Вы не можете редактировать эту статью'))
         dispatch(setEditingArticleAC({
             'status_code': '403'
         }))
@@ -207,7 +236,7 @@ export const requestArticle = (articleId) => async (dispatch, getState) => {
     if (data.statusCode === 1) {
         
     } else {
-        setError('Произошла ошибка при запросе на публикацию')
+        dispatch(setError('Произошла ошибка при запросе на публикацию'))
     }
 }
 
@@ -217,7 +246,7 @@ export const saveArticleToDraft = (authId) => async (dispatch, getState) => {
     if (data.statusCode === 1) {
         
     } else {
-        setError('Произошла ошибка при сохранении статьи')
+        dispatch(setError('Произошла ошибка при сохранении статьи'))
     }
 }
 

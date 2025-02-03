@@ -75,10 +75,10 @@ export const subscribe = (id) => async (dispatch, getState) => {
                 dispatch(subtractFollowersCountAC())
             }
         } else {
-            setError('Вы не можете подписываться на самого себя')
+            dispatch(setError('Вы не можете подписываться на самого себя'))
         }
     } else {
-        setError('Войдите в аккаунт, прежде чем подписываться')
+        dispatch(setError('Войдите в аккаунт, прежде чем подписываться'))
     }
 }
 

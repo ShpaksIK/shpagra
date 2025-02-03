@@ -1,6 +1,3 @@
-import { errorTimeout } from "../../utils/timeouts"
-
-
 // ======== Initialize ========
 const SET_ERROR = 'SET_ERROR'
 
@@ -28,11 +25,12 @@ const setErrorAC = (text) => ({
 })
 
 // ======== Thunks ========
-export const setError = (text) => {
-    setErrorAC(text)
-    // setTimeout(() => {
-    //     setError(null)
-    // }, 3000)
+export const setError = (text) => async (dispatch) => {
+    dispatch(setErrorAC(text))
+    console.log(text)
+    setTimeout(() => {
+        dispatch(setError(null))
+    }, 3000)
 }
 
 

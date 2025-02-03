@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { users, articles, posts, comments, articles_content } from './../redux/db'
+import { users, articles, posts, comments, articles_content, articles_to_moderation, articles_draft } from './../redux/db'
 
 
 // const instance = axios.create({
@@ -39,7 +39,7 @@ export const profileAPI = {
                 subscribeType = 'unsub'
             }
             resolve({
-                'statusCode': 0,
+                'statusCode': 1,
                 'type': subscribeType
             })
         })
@@ -58,8 +58,13 @@ export const articlesAPI = {
     },
     getProfileArticles(profileId) {
         return new Promise((resolve) => {
-            setTimeout(() => resolve(articles[`${profileId}`]), 0)
-            // resolve(articles[`${profileId}`])
+            // setTimeout(() => resolve(articles[`${profileId}`]), 2000)
+            resolve({
+                'statusCode': 1,
+                'profileArticles': articles[`${profileId}`],
+                'draftArticles': articles_draft[`${profileId}`],
+                'moderationArticles': [articles_to_moderation.find(art => art.author_id === profileId)]
+            })
         }).then(data => data)
     },
     likeArticle(profileId, articleId, authId) {
@@ -77,7 +82,7 @@ export const articlesAPI = {
                 }
             }
             resolve({
-                'statusCode': 0
+                'statusCode': 1
             })
         })
     },
@@ -113,7 +118,10 @@ export const articlesAPI = {
     },
     saveArticleToDraft(article, authId) {
         return new Promise((resolve) => {
-            
+            const id = Object.values(articles_draft).reduce((accumulator, current) => accumulator + current.length, 0) + 1 
+            article.id = id
+            articles_draft[`${authId}`] = [article, ...articles_draft[`${authId}`]]
+            users[`${authId}`].draft_articles.push(id)
             resolve({
                 'statusCode': 1
             })
@@ -121,7 +129,14 @@ export const articlesAPI = {
     },
     requestArticle(article) {
         return new Promise((resolve) => {
-            
+            const id = articles_to_moderation.length
+            articles_to_moderation.push({
+                ...article,
+                'id': id
+            })
+            article.id = articles_to_moderation.length + 1
+            articles_to_moderation = [article, ...articles_to_moderation]
+            users[`${article.author_id}`].moderation_articles.push(id)
             resolve({
                 'statusCode': 1
             })

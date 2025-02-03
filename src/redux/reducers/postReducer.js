@@ -131,14 +131,14 @@ export const sendPost = (text) => async (dispatch, getState) => {
     if (sendData.statusCode === 1) {
         dispatch(addProfilePostsAC(post))
     } else {
-        setError('Невозможно создать пост')
+        dispatch(setError('Невозможно создать пост'))
     }
 }
 
 export const likePost = (profileId, postId, authId) => async (dispatch) => {
     const data = await postsAPI.likePost(profileId, postId, authId)
     if (data.statusCode !== 1) {
-        setError('Невозможно поставить лайк')
+        dispatch(setError('Невозможно поставить лайк'))
     }
 }
 

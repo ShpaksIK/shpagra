@@ -103,6 +103,26 @@ const ProfilePage = (props) => {
                                 </> : loadArticlesBlock}
                             </div>
                         </div>
+                        {props.draft.length > 0 && (
+                            <div className={style.content_block}>
+                                <div className={style.content_title}>
+                                    <b>Черновик</b>
+                                </div>
+                                <div className={style.content_body}>
+                                    {props.draft.map(article => <div key={article.id}>{article.title}</div>)}
+                                </div>
+                            </div>
+                        )}
+                        {props.moderation.length > 0 && (
+                            <div className={style.content_block}>
+                                <div className={style.content_title}>
+                                    <b>На проверке</b>
+                                </div>
+                                <div className={style.content_body}>
+                                    {props.moderation.map(article => <div key={article.id}>{article.title}</div>)}
+                                </div>
+                            </div>
+                        )}
                         <div className={style.content_block}>
                             <div className={style.content_title}>
                                 <b>Мои посты</b>
@@ -136,6 +156,8 @@ const mapStateToProps = (state) => ({
     email: state.auth.email,
     followersCount: state.auth.followersCount,
     articles: state.article.profileArticles,
+    draft: state.article.draftArticles,
+    moderation: state.article.moderationArticles,
     posts: state.post.profilePosts
 })
 
