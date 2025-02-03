@@ -128,7 +128,7 @@ export const articlesAPI = {
             .find(article => article.id == articleId && article.author_id == authorId)
             const metaDraftArticle = Object.values(articles_draft)
             .flatMap(articleArray => articleArray)
-            .find(article => article.author_id == authorId)
+            .find(article => article.id == articleId && article.author_id == authorId)
             if (metaArticle) {
                 isAuthor = true
             } else if (metaDraftArticle) {
