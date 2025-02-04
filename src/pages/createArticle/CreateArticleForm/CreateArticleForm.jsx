@@ -39,7 +39,9 @@ const CreateArticleForm = (props) => {
     // Хранение, добавление и удаление хештегов
     const [hashtags, setHashtags] = useState([])
     useEffect(() => {
-        setHashtags(props.article.scopes)
+        if (props.article.scopes) {
+            setHashtags(props.article.scopes)
+        }
     }, [props.article.scopes])
     const addHashtag = () => {
         if (inputValue && !hashtags.includes(inputValue)) {

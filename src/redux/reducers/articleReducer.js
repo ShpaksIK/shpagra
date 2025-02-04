@@ -42,7 +42,9 @@ const articleReducer = (state = defaultState, action) => {
         case CHANGE_EDITING_ARTICLES_DATA:
             return {
                 ...state,
-                editingArticle: action.payload
+                editingArticle: {
+                    ...action.payload
+                }
             }
         case SET_FILTER_TYPE:
             return {
@@ -206,6 +208,7 @@ export const getArticleContent = (articleId) => async (dispatch) => {
 }
 
 export const getArticleForEditing = (articleId, authId) => async (dispatch) => {
+    dispatch(setEditingArticleAC({}))
     const isAuthor = await articlesAPI.isAuthorArticle(articleId, authId)
     if (isAuthor.data.isAuthor) {
         let fullArticleData
@@ -222,12 +225,13 @@ export const getArticleForEditing = (articleId, authId) => async (dispatch) => {
     } else {
         dispatch(setError('Вы не можете редактировать эту статью'))
         dispatch(setEditingArticleAC({
-            'status_code': '403'
+            'status_code': 403
         }))
     }
 }
 
 export const createArticle = () => async (dispatch, getState) => {
+    dispatch(setEditingArticleAC({}))
     dispatch(setEditingArticleAC({
         ...articleCreator(getState().auth.username, getState().auth.id),
         'content': [{

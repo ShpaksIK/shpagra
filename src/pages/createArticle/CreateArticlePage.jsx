@@ -11,6 +11,7 @@ import { getArticleForEditing, createArticle } from '../../redux/reducers/articl
 
 
 const CreateArticlePage = (props) => {
+    
     // Проверка на авторизированного пользователя и загрузка статьи
     const navigate = useNavigate()
     const { articleId } = useParams()
@@ -24,7 +25,7 @@ const CreateArticlePage = (props) => {
                 props.createArticle()
             }
         }
-    })    
+    }, [])
 
     return (
         <div className={style.main}>
@@ -46,7 +47,7 @@ const CreateArticlePage = (props) => {
 
 const mapStateToProps = (state) => ({
     isAuth: state.auth.isAuth,
-    id: state.auth.id,
+    id: state.auth.id
 })
 
 export default connect(mapStateToProps, {getArticleForEditing, createArticle})(CreateArticlePage)
