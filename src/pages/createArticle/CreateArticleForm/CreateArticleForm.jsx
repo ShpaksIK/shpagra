@@ -7,7 +7,7 @@ import * as Yup from 'yup'
 import style from '../style.module.scss'
 import removeSVG from './../../../assets/svg/remove.svg'
 import Preloader from '../../../components/Preloader/Preloader'
-import { saveArticleToDraft } from '../../../redux/reducers/articleReducer'
+import { saveArticleToDraft, requestArticle } from '../../../redux/reducers/articleReducer'
 
 
 const CreateArticleForm = (props) => {
@@ -57,14 +57,21 @@ const CreateArticleForm = (props) => {
 
     // Отправка формы
     const submitForm = (values) => {
-        console.log({
+        props.requestArticle({
             ...values,
-            hashtags: hashtags
-        })
+            hashtags: hashtags,
+        }, props.isUpdate)
     }
 
-    const saveArticleToDraft = () => {
-        props.saveArticleToDraft(props.id)
+    // Сохранение статьи в черновик
+    const saveArticleToDraft = (values) => {
+        if (values.submitBttn) {
+            delete values['submitBttn']
+        }
+        props.saveArticleToDraft({
+            ...values,
+            hashtags: hashtags,
+        })
     }
 
     return (
@@ -74,14 +81,19 @@ const CreateArticleForm = (props) => {
                 <Formik
                     initialValues={{
                         title: props.article.title,
-                        description: props.article.description
+                        description: props.article.description,
+                        submitBttn: ''
                     }}
                     validationSchema={CreateArticleSchema}
                     onSubmit={ (values) => {
-                        submitForm(values)
+                        if (values.submitBttn === 'toRequest') {
+                            submitForm(values)
+                        } else {
+                            saveArticleToDraft(values)
+                        }
                     }}
                 >
-                    {() => (
+                    {(helpers) => (
                         <Form className={style.create_article}>
                             <div className={style.input_block}>
                                 <p>Заголовок</p>
@@ -109,8 +121,8 @@ const CreateArticleForm = (props) => {
                                     ))}
                                 </div>
                             </div>
-                            <div className={style.button_insert} onClick={saveArticleToDraft}>Сохранить в черновики</div>
-                            <button className={style.button} type='submit'>Запрос на публикацию</button>
+                            <button className={style.button_insert} onClick={() => {helpers.setFieldValue('submitBttn', 'toDraft')}} type='submit'>Сохранить в черновики</button>
+                            <button className={style.button} onClick={() => {helpers.setFieldValue('submitBttn', 'toRequest')}} type='submit'>Запрос на публикацию</button>
                         </Form>
                     )}
                 </Formik>
@@ -120,8 +132,7 @@ const CreateArticleForm = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    id: state.auth.id,
     article: state.article.editingArticle
 })
 
-export default connect(mapStateToProps, {saveArticleToDraft})(CreateArticleForm)
+export default connect(mapStateToProps, {saveArticleToDraft, requestArticle})(CreateArticleForm)

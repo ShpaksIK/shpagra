@@ -118,6 +118,8 @@ export let posts = {
 // При дальнейшем раскладе они будут либо удалены, либо опубликованы
 // и перенесуться в таблицу articles к пользователю.
 // Id статьи не имеет отношений к другим id.
+// После публикации значение content перейдет в другую таблицу и удалится.
+// Поле is_update удалится, но будет проверка с ним.
 export let articles_to_moderation = [
     {
         'id': 1,
@@ -137,7 +139,8 @@ export let articles_to_moderation = [
         ],
         'scopes': ['#рек'],
         'author': 'Shpaks',
-        'author_id': 1
+        'author_id': 1,
+        'is_update': false
     }
 ]
 

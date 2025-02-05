@@ -1,18 +1,12 @@
-export const articleCreator = (author, authorId) => {
-    
-    const currentDate = new Date()
-    const day = String(currentDate.getDate()).padStart(2, '0')
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0')
-    const year = currentDate.getFullYear();
-    const hours = String(currentDate.getHours()).padStart(2, '0')
-    const minutes = String(currentDate.getMinutes()).padStart(2, '0')
-    const formattedDate = `${day}.${month}.${year} в ${hours}:${minutes}`
+import { formattedDateCreator } from "./formattedDateCreator"
 
+
+export const articleCreator = (title = '', description = '', author, authorId) => {
     return {
-        'title': '',
-        'description': '',
+        'title': title,
+        'description': description,
         'banner': '',
-        'created_at': formattedDate,
+        'created_at': formattedDateCreator(),
         'likes_count': 0,
         'likes_id': [],
         'comments_id': [],

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -11,6 +11,7 @@ import { getArticleForEditing, createArticle } from '../../redux/reducers/articl
 
 
 const CreateArticlePage = (props) => {
+    const [isUpdate, setIsUpdate] = useState(false)
     
     // Проверка на авторизированного пользователя и загрузка статьи
     const navigate = useNavigate()
@@ -20,6 +21,7 @@ const CreateArticlePage = (props) => {
             navigate('/login')
         } else {
             if (articleId) {
+                setIsUpdate(true)
                 props.getArticleForEditing(articleId, props.id)
             } else {
                 props.createArticle()
@@ -36,7 +38,7 @@ const CreateArticlePage = (props) => {
             <div className={style.createArticle_block}>
                 <h3>Создать новую статью</h3>
                 <div className={style.createArticle_block_flex}>
-                    <CreateArticleForm />
+                    <CreateArticleForm isUpdate={isUpdate} />
                     <CreateArticleContent />
                 </div>
             </div>

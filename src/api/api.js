@@ -146,25 +146,51 @@ export const articlesAPI = {
     },
     saveArticleToDraft(article, authId) {
         return new Promise((resolve) => {
-            const id = `r${Object.values(articles_draft).reduce((accumulator, current) => accumulator + current.length, 0) + 1}`
+            let id = `r${Object.values(articles_draft).reduce((accumulator, current) => accumulator + current.length, 0) + 1}`
+            article.id = id
+            if (!article.old_id) {
+                delete article['old_id']
+            }
+            if (article.old_id && articles_draft[`${authId}`].filter(art => art.old_id == article.old_id).length > 1) {
+                articles_draft[`${authId}`] = articles_draft[`${authId}`].filter(art => article.old_id && art.old_id != article.old_id)
+            }
+            id = `r${Object.values(articles_draft).reduce((accumulator, current) => accumulator + current.length, 0) + 1}`
             article.id = id
             articles_draft[`${authId}`] = [article, ...articles_draft[`${authId}`]]
             users[`${authId}`].draft_articles.push(id)
+            console.log(articles_draft)
             resolve({
                 'statusCode': 1
             })
         })
     },
-    requestArticle(article) {
+    requestArticle(article, isUpdate = false) {
         return new Promise((resolve) => {
+            if (articles_to_moderation.find(atm => atm.author_id === article.author_id)) {
+                resolve({
+                    'statusCode': 2
+                })
+                return
+            }
             const id = articles_to_moderation.length
-            articles_to_moderation.push({
-                ...article,
-                'id': id
-            })
-            article.id = articles_to_moderation.length + 1
-            articles_to_moderation = [article, ...articles_to_moderation]
-            users[`${article.author_id}`].moderation_articles.push(id)
+            if (isUpdate) {
+                articles_to_moderation.push({
+                    ...article,
+                    'id': id,
+                    'is_update': true
+                })
+                article.id = articles_to_moderation.length + 1
+                articles_to_moderation.push(article)
+                users[`${article.author_id}`].moderation_articles.push(id)
+            } else {     
+                articles_to_moderation.push({
+                    ...article,
+                    'id': id
+                })
+                article.id = articles_to_moderation.length + 1
+                articles_to_moderation.push(article)
+                users[`${article.author_id}`].moderation_articles.push(id)
+            }
             resolve({
                 'statusCode': 1
             })

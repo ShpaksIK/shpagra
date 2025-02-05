@@ -31,7 +31,7 @@ export const setError = (text) => async (dispatch, getState) => {
         if (getState().error.text) {
             dispatch(setError(null))
         }
-    }, 3000)
+    }, 5000)
 }
 
 
