@@ -59,8 +59,8 @@ const CreateArticleForm = (props) => {
     const submitForm = (values) => {
         props.requestArticle({
             ...values,
-            hashtags: hashtags,
-        }, props.isUpdate)
+            'scopes': hashtags,
+        })
     }
 
     // Сохранение статьи в черновик
@@ -70,7 +70,7 @@ const CreateArticleForm = (props) => {
         }
         props.saveArticleToDraft({
             ...values,
-            hashtags: hashtags,
+            'scopes': hashtags,
         })
     }
 

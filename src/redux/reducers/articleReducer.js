@@ -15,6 +15,7 @@ const SET_FULL_ARTICLE_CONTENT = 'SET_FULL_ARTICLE_CONTENT'
 const SET_COMMENTS_FULL_ARTICLE = 'SET_COMMENTS_FULL_ARTICLE'
 const SET_DRAFT_ARTICLES = 'SET_DRAFT_ARTICLES'
 const SET_MODERATION_ARTICLES = 'SET_MODERATION_ARTICLES'
+const ADD_ELEMENT_TO_ARTICLE = 'ADD_ELEMENT_TO_ARTICLE'
 
 let defaultState = {
     mainArticles: [],
@@ -105,6 +106,14 @@ const articleReducer = (state = defaultState, action) => {
                 ...state,
                 moderationArticles: action.payload
             }
+        case ADD_ELEMENT_TO_ARTICLE:
+            return {
+                ...state,
+                editingArticle: {
+                    ...state.editingArticle,
+                    content: [...state.editingArticle.content, action.payload]
+                }
+            }
         default:
             return state
     }
@@ -145,6 +154,11 @@ export const setCommentsProfileArticleAC = (comments, articleId) => ({
 export const setCommentsViewArticleAC = (comments) => ({
     type: SET_COMMENTS_FULL_ARTICLE,
     payload: comments
+})
+
+const addElementToArticleAC = (element) => ({
+    type: ADD_ELEMENT_TO_ARTICLE,
+    payload: element
 })
 
 const setFullArticleContentAC = (fullArticle) => ({
@@ -212,14 +226,15 @@ export const getArticleContent = (articleId) => async (dispatch) => {
     }
 }
 
-export const getArticleForEditing = (articleId, authId) => async (dispatch) => {
+export const getArticleForEditing = (articleId, type) => async (dispatch, getState) => {
     // Получить статью для её редактирования
     // (без некоторых значений, например без комментариев)
     dispatch(setEditingArticleAC({}))
-    const isAuthor = await articlesAPI.isAuthorArticle(articleId, authId)
+    const isAuthor = await articlesAPI.isAuthorArticle(articleId, getState().auth.id)
     if (isAuthor.data.isAuthor) {
         let fullArticleData
         if (isAuthor.data.isDraft) {
+            console.log('draft')
             fullArticleData = await articlesAPI.getArticleForEditing(articleId)
         } else {
             fullArticleData = await articlesAPI.getFullArticle(articleId)
@@ -249,24 +264,19 @@ export const createArticle = () => async (dispatch, getState) => {
     }))
 }
 
-export const requestArticle = (article, isUpdate = false) => async (dispatch, getState) => {
+export const requestArticle = (article) => async (dispatch, getState) => {
     // Добавление в БД новой или обновленной статьи на проверку модерацией
-    let data
-    if (isUpdate) {
-        data = await articlesAPI.requestArticle({
-            ...getState().article.editingArticle,
-            ...article,
-            'created_at': formattedDateCreator(),
-            'old_id': getState().article.editingArticle.id
-        }, true)
-    } else {
-        data = await articlesAPI.requestArticle(getState().article.editingArticle)
-    }
+    const data = await articlesAPI.requestArticle({
+        ...getState().article.editingArticle,
+        ...article,
+        'created_at': formattedDateCreator(),
+        'old_id': getState().article.editingArticle.id
+    })
     if (data.statusCode === 1) {
         
     } else if (data.statusCode === 2) {
         dispatch(setError('Вы не можете подать более 1-го запроса на публикацию статьи. Текущая статья сохранена в черновиках'))
-        dispatch(saveArticleToDraft())
+        dispatch(saveArticleToDraft(article))
     } else {
         dispatch(setError('Произошла ошибка при запросе на публикацию'))
     }
@@ -274,17 +284,49 @@ export const requestArticle = (article, isUpdate = false) => async (dispatch, ge
 
 export const saveArticleToDraft = (article) => async (dispatch, getState) => {
     // Сохранение статьи в черновик пользователя (запрос в БД)
-    const data = await articlesAPI.saveArticleToDraft({
-        ...getState().article.editingArticle,
-        ...article,
-        'created_at': formattedDateCreator(),
-        'old_id': getState().article.editingArticle.id
-    }, getState().auth.id)
-    if (data.statusCode === 1) {
-        
+    if (getState().article.editingArticle.id) {
+        const data = await articlesAPI.updateArticleToDraft({
+            ...getState().article.editingArticle,
+            ...article,
+            'created_at': formattedDateCreator(),
+            'old_id': getState().article.editingArticle.id
+        }, getState().auth.id)
+        if (data.statusCode === 1) {
+            
+        } else {
+            dispatch(setError('Произошла ошибка при сохранении статьи'))
+        }
     } else {
-        dispatch(setError('Произошла ошибка при сохранении статьи'))
+        const data = await articlesAPI.saveArticleToDraft({
+            ...getState().article.editingArticle,
+            ...article,
+            'created_at': formattedDateCreator(),
+            'old_id': getState().article.editingArticle.id
+        }, getState().auth.id)
+        if (data.statusCode === 1) {
+            
+        } else {
+            dispatch(setError('Произошла ошибка при сохранении статьи'))
+        }
     }
+}
+
+export const saveCurrentArticleToDraft = (articleId) => async (dispatch, getState) => {
+    dispatch(getArticleForEditing(articleId))
+    // const data = await articlesAPI.saveArticleToDraft({
+    //     ...getState().article.editingArticle,
+    //     'created_at': formattedDateCreator(),
+    //     'old_id': getState().article.editingArticle.id
+    // }, getState().auth.id)
+    // if (data.statusCode === 1) {
+        
+    // } else {
+    //     dispatch(setError('Произошла ошибка при добавлении статьи в черновик'))
+    // }
+}
+
+export const addElementToArticle = (element) => async (dispatch) => {
+    dispatch(addElementToArticleAC(element))
 }
 
 

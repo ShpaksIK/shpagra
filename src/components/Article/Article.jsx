@@ -7,7 +7,7 @@ import style from './style.module.scss'
 import likeSVG from './../../assets/svg/like.svg'
 import commentSVG from './../../assets/svg/comment.svg'
 import settingsSVG from './../../assets/svg/settings.svg'
-import { likeArticle } from '../../redux/reducers/articleReducer'
+import { likeArticle, saveCurrentArticleToDraft } from '../../redux/reducers/articleReducer'
 import Comments from '../Comments/Comments'
 
 
@@ -20,6 +20,10 @@ const Article = (props) => {
             setIsLike(!isLike)
             props.likeArticle(profileId, articleId, props.id)
         }
+    }
+
+    const openArticleRedactor = () => {
+        props.saveCurrentArticleToDraft(props.articleData.id)
     }
 
     const scopesElements = props.articleData.scopes.map((scop) => <div key={scop}>{scop}</div>)
@@ -78,7 +82,7 @@ const Article = (props) => {
                             <p>{props.articleData.comments_count}</p>
                     </div>
                     {props.id === props.articleData.author_id && (
-                        <Link to={`/article-creator/${props.articleData.id}`}>
+                        <Link to={`/article-creator/r/${props.articleData.id}`}>
                             <div className={style.article_footer_block}>
                                 <img src={settingsSVG} />
                                 <p>Редактировать</p>
@@ -106,4 +110,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {likeArticle})(Article)
+export default connect(mapStateToProps, {likeArticle, saveCurrentArticleToDraft})(Article)

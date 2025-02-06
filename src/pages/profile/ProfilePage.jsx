@@ -110,7 +110,7 @@ const ProfilePage = (props) => {
                                     <b>Черновик</b>
                                 </div>
                                 <div className={style.content_body}>
-                                    {props.draft.map(article => <ArticleDraft key={`art-draft-${article.id}`} articleDraftData={article} />)}
+                                    {props.draft.map(articleDraft => <ArticleDraft key={`art-draft-${articleDraft.id}`} articleDraftData={articleDraft} />)}
                                 </div>
                             </div>
                         )}

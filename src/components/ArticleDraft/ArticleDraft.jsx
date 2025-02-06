@@ -12,7 +12,9 @@ const ArticleDraft = (props) => {
     return (
         <div className={style.article}>
             <div className={style.picture}>
-                <img src={props.articleDraftData.banner} />
+                <Link to={`/article-creator/r/${props.articleDraftData.id}`}>
+                    <img src={props.articleDraftData.banner} />
+                </Link>
             </div>
             <div className={style.info}>
                 <div className={style.author}>
@@ -37,14 +39,18 @@ const ArticleDraft = (props) => {
                 </div>
                 <div>
                     <div className={style.title}>
-                        <b>{props.articleDraftData.title}</b>
+                        <Link to={`/article-creator/r/${props.articleDraftData.id}`}>
+                            <b>{props.articleDraftData.title}</b>
+                        </Link>
                     </div>
                     <div className={style.description}>
-                        <p>{props.articleDraftData.description}</p>
+                        <Link to={`/article-creator/r/${props.articleDraftData.id}`}>
+                            <p>{props.articleDraftData.description}</p>
+                        </Link>
                     </div>
                 </div>
                 <div className={style.article_footer}>
-                    <Link to={`/article-creator/${props.articleDraftData.id}`}>
+                    <Link to={`/article-creator/r/${props.articleDraftData.id}`}>
                         <div className={style.article_footer_block}>
                             <img src={settingsSVG} />
                             <p>Редактировать</p>
