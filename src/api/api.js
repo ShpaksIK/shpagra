@@ -121,8 +121,11 @@ export const articlesAPI = {
     },
     getArticleForEditingFormMain(articleId, authId) {
         return new Promise((resolve) => {
-            const metaArticle = articles[authId].find(art => art.id == articleId)
-            if (metaArticle.id) {
+            const metaArticle = {
+                ...articles[authId].find(art => art.id == articleId),
+                'content': [...articles_content[articleId].content]
+            }
+            if (metaArticle) {
                 resolve({
                     'statusCode': 1,
                     'data': metaArticle
@@ -154,37 +157,12 @@ export const articlesAPI = {
             })
         })
     },
-    // isAuthorArticle(articleId, authorId) {
-    //     return new Promise((resolve) => {
-    //         let isAuthor = false
-    //         let isDraft = false
-    //         const metaArticle = Object.values(articles)
-    //         .flatMap(articleArray => articleArray)
-    //         .find(article => article.id == articleId && article.author_id == authorId)
-    //         const metaDraftArticle = Object.values(articles_draft)
-    //         .flatMap(articleArray => articleArray)
-    //         .find(article => article.id == articleId && article.author_id == authorId)
-    //         if (metaArticle) {
-    //             isAuthor = true
-    //         } else if (metaDraftArticle) {
-    //             isAuthor = true
-    //             isDraft = true
-    //         } 
-    //         resolve({
-    //             'statusCode': 1,
-    //             'data': {
-    //                 'isAuthor': isAuthor,
-    //                 'isDraft': isDraft
-    //             },
-    //         })
-    //     })
-    // },
     isAuthorPublicArticle(articleId, authorId) {
         return new Promise((resolve) => {
             const metaArticle = Object.values(articles)
             .flatMap(articleArray => articleArray)
             .find(article => article.id == articleId && article.author_id == authorId)
-            if (metaArticle.id) {
+            if (metaArticle) {
                 resolve({
                     'statusCode': 1,
                     'data': {
@@ -207,7 +185,7 @@ export const articlesAPI = {
                 const metaArticleDraft = Object.values(articles_draft)
                 .flatMap(articleArray => articleArray)
                 .find(article => article.id == articleId && article.author_id == authorId)
-                if (metaArticleDraft.id) {
+                if (metaArticleDraft) {
                     resolve({
                         'statusCode': 1,
                         'data': {
@@ -220,7 +198,7 @@ export const articlesAPI = {
                 }
             } else if (type === 'moder') {
                 const metaArticleModer = Object.values(articles_to_moderation).find(article => article.id == articleId && article.author_id == authorId)
-                if (metaArticleModer.id) {
+                if (metaArticleModer) {
                     resolve({
                         'statusCode': 1,
                         'data': {

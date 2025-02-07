@@ -256,9 +256,20 @@ export const getArticleForEditing = (articleId, type) => async (dispatch, getSta
         if (isAuthor.data.isAuthor) {
             const fullArticleData = await articlesAPI.getArticleForEditingFormMain(articleId, getState().auth.id)
             if (fullArticleData.statusCode === 1) {
-                // Сделать добавление в черновик
-                // ...
-                dispatch(setEditingArticleAC(fullArticleData.data))
+                dispatch(setEditingArticleAC({
+                    ...fullArticleData.data,
+                    'editing_from': 'public'
+                }))
+                // Добавление в черновик
+                // const data = await articlesAPI.saveArticleToDraft({
+                //     ...fullArticleData.data,
+                //     'created_at': formattedDateCreator(),
+                //     'old_id': fullArticleData.data.id
+                // }, getState().auth.id)
+                // if (data.statusCode === 1) {
+                // } else {
+                //     dispatch(setError('Произошла ошибка при сохранении статьи'))
+                // }
             } else {
                 dispatch(setError('Возникла непредвиденная ошибка'))
             }
@@ -269,27 +280,6 @@ export const getArticleForEditing = (articleId, type) => async (dispatch, getSta
             }))
         }
     }
-
-    // const isAuthor = await articlesAPI.isAuthorArticle(articleId, getState().auth.id)
-    // if (isAuthor.data.isAuthor) {
-    //     let fullArticleData
-    //     if (isAuthor.data.isDraft) {
-    //         console.log('draft')
-    //         fullArticleData = await articlesAPI.getArticleForEditing(articleId)
-    //     } else {
-    //         fullArticleData = await articlesAPI.getFullArticle(articleId)
-    //     }
-    //     if (fullArticleData.statusCode === 1) {
-    //         dispatch(setEditingArticleAC(fullArticleData.data))
-    //     } else {
-    //         dispatch(setError('Произошла ошибка при загрузке статьи'))
-    //     }
-    // } else {
-    //     dispatch(setError('Вы не можете редактировать эту статью'))
-    //     dispatch(setEditingArticleAC({
-    //         'status_code': 403
-    //     }))
-    // }
 }
 
 export const createArticle = () => async (dispatch, getState) => {
@@ -324,7 +314,7 @@ export const requestArticle = (article) => async (dispatch, getState) => {
 
 export const saveArticleToDraft = (article) => async (dispatch, getState) => {
     // Сохранение статьи в черновик пользователя (запрос в БД)
-    if (getState().article.editingArticle.id) {
+    if (getState().article.editingArticle.editing_from !== 'public' && getState().article.editingArticle.id) {
         const data = await articlesAPI.updateArticleToDraft({
             ...getState().article.editingArticle,
             ...article,
@@ -349,20 +339,6 @@ export const saveArticleToDraft = (article) => async (dispatch, getState) => {
             dispatch(setError('Произошла ошибка при сохранении статьи'))
         }
     }
-}
-
-export const saveCurrentArticleToDraft = (articleId) => async (dispatch, getState) => {
-    dispatch(getArticleForEditing(articleId))
-    // const data = await articlesAPI.saveArticleToDraft({
-    //     ...getState().article.editingArticle,
-    //     'created_at': formattedDateCreator(),
-    //     'old_id': getState().article.editingArticle.id
-    // }, getState().auth.id)
-    // if (data.statusCode === 1) {
-        
-    // } else {
-    //     dispatch(setError('Произошла ошибка при добавлении статьи в черновик'))
-    // }
 }
 
 export const addElementToArticle = (element) => async (dispatch) => {

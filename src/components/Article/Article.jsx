@@ -7,7 +7,7 @@ import style from './style.module.scss'
 import likeSVG from './../../assets/svg/like.svg'
 import commentSVG from './../../assets/svg/comment.svg'
 import settingsSVG from './../../assets/svg/settings.svg'
-import { likeArticle, saveCurrentArticleToDraft } from '../../redux/reducers/articleReducer'
+import { likeArticle } from '../../redux/reducers/articleReducer'
 import Comments from '../Comments/Comments'
 
 
@@ -110,4 +110,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {likeArticle, saveCurrentArticleToDraft})(Article)
+export default connect(mapStateToProps, {likeArticle})(Article)

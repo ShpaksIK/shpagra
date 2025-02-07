@@ -8,7 +8,7 @@ import settingsSVG from './../../assets/svg/settings.svg'
 
 const ArticleDraft = (props) => {
     const scopesElements = props.articleDraftData.scopes.map((scop) => <div key={scop}>{scop}</div>)
-
+    
     return (
         <div className={style.article}>
             <div className={style.picture}>
