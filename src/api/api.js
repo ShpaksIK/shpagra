@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { users, articles, posts, comments, articles_content } from './../redux/db'
+import { users, articles, posts, comments, articles_content, articles_to_moderation, articles_draft } from './../redux/db'
 
 
 // const instance = axios.create({
@@ -14,7 +14,7 @@ export const authAPI = {
     me() {
         return new Promise((resolve) => {
             resolve(users['1'])
-        }).then(data => data)
+        })
     }
 }
 
@@ -22,7 +22,7 @@ export const profileAPI = {
     getProfile(id) {
         return new Promise((resolve) => {
             resolve(users[id])
-        }).then(data => data)
+        })
     },
     subscribe(id, authId) {
         return new Promise((resolve) => {
@@ -39,7 +39,7 @@ export const profileAPI = {
                 subscribeType = 'unsub'
             }
             resolve({
-                'statusCode': 0,
+                'statusCode': 1,
                 'type': subscribeType
             })
         })
@@ -54,13 +54,25 @@ export const articlesAPI = {
             .filter(article => article.author_id !== authId)
             setTimeout(() => resolve(outputArticles), 0)
             // resolve(outputArticles)
-        }).then(data => data)
+        })
     },
-    getProfileArticles(profileId) {
+    getProfileArticles(profileId, authId) {
         return new Promise((resolve) => {
-            setTimeout(() => resolve(articles[`${profileId}`]), 0)
-            // resolve(articles[`${profileId}`])
-        }).then(data => data)
+            // setTimeout(() => resolve(articles[`${profileId}`]), 2000)
+            if (profileId === authId) {
+                resolve({
+                    'statusCode': 1,
+                    'profileArticles': articles[`${profileId}`],
+                    'draftArticles': articles_draft[`${profileId}`],
+                    'moderationArticles': [articles_to_moderation.find(art => art.author_id === profileId)]
+                })
+            } else {
+                resolve({
+                    'statusCode': 1,
+                    'profileArticles': articles[`${profileId}`],
+                })
+            }
+        })
     },
     likeArticle(profileId, articleId, authId) {
         return new Promise((resolve) => {
@@ -77,7 +89,7 @@ export const articlesAPI = {
                 }
             }
             resolve({
-                'statusCode': 0
+                'statusCode': 1
             })
         })
     },
@@ -93,6 +105,156 @@ export const articlesAPI = {
             resolve({
                 'statusCode': 1,
                 'data': fullArticle
+            })
+        })
+    },
+    getArticleForEditing(articleId) {
+        return new Promise((resolve) => {
+            const metaArticle = Object.values(articles_draft)
+            .flatMap(articleArray => articleArray)
+            .find(article => article.id == articleId)
+            resolve({
+                'statusCode': 1,
+                'data': metaArticle
+            })
+        })
+    },
+    getArticleForEditingFormMain(articleId, authId) {
+        return new Promise((resolve) => {
+            const metaArticle = {
+                ...articles[authId].find(art => art.id == articleId),
+                'content': [...articles_content[articleId].content]
+            }
+            if (metaArticle) {
+                resolve({
+                    'statusCode': 1,
+                    'data': metaArticle
+                })
+            } else {
+                resolve({
+                    'statusCode': 2
+                }) 
+            }
+        })
+    },
+    getArticleForEditingFormDraft(articleId) {
+        return new Promise((resolve) => {
+            const metaArticle = Object.values(articles_draft)
+            .flatMap(articleArray => articleArray)
+            .find(article => article.id == articleId)
+            resolve({
+                'statusCode': 1,
+                'data': metaArticle
+            })
+        })
+    },
+    getArticleForEditingFormModer(articleId) {
+        return new Promise((resolve) => {
+            const metaArticle = Object.values(articles_to_moderation).find(article => article.id == articleId)
+            resolve({
+                'statusCode': 1,
+                'data': metaArticle
+            })
+        })
+    },
+    isAuthorPublicArticle(articleId, authorId) {
+        return new Promise((resolve) => {
+            const metaArticle = Object.values(articles)
+            .flatMap(articleArray => articleArray)
+            .find(article => article.id == articleId && article.author_id == authorId)
+            if (metaArticle) {
+                resolve({
+                    'statusCode': 1,
+                    'data': {
+                        'isAuthor': true
+                    },
+                })
+                return
+            }
+            resolve({
+                'statusCode': 1,
+                'data': {
+                    'isAuthor': false
+                },
+            })
+        })
+    },
+    isAuthorArticle(articleId, authorId, type) {
+        return new Promise((resolve) => {
+            if (type === 'redactor') {
+                const metaArticleDraft = Object.values(articles_draft)
+                .flatMap(articleArray => articleArray)
+                .find(article => article.id == articleId && article.author_id == authorId)
+                if (metaArticleDraft) {
+                    resolve({
+                        'statusCode': 1,
+                        'data': {
+                            'from': 'draft',
+                            'id': metaArticleDraft.id,
+                            'isAuthor': true
+                        },
+                    })
+                    return
+                }
+            } else if (type === 'moder') {
+                const metaArticleModer = Object.values(articles_to_moderation).find(article => article.id == articleId && article.author_id == authorId)
+                if (metaArticleModer) {
+                    resolve({
+                        'statusCode': 1,
+                        'data': {
+                            'from': 'draft',
+                            'id': metaArticleModer.id,
+                            'isAuthor': true
+                        },
+                    })
+                    return
+                }
+            }            
+            resolve({
+                'statusCode': 1,
+                'data': {
+                    'isAuthor': false
+                },
+            })
+        })
+    },
+    saveArticleToDraft(article, authId) {
+        return new Promise((resolve) => {
+            let id = Object.values(articles_draft).reduce((accumulator, current) => accumulator + current.length, 0) + 1
+            article.id = id
+            articles_draft[`${authId}`] = [article, ...articles_draft[`${authId}`]]
+            users[`${authId}`].draft_articles.push(id)
+            resolve({
+                'statusCode': 1
+            })
+        })
+    },
+    updateArticleToDraft(article, authId) {
+        return new Promise((resolve) => {
+            articles_draft[`${authId}`] = [article, ...articles_draft[`${authId}`].filter(art => art.id != article.id)]
+            resolve({
+                'statusCode': 1
+            })
+        })
+    },
+    requestArticle(article) {
+        return new Promise((resolve) => {
+            if (articles_to_moderation.find(atm => atm.author_id === article.author_id)) {
+                resolve({
+                    'statusCode': 2
+                })
+                return
+            }
+            const id = articles_to_moderation.length    
+            articles_to_moderation.push({
+                ...article,
+                'id': id
+            })
+            article.id = articles_to_moderation.length + 1
+            articles_to_moderation.push(article)
+            users[`${article.author_id}`].moderation_articles.push(id)
+            resolve({
+                'statusCode': 1
             })
         })
     }

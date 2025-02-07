@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import style from './style.module.scss'
 import likeSVG from './../../assets/svg/like.svg'
 import commentSVG from './../../assets/svg/comment.svg'
+import settingsSVG from './../../assets/svg/settings.svg'
 import { likeArticle } from '../../redux/reducers/articleReducer'
 import Comments from '../Comments/Comments'
 
@@ -19,6 +20,10 @@ const Article = (props) => {
             setIsLike(!isLike)
             props.likeArticle(profileId, articleId, props.id)
         }
+    }
+
+    const openArticleRedactor = () => {
+        props.saveCurrentArticleToDraft(props.articleData.id)
     }
 
     const scopesElements = props.articleData.scopes.map((scop) => <div key={scop}>{scop}</div>)
@@ -63,7 +68,7 @@ const Article = (props) => {
                     <div className={classNames(
                             style.article_footer_block, 
                             {[`${style.article_footer_block_like}`]: isLike}
-                        )} 
+                        )}
                         onClick={() => likeArticle(props.articleData.author_id, props.articleData.id)}>
                             <img src={likeSVG} />
                             <p>{props.articleData.likes_count}</p>
@@ -71,10 +76,21 @@ const Article = (props) => {
                     <div className={classNames(
                             style.article_footer_block, 
                             {[`${style.article_footer_block_comment}`]: isOpenComments}
-                        )} 
+                        )}
                         onClick={() => setIsOpenComments(prev => !prev)}>
                             <img src={commentSVG} />
                             <p>{props.articleData.comments_count}</p>
+                    </div>
+                    {props.id === props.articleData.author_id && (
+                        <Link to={`/article-creator/p/${props.articleData.id}`}>
+                            <div className={style.article_footer_block}>
+                                <img src={settingsSVG} />
+                                <p>Редактировать</p>
+                            </div>
+                        </Link>
+                    )}
+                    <div className={style.article_createData}>
+                        <p>{props.articleData.created_at}</p>
                     </div>
                 </div>
                 {isOpenComments && (

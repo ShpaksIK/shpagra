@@ -3,10 +3,10 @@ import React from 'react'
 import style from '../style.module.scss'
 
 
-const Indent = () => {
+const Margin = () => {
     return (
-        <div className={style.indent}></div>
+        <div className={style.margin}></div>
     )
 }
 
-export default Indent
+export default Margin

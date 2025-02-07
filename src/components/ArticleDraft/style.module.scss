@@ -10,12 +10,12 @@
 .picture {
     width: 100%;
     height: 50%;
-}
 
-.picture > img {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+    }
 }
 
 .info {
@@ -86,17 +86,6 @@
     background-color: var(--color-light);
     border-radius: 5px;
     cursor: pointer;
-}
-
-.article_footer_block_like {
-    background-color: var(--color-like);
-    p {
-        color: red;
-    }
-}
-
-.article_footer_block_comment {
-    background-color: #d6d6d6;
 }
 
 .article_footer_block > img {
