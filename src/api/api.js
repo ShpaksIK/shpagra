@@ -119,27 +119,123 @@ export const articlesAPI = {
             })
         })
     },
-    isAuthorArticle(articleId, authorId) {
+    getArticleForEditingFormMain(articleId, authId) {
         return new Promise((resolve) => {
-            let isAuthor = false
-            let isDraft = false
+            const metaArticle = articles[authId].find(art => art.id == articleId)
+            if (metaArticle.id) {
+                resolve({
+                    'statusCode': 1,
+                    'data': metaArticle
+                })
+            } else {
+                resolve({
+                    'statusCode': 2
+                }) 
+            }
+        })
+    },
+    getArticleForEditingFormDraft(articleId) {
+        return new Promise((resolve) => {
+            const metaArticle = Object.values(articles_draft)
+            .flatMap(articleArray => articleArray)
+            .find(article => article.id == articleId)
+            resolve({
+                'statusCode': 1,
+                'data': metaArticle
+            })
+        })
+    },
+    getArticleForEditingFormModer(articleId) {
+        return new Promise((resolve) => {
+            const metaArticle = Object.values(articles_to_moderation).find(article => article.id == articleId)
+            resolve({
+                'statusCode': 1,
+                'data': metaArticle
+            })
+        })
+    },
+    // isAuthorArticle(articleId, authorId) {
+    //     return new Promise((resolve) => {
+    //         let isAuthor = false
+    //         let isDraft = false
+    //         const metaArticle = Object.values(articles)
+    //         .flatMap(articleArray => articleArray)
+    //         .find(article => article.id == articleId && article.author_id == authorId)
+    //         const metaDraftArticle = Object.values(articles_draft)
+    //         .flatMap(articleArray => articleArray)
+    //         .find(article => article.id == articleId && article.author_id == authorId)
+    //         if (metaArticle) {
+    //             isAuthor = true
+    //         } else if (metaDraftArticle) {
+    //             isAuthor = true
+    //             isDraft = true
+    //         } 
+    //         resolve({
+    //             'statusCode': 1,
+    //             'data': {
+    //                 'isAuthor': isAuthor,
+    //                 'isDraft': isDraft
+    //             },
+    //         })
+    //     })
+    // },
+    isAuthorPublicArticle(articleId, authorId) {
+        return new Promise((resolve) => {
             const metaArticle = Object.values(articles)
             .flatMap(articleArray => articleArray)
             .find(article => article.id == articleId && article.author_id == authorId)
-            const metaDraftArticle = Object.values(articles_draft)
-            .flatMap(articleArray => articleArray)
-            .find(article => article.id == articleId && article.author_id == authorId)
-            if (metaArticle) {
-                isAuthor = true
-            } else if (metaDraftArticle) {
-                isAuthor = true
-                isDraft = true
-            } 
+            if (metaArticle.id) {
+                resolve({
+                    'statusCode': 1,
+                    'data': {
+                        'isAuthor': true
+                    },
+                })
+                return
+            }
             resolve({
                 'statusCode': 1,
                 'data': {
-                    'isAuthor': isAuthor,
-                    'isDraft': isDraft
+                    'isAuthor': false
+                },
+            })
+        })
+    },
+    isAuthorArticle(articleId, authorId, type) {
+        return new Promise((resolve) => {
+            if (type === 'redactor') {
+                const metaArticleDraft = Object.values(articles_draft)
+                .flatMap(articleArray => articleArray)
+                .find(article => article.id == articleId && article.author_id == authorId)
+                if (metaArticleDraft.id) {
+                    resolve({
+                        'statusCode': 1,
+                        'data': {
+                            'from': 'draft',
+                            'id': metaArticleDraft.id,
+                            'isAuthor': true
+                        },
+                    })
+                    return
+                }
+            } else if (type === 'moder') {
+                const metaArticleModer = Object.values(articles_to_moderation).find(article => article.id == articleId && article.author_id == authorId)
+                if (metaArticleModer.id) {
+                    resolve({
+                        'statusCode': 1,
+                        'data': {
+                            'from': 'draft',
+                            'id': metaArticleModer.id,
+                            'isAuthor': true
+                        },
+                    })
+                    return
+                }
+            }            
+            resolve({
+                'statusCode': 1,
+                'data': {
+                    'isAuthor': false
                 },
             })
         })

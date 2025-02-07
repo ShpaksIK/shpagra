@@ -25,6 +25,7 @@ const App = (props) => {
           <Route path='/forgot-password' element={<ResetPasswordPage />} />
           <Route path='/profile/:profileId?' element={<ProfileNavigator />} />
           <Route path='/article/:articleId' element={<ArticlePage />} />
+          <Route path='/article-creator/p/:articleId' element={<CreateArticlePage type='public' />} />
           <Route path='/article-creator/r/:articleId' element={<CreateArticlePage type='redactor' />} />
           <Route path='/article-creator/m/:articleId' element={<CreateArticlePage type='moder' />} />
           <Route path='/article-creator' element={<CreateArticlePage />} />

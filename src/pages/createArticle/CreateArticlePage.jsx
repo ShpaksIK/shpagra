@@ -22,6 +22,8 @@ const CreateArticlePage = (props) => {
                 props.getArticleForEditing(articleId, 'redactor')
             } else if (props.type === 'moder') {
                 props.getArticleForEditing(articleId, 'moder')
+            } else if (props.type === 'public') {
+                props.getArticleForEditing(articleId, 'public')
             } else {
                 props.createArticle()
             }

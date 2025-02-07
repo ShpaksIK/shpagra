@@ -82,7 +82,7 @@ const Article = (props) => {
                             <p>{props.articleData.comments_count}</p>
                     </div>
                     {props.id === props.articleData.author_id && (
-                        <Link to={`/article-creator/r/${props.articleData.id}`}>
+                        <Link to={`/article-creator/p/${props.articleData.id}`}>
                             <div className={style.article_footer_block}>
                                 <img src={settingsSVG} />
                                 <p>Редактировать</p>

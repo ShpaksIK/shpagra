@@ -228,28 +228,68 @@ export const getArticleContent = (articleId) => async (dispatch) => {
 
 export const getArticleForEditing = (articleId, type) => async (dispatch, getState) => {
     // Получить статью для её редактирования
-    // (без некоторых значений, например без комментариев)
+    // (без некоторых данных, например без комментариев)
     dispatch(setEditingArticleAC({}))
-    const isAuthor = await articlesAPI.isAuthorArticle(articleId, getState().auth.id)
-    if (isAuthor.data.isAuthor) {
-        let fullArticleData
-        if (isAuthor.data.isDraft) {
-            console.log('draft')
-            fullArticleData = await articlesAPI.getArticleForEditing(articleId)
+    if (type !== 'public') {
+        const isAuthor = await articlesAPI.isAuthorArticle(articleId, getState().auth.id, type)
+        if (isAuthor.data.isAuthor) {
+            let fullArticleData
+            if (isAuthor.data.from === 'draft') {
+                fullArticleData = await articlesAPI.getArticleForEditingFormDraft(articleId)
+            } else {
+                fullArticleData = await articlesAPI.getArticleForEditingFormModer(articleId)
+            }
+            if (fullArticleData.statusCode === 1) {
+                dispatch(setEditingArticleAC(fullArticleData.data))
+            } else {
+                dispatch(setError('Произошла ошибка при загрузке статьи'))
+            }
         } else {
-            fullArticleData = await articlesAPI.getFullArticle(articleId)
-        }
-        if (fullArticleData.statusCode === 1) {
-            dispatch(setEditingArticleAC(fullArticleData.data))
-        } else {
-            dispatch(setError('Произошла ошибка при загрузке статьи'))
+            dispatch(setError('Вы не можете редактировать эту статью'))
+            dispatch(setEditingArticleAC({
+                'status_code': 403
+            }))
         }
     } else {
-        dispatch(setError('Вы не можете редактировать эту статью'))
-        dispatch(setEditingArticleAC({
-            'status_code': 403
-        }))
+        // Иначе добавляем публичную статью в черновик и открываем её
+        const isAuthor = await articlesAPI.isAuthorPublicArticle(articleId, getState().auth.id)
+        if (isAuthor.data.isAuthor) {
+            const fullArticleData = await articlesAPI.getArticleForEditingFormMain(articleId, getState().auth.id)
+            if (fullArticleData.statusCode === 1) {
+                // Сделать добавление в черновик
+                // ...
+                dispatch(setEditingArticleAC(fullArticleData.data))
+            } else {
+                dispatch(setError('Возникла непредвиденная ошибка'))
+            }
+        } else {
+            dispatch(setError('Вы не можете редактировать эту статью'))
+            dispatch(setEditingArticleAC({
+                'status_code': 403
+            }))
+        }
     }
+
+    // const isAuthor = await articlesAPI.isAuthorArticle(articleId, getState().auth.id)
+    // if (isAuthor.data.isAuthor) {
+    //     let fullArticleData
+    //     if (isAuthor.data.isDraft) {
+    //         console.log('draft')
+    //         fullArticleData = await articlesAPI.getArticleForEditing(articleId)
+    //     } else {
+    //         fullArticleData = await articlesAPI.getFullArticle(articleId)
+    //     }
+    //     if (fullArticleData.statusCode === 1) {
+    //         dispatch(setEditingArticleAC(fullArticleData.data))
+    //     } else {
+    //         dispatch(setError('Произошла ошибка при загрузке статьи'))
+    //     }
+    // } else {
+    //     dispatch(setError('Вы не можете редактировать эту статью'))
+    //     dispatch(setEditingArticleAC({
+    //         'status_code': 403
+    //     }))
+    // }
 }
 
 export const createArticle = () => async (dispatch, getState) => {
