@@ -54,7 +54,7 @@ const ArticleContent = (props) => {
                                 <ArticleRender content={props.article.content} />
                             )}
                             {objectLength == 0 && (
-                                <Preloader />
+                                <p>Возможно, у данной статьи нет заголовков.</p>
                             )}
                         </div>
                     </div>

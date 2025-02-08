@@ -16,6 +16,8 @@ const SET_COMMENTS_FULL_ARTICLE = 'SET_COMMENTS_FULL_ARTICLE'
 const SET_DRAFT_ARTICLES = 'SET_DRAFT_ARTICLES'
 const SET_MODERATION_ARTICLES = 'SET_MODERATION_ARTICLES'
 const ADD_ELEMENT_TO_ARTICLE = 'ADD_ELEMENT_TO_ARTICLE'
+const UPDATE_ELEMENT_TO_ARTICLE = 'UPDATE_ELEMENT_TO_ARTICLE'
+const REMOVE_ELEMENT_TO_ARTICLE = 'REMOVE_ELEMENT_TO_ARTICLE'
 
 let defaultState = {
     mainArticles: [],
@@ -114,6 +116,35 @@ const articleReducer = (state = defaultState, action) => {
                     content: [...state.editingArticle.content, action.payload]
                 }
             }
+        case UPDATE_ELEMENT_TO_ARTICLE:
+            const newContent = []
+            for (let i = 0; i <= state.editingArticle.content.length - 1; i++) {
+                if (i === action.payload.position) {
+                    newContent.push({
+                        ...state.editingArticle.content[i],
+                        ...action.payload
+                    })
+                } else {
+                    newContent.push(state.editingArticle.content[i])
+                }
+            }
+            return {
+                ...state,
+                editingArticle: {
+                    ...state.editingArticle,
+                    content: newContent
+                }
+            }
+        case REMOVE_ELEMENT_TO_ARTICLE:
+            const copyContent = [...state.editingArticle.content]
+            copyContent.splice(action.payload, 1)
+            return {
+                ...state,
+                editingArticle: {
+                    ...state.editingArticle,
+                    content: copyContent
+                }
+            }
         default:
             return state
     }
@@ -174,6 +205,16 @@ const setDraftArticles = (draftArticles) => ({
 const setModerationArticles = (moderationArticles) => ({
     type: SET_MODERATION_ARTICLES,
     payload: moderationArticles
+})
+
+const updateElementToArticleAC = (newElement) => ({
+    type: UPDATE_ELEMENT_TO_ARTICLE,
+    payload: {...newElement}
+})
+
+const removeElementToArticleAC = (elementId) => ({
+    type: REMOVE_ELEMENT_TO_ARTICLE,
+    payload: elementId
 })
 
 // ======== Thunks ========
@@ -251,7 +292,6 @@ export const getArticleForEditing = (articleId, type) => async (dispatch, getSta
             }))
         }
     } else {
-        // Иначе добавляем публичную статью в черновик и открываем её
         const isAuthor = await articlesAPI.isAuthorPublicArticle(articleId, getState().auth.id)
         if (isAuthor.data.isAuthor) {
             const fullArticleData = await articlesAPI.getArticleForEditingFormMain(articleId, getState().auth.id)
@@ -260,16 +300,6 @@ export const getArticleForEditing = (articleId, type) => async (dispatch, getSta
                     ...fullArticleData.data,
                     'editing_from': 'public'
                 }))
-                // Добавление в черновик
-                // const data = await articlesAPI.saveArticleToDraft({
-                //     ...fullArticleData.data,
-                //     'created_at': formattedDateCreator(),
-                //     'old_id': fullArticleData.data.id
-                // }, getState().auth.id)
-                // if (data.statusCode === 1) {
-                // } else {
-                //     dispatch(setError('Произошла ошибка при сохранении статьи'))
-                // }
             } else {
                 dispatch(setError('Возникла непредвиденная ошибка'))
             }
@@ -341,8 +371,20 @@ export const saveArticleToDraft = (article) => async (dispatch, getState) => {
     }
 }
 
+export const clearEditingArticle = () => async (dispatch) => {
+    dispatch(setEditingArticleAC({}))
+}
+
 export const addElementToArticle = (element) => async (dispatch) => {
     dispatch(addElementToArticleAC(element))
+}
+
+export const updateElementToArticle = (newElement) => async (dispatch) => {
+    dispatch(updateElementToArticleAC(newElement))
+}
+
+export const removeElementToArticle = (elementId) => async (dispatch) => {
+    dispatch(removeElementToArticleAC(elementId))
 }
 
 

@@ -10,7 +10,7 @@ import Footer from '../../components/Footer/Footer'
 import Article from '../../components/Article/Article'
 import Post from '../../components/Post/Post'
 import CreatePostForm from './CreatePostForm/CreatePostForm'
-import { getProfileArticles } from '../../redux/reducers/articleReducer'
+import { getProfileArticles, clearEditingArticle } from '../../redux/reducers/articleReducer'
 import { getProfilePosts } from '../../redux/reducers/postReducer'
 import Preloader from '../../components/Preloader/Preloader'
 import ArticleDraft from '../../components/ArticleDraft/ArticleDraft'
@@ -43,6 +43,7 @@ const ProfilePage = (props) => {
     useEffect(() => {
         props.getProfileArticles(props.id)
         props.getProfilePosts(props.id)
+        props.clearEditingArticle()
     }, [])
 
     return (
@@ -162,4 +163,4 @@ const mapStateToProps = (state) => ({
     posts: state.post.profilePosts
 })
 
-export default connect(mapStateToProps, {getProfileArticles, getProfilePosts})(ProfilePage)
+export default connect(mapStateToProps, {getProfileArticles, getProfilePosts, clearEditingArticle})(ProfilePage)

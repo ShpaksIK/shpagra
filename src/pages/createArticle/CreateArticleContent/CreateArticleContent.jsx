@@ -80,7 +80,7 @@ const CreateArticleContent = (props) => {
                 </div>
             </div>
             <div className={style.content_content}>
-                <ArticleRender content={props.article.content} />
+                <ArticleRender content={props.article.content} type='editing' />
             </div>
         </div>
     )
