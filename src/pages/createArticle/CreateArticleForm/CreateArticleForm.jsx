@@ -8,6 +8,7 @@ import style from '../style.module.scss'
 import removeSVG from './../../../assets/svg/remove.svg'
 import Preloader from '../../../components/Preloader/Preloader'
 import { saveArticleToDraft, requestArticle } from '../../../redux/reducers/articleReducer'
+import { useNavigate } from 'react-router-dom'
 
 
 const CreateArticleForm = (props) => {
@@ -15,6 +16,8 @@ const CreateArticleForm = (props) => {
     if (props.article.status_code == 403) {
         return
     }
+
+    const navigator = useNavigate()
 
     // Схема ошибок формы
     const CreateArticleSchema = Yup.object().shape({
@@ -61,6 +64,7 @@ const CreateArticleForm = (props) => {
             ...values,
             'scopes': hashtags,
         })
+        navigator('/profile')
     }
 
     // Сохранение статьи в черновик
@@ -72,6 +76,7 @@ const CreateArticleForm = (props) => {
             ...values,
             'scopes': hashtags,
         })
+        navigator('/profile')
     }
 
     return (

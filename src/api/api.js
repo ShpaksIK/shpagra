@@ -64,7 +64,7 @@ export const articlesAPI = {
                     'statusCode': 1,
                     'profileArticles': articles[`${profileId}`],
                     'draftArticles': articles_draft[`${profileId}`],
-                    'moderationArticles': [articles_to_moderation.find(art => art.author_id === profileId)]
+                    'moderationArticles': [articles_to_moderation.find(art => art.author_id === profileId)].filter(a => a !== undefined)
                 })
             } else {
                 resolve({
@@ -260,7 +260,59 @@ export const articlesAPI = {
                 'statusCode': 1
             })
         })
-    }
+    },
+    removePublicArticle(articleId, authId) {
+        return new Promise((resolve) => {
+            const metaArticlePublic = articles[authId]
+            .find(article => article.id == articleId && article.author_id == authId)
+            if (metaArticlePublic) {
+                articles[authId] = articles[authId].filter(article => article.id !== articleId)
+                resolve({
+                    'statusCode': 1
+                })
+            } else {
+                resolve({
+                    'statusCode': 2
+                })
+            }
+        })
+    },
+    removeDraftArticle(articleId, authId) {
+        return new Promise((resolve) => {
+            const metaArticleDraft = articles_draft[authId]
+            .find(article => article.id == articleId && article.author_id == authId)
+            if (metaArticleDraft) {
+                articles_draft[authId] = articles_draft[authId].filter(article => article.id !== articleId)
+                resolve({
+                    'statusCode': 1
+                })
+            } else {
+                resolve({
+                    'statusCode': 2
+                })
+            }
+        })
+    },
+    removeModerArticle(articleId, authId) {
+        return new Promise((resolve) => {
+            const metaArticleModer = articles_to_moderation.find(article => article.id == articleId && article.author_id == authId)
+            if (metaArticleModer) {
+                for (let i = 0; i < articles_to_moderation.length; i++) {
+                    if (articles_to_moderation[i].id === articleId) {
+                        articles_to_moderation.splice(i, 1)
+                        break
+                    }
+                }
+                resolve({
+                    'statusCode': 1
+                })
+            } else {
+                resolve({
+                    'statusCode': 2
+                })
+            }
+        })
+    },
 }
 
 export const postsAPI = {

@@ -40,7 +40,7 @@ const CreateArticlePage = (props) => {
                 <h3>Создать новую статью</h3>
                 <div className={style.createArticle_block_flex}>
                     <CreateArticleForm />
-                    <CreateArticleContent />
+                    <CreateArticleContent type={props.type} />
                 </div>
             </div>
             <Footer />

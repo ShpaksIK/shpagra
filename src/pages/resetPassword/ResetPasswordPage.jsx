@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 
@@ -9,9 +9,12 @@ import EnterCodeForm from './ResetPasswordForms/EnterCodeForm'
 
 const ResetPasswordPage = (props) => {
     const navigate = useNavigate()
-    if (props.isAuth) {
-        navigate('/')
-    }
+    
+    useEffect(() => {
+        if (props.isAuth) {
+            navigate('/')
+        }
+    }, [props.isAuth])
 
     const [step, setStep] = useState(1) // Шаги: 1 - ввод почты, 2 - ввод кода, 3 - успех
     const [success, setSuccess] = useState(false)

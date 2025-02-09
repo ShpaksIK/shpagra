@@ -16,13 +16,15 @@ const Title = (props) => {
 
     const deactivateEditMode = () => {
         setEditMode(false)
-        if (status == '') {
+        if (status.replace(/ /g, '') == '') {
             removeElement()
         } else {
+            let newText = status.replace(/\s+/g, ' ').trim()
             props.updateElementToArticle({
                 'position': props.position,
-                'text': status
+                'text': newText
             })
+            setStatus(newText)
         }
     }
 

@@ -271,17 +271,15 @@ export const getArticleForEditing = (articleId, type) => async (dispatch, getSta
     // Получить статью для её редактирования
     // (без некоторых данных, например без комментариев)
     dispatch(setEditingArticleAC({}))
-    if (type !== 'public') {
+    if (type === 'redactor') {
         const isAuthor = await articlesAPI.isAuthorArticle(articleId, getState().auth.id, type)
         if (isAuthor.data.isAuthor) {
-            let fullArticleData
-            if (isAuthor.data.from === 'draft') {
-                fullArticleData = await articlesAPI.getArticleForEditingFormDraft(articleId)
-            } else {
-                fullArticleData = await articlesAPI.getArticleForEditingFormModer(articleId)
-            }
+            const fullArticleData = await articlesAPI.getArticleForEditingFormDraft(articleId)
             if (fullArticleData.statusCode === 1) {
-                dispatch(setEditingArticleAC(fullArticleData.data))
+                dispatch(setEditingArticleAC({
+                    ...fullArticleData.data,
+                    'editing_from': 'redactor'
+                }))
             } else {
                 dispatch(setError('Произошла ошибка при загрузке статьи'))
             }
@@ -291,7 +289,7 @@ export const getArticleForEditing = (articleId, type) => async (dispatch, getSta
                 'status_code': 403
             }))
         }
-    } else {
+    } else if (type === 'public') {
         const isAuthor = await articlesAPI.isAuthorPublicArticle(articleId, getState().auth.id)
         if (isAuthor.data.isAuthor) {
             const fullArticleData = await articlesAPI.getArticleForEditingFormMain(articleId, getState().auth.id)
@@ -301,7 +299,25 @@ export const getArticleForEditing = (articleId, type) => async (dispatch, getSta
                     'editing_from': 'public'
                 }))
             } else {
-                dispatch(setError('Возникла непредвиденная ошибка'))
+                dispatch(setError('Произошла ошибка при загрузке статьи'))
+            }
+        } else {
+            dispatch(setError('Вы не можете редактировать эту статью'))
+            dispatch(setEditingArticleAC({
+                'status_code': 403
+            }))
+        }
+    } else if (type === 'moder') {
+        const isAuthor = await articlesAPI.isAuthorArticle(articleId, getState().auth.id, type)
+        if (isAuthor.data.isAuthor) {
+            const fullArticleData = await articlesAPI.getArticleForEditingFormModer(articleId)
+            if (fullArticleData.statusCode === 1) {
+                dispatch(setEditingArticleAC({
+                    ...fullArticleData.data,
+                    'editing_from': 'moder'
+                }))
+            } else {
+                dispatch(setError('Произошла ошибка при загрузке статьи'))
             }
         } else {
             dispatch(setError('Вы не можете редактировать эту статью'))
@@ -344,7 +360,7 @@ export const requestArticle = (article) => async (dispatch, getState) => {
 
 export const saveArticleToDraft = (article) => async (dispatch, getState) => {
     // Сохранение статьи в черновик пользователя (запрос в БД)
-    if (getState().article.editingArticle.editing_from !== 'public' && getState().article.editingArticle.id) {
+    if (getState().article.editingArticle.editing_from === 'redactor' && getState().article.editingArticle.id) {
         const data = await articlesAPI.updateArticleToDraft({
             ...getState().article.editingArticle,
             ...article,
@@ -371,10 +387,34 @@ export const saveArticleToDraft = (article) => async (dispatch, getState) => {
     }
 }
 
-export const removeArticle = (articleId) => async (dispatch, getState) => {
-    // Запрос на удаление статьи (отдаем articleId и authId)
-    // Проверять URL (r или p или m)
-    console.log('removed', articleId)
+export const removeArticle = (articleId, type) => async (dispatch, getState) => {
+    // Удаление статьи
+    let removeData
+    switch (type) {
+        case 'redactor':
+            removeData = await articlesAPI.removeDraftArticle(articleId, getState().auth.id)
+            break
+        case 'moder':
+            removeData = await articlesAPI.removeModerArticle(articleId, getState().auth.id)
+            break
+        case 'public':
+            removeData = await articlesAPI.removePublicArticle(articleId, getState().auth.id)
+            break
+    }
+    if (removeData.statusCode === 1) {
+        dispatch(clearEditingArticle())
+        switch (type) {
+            case 'redactor':
+                break
+            case 'moder':
+                dispatch(setModerationArticles(getState().article.moderationArticles.filter(art => art.id !== articleId)))
+                break
+            case 'public':
+                break
+        }
+    } else {
+        dispatch(setError('Вы не можете редактировать эту статью'))
+    }
 }
 
 export const clearEditingArticle = () => async (dispatch) => {

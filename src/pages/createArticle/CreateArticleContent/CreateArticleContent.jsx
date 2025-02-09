@@ -92,7 +92,7 @@ const CreateArticleContent = (props) => {
                     {isOpenSettings && (
                         <ArticleSettings 
                             onSettingsClick={() => setIsOpenSettings(!isOpenSettings)} 
-                            removeArticle={() => props.removeArticle(props.article.id)}
+                            removeArticle={() => props.removeArticle(props.article.id, props.type)}
                         />
                     )}
                 </div>
