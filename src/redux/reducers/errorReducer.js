@@ -26,12 +26,12 @@ const setErrorAC = (text) => ({
 
 // ======== Thunks ========
 export const setError = (text) => async (dispatch, getState) => {
-    dispatch(setErrorAC(text))
-    setTimeout(() => {
-        if (getState().error.text) {
-            dispatch(setError(null))
-        }
-    }, 5000)
+    if (!getState().error.text) {
+        dispatch(setErrorAC(text))
+        setTimeout(() => {
+            dispatch(setErrorAC(null))
+        }, 5000)
+    } 
 }
 
 

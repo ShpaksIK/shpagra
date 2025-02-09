@@ -220,6 +220,9 @@ export const articlesAPI = {
     },
     saveArticleToDraft(article, authId) {
         return new Promise((resolve) => {
+            if (article['editing_from']) {
+                delete article['editing_from']
+            }
             let id = Object.values(articles_draft).reduce((accumulator, current) => accumulator + current.length, 0) + 1
             article.id = id
             articles_draft[`${authId}`] = [article, ...articles_draft[`${authId}`]]

@@ -371,6 +371,12 @@ export const saveArticleToDraft = (article) => async (dispatch, getState) => {
     }
 }
 
+export const removeArticle = (articleId) => async (dispatch, getState) => {
+    // Запрос на удаление статьи (отдаем articleId и authId)
+    // Проверять URL (r или p или m)
+    console.log('removed', articleId)
+}
+
 export const clearEditingArticle = () => async (dispatch) => {
     dispatch(setEditingArticleAC({}))
 }
