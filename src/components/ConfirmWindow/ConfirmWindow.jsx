@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import style from './style.module.scss'
 import closeSVG from './../../assets/svg/close.svg'
@@ -22,10 +21,4 @@ const ConfirmWindow = ({ onClick, onClose }) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        
-    }
-}
-
-export default connect(mapStateToProps)(ConfirmWindow)
+export default ConfirmWindow

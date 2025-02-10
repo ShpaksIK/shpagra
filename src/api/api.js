@@ -358,6 +358,22 @@ export const postsAPI = {
                 'statusCode': 1
             })
         })
+    },
+    removePost(postId, authId) {
+        return new Promise((resolve) => {
+            if (posts[authId]) {
+                if (posts[authId].find(post => post.id === postId)) {
+                    posts[authId] = posts[authId].filter(post => post.id !== postId)
+                    resolve({
+                        'statusCode': 1
+                    })
+                    return
+                }
+            }
+            resolve({
+                'statusCode': 2
+            })
+        })
     }
 }
 
