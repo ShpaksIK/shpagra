@@ -145,7 +145,7 @@ export const likePost = (profileId, postId, authId) => async (dispatch) => {
 export const removePost = (postId) => async (dispatch, getState) => {
     const data = await postsAPI.removePost(postId, getState().auth.id)
     if (data.statusCode === 1) {
-
+        dispatch(setProfilePostsAC(getState().post.profilePosts.filter(post => post.id !== postId)))
     } else {
         dispatch(setError('Невозможно удалить пост'))
     }

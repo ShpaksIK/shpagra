@@ -85,3 +85,18 @@ export const dislikeComment = (commentId, dislikeAuthorId) => async (dispatch, g
         dispatch(setError('Войдите в аккаунт, прежде чем ставить дизлайк'))
     }
 }
+
+export const removeComment = (commentId, commentsId, sendType, objectType, objectId) => async (dispatch, getState) => {
+    const data = await commentsAPI.removeComment(commentId, getState().auth.id)
+    if (data.statusCode === 1) {
+        console.log(commentId, commentsId, sendType, objectType, objectId)
+        commentsId = commentsId.filter(com => com !== commentId)
+        if (sendType === 'post') {
+            dispatch(getPostComments(commentsId, objectId, objectType))
+        } else {
+            dispatch(getArticleComments(commentsId, objectId, objectType))
+        }
+    } else {
+        dispatch(setError('Невозможно удалить комментарий'))
+    }
+}

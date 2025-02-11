@@ -5,7 +5,8 @@ import classNames from 'classnames'
 
 import style from '../style.module.scss'
 import likeSVG from './../../../assets/svg/like.svg'
-import { likeComment, dislikeComment } from '../../../redux/reducers/commentReducer'
+import garbageSVG from './../../../assets/svg/garbage.svg'
+import { likeComment, dislikeComment, removeComment } from '../../../redux/reducers/commentReducer'
 
 
 const Comment = (props) => {
@@ -24,6 +25,10 @@ const Comment = (props) => {
         props.dislikeComment(commentId, dislikeAuthorId)
     }
 
+    const removeComment = (commentId) => {
+        props.removeComment(commentId, props.commentsId, props.sendType, props.objectType, props.objectId)
+    }
+
     return (
         <div className={style.comment}>
             <div className={style.comment_header}>
@@ -39,6 +44,12 @@ const Comment = (props) => {
                 <p>{props.commentData.text}</p>
                 {props.isAuth && (
                     <div className={style.comment_content_footer}>
+                        {props.commentData.author_id === props.id && (
+                            <div className={style.comment_footer_block} 
+                                onClick={() => removeComment(props.commentData.id)}>
+                                    <img src={garbageSVG} alt='Удалить комментарий' />
+                            </div>
+                        )}
                         <div className={classNames(
                                 style.comment_footer_block, 
                                 {[`${style.comment_footer_block_like}`]: isLike}
@@ -69,4 +80,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {likeComment, dislikeComment})(Comment)
+export default connect(mapStateToProps, {likeComment, dislikeComment, removeComment})(Comment)

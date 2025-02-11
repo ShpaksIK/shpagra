@@ -83,10 +83,10 @@ main {
 }
 
 .post_form > textarea, .textarea {
-    max-width: 80%;
-    width: 80%;
+    max-width: 500px;
+    min-width: 100px;
+    width: 300px;
     max-height: 200px;
-    height: 200px;
     outline: none;
     border: 1px solid var(--color-blue-light);
     border-radius: 5px;
@@ -147,7 +147,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 200px;
+    width: 300px;
     background-color: var(--color-blue-light);
     border-radius: 5px;
     border: none;

@@ -457,5 +457,25 @@ export const commentsAPI = {
                 'statusCode': 1
             })
         })
+    },
+    removeComment(commentId, authId) {
+        return new Promise((resolve) => {
+            const findComment = comments.find(com => com.id === commentId && com.author_id === authId)
+            if (findComment) {
+                for (let i = 0; i < comments.length; i++) {
+                    if (comments[i].id === commentId) {
+                        comments.splice(i, 1)
+                        break
+                    }
+                }
+                resolve({
+                    'statusCode': 1
+                })
+                return
+            }
+            resolve({
+                'statusCode': 2
+            })
+        })
     }
 }

@@ -5,6 +5,7 @@ import classNames from 'classnames'
 
 import style from './style.module.scss'
 import likeSVG from './../../assets/svg/like.svg'
+import garbageSVG from './../../assets/svg/garbage.svg'
 import commentSVG from './../../assets/svg/comment.svg'
 import { likePost } from '../../redux/reducers/postReducer'
 import Comments from '../Comments/Comments'
@@ -53,13 +54,21 @@ const Post = (props) => {
                         <img src={commentSVG} />
                         <p>{props.postData.comments_count}</p>
                 </div>
-                <div className={style.post_footer_block} 
-                    onClick={() => setIsOpenConfirm(true)}>
-                        <img src={likeSVG} alt='Удалить пост' />
-                </div>
+                {props.postData.author_id === props.id && (
+                    <div className={style.post_footer_block} 
+                        onClick={() => setIsOpenConfirm(true)}>
+                            <img src={garbageSVG} alt='Удалить пост' />
+                    </div>
+                )}
             </div>
             {isOpenComments && (
-                <Comments sendType='post' objectId={props.postData.id} commentsData={props.postData.comments_data} commentsId={props.postData.comments_id} authorId={props.postData.author_id} objectType={props.objectType} />
+                <Comments 
+                sendType='post'
+                commentsData={props.postData.comments_data} 
+                commentsId={props.postData.comments_id} 
+                authorId={props.postData.author_id} 
+                objectId={props.postData.id} 
+                objectType={props.objectType} />
             )}
         </div>
     )

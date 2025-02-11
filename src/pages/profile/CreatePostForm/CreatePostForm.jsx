@@ -14,7 +14,10 @@ const CreatePostForm = (props) => {
     })
 
     const submitForm = (text) => {
-        props.sendPost(text, props.id)
+        if (text.replace(/ /g, '') != '') {
+            let newText = text.replace(/\s+/g, ' ').trim()
+            props.sendPost(newText, props.id)
+        }
     }
 
     return (
