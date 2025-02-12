@@ -26,7 +26,7 @@ const Comment = (props) => {
     }
 
     const removeComment = (commentId) => {
-        props.removeComment(commentId, props.commentsId, props.sendType, props.objectType, props.objectId)
+        props.removeComment(commentId, props.commentsId, props.sendType, props.objectType, props.objectId, props.authorId)
     }
 
     return (

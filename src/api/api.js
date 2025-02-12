@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { users, articles, posts, comments, articles_content, articles_to_moderation, articles_draft } from './../redux/db'
+import { randomIdGenerator } from '../utils/randomIdGenerator'
 
 
 // const instance = axios.create({
@@ -382,7 +383,8 @@ export const commentsAPI = {
         return new Promise((resolve) => {
             let parsedComments = []
             for (let i = 0; i <= commentsId.length - 1; i++) {
-                parsedComments.push(comments[commentsId[i]-1])
+                parsedComments.push(comments.find(c => c.id === commentsId[i]))
+
             }
             resolve({
                 'statusCode': 1,
@@ -392,7 +394,7 @@ export const commentsAPI = {
     },
     sendCommentToArticle(comment, authorId, articleId) {
         return new Promise((resolve) => {
-            comment.id = comments.length + 1
+            comment.id = randomIdGenerator()
             comments.push(comment)
             for (let i = 0; i <= articles[authorId].length - 1; i++) {
                 if (articles[authorId][i].id === articleId) {
@@ -408,7 +410,7 @@ export const commentsAPI = {
     },
     sendCommentToPost(comment, authorId, postId) {
         return new Promise((resolve) => {
-            comment.id = comments.length + 1
+            comment.id = randomIdGenerator()
             comments.push(comment)
             for (let i = 0; i <= posts[authorId].length - 1; i++) {
                 if (posts[authorId][i].id === postId) {
@@ -424,47 +426,95 @@ export const commentsAPI = {
     },
     likeComment(commentId, likeAuthorId) {
         return new Promise((resolve) => {
-            if (comments[commentId - 1].dislike_id.find(id => id === likeAuthorId)) {
-                comments[commentId - 1].dislike_count -= 1
-                comments[commentId - 1].dislike_id = comments[commentId - 1].dislike_id.filter(id => id !== likeAuthorId)
-            }
-            if (comments[commentId - 1].likes_id.find(id => id === likeAuthorId)) {
-                comments[commentId - 1].likes_count -= 1
-                comments[commentId - 1].likes_id = comments[commentId - 1].likes_id.filter(id => id !== likeAuthorId)
-            } else {
-                comments[commentId - 1].likes_count += 1
-                comments[commentId - 1].likes_id.push(likeAuthorId)
+            const editingComment = comments.find(com => com.id === commentId)
+            if (editingComment) {
+                if (editingComment.dislike_id.find(id => id === likeAuthorId)) {
+                    editingComment.dislike_count -= 1
+                    editingComment.dislike_id = editingComment.dislike_id.filter(id => id !== likeAuthorId)
+                }
+                if (editingComment.likes_id.find(id => id === likeAuthorId)) {
+                    editingComment.likes_count -= 1
+                    editingComment.likes_id = editingComment.likes_id.filter(id => id !== likeAuthorId)
+                } else {
+                    editingComment.likes_count += 1
+                    editingComment.likes_id.push(likeAuthorId)
+                }
+                resolve({
+                    'statusCode': 1
+                })
+                return
             }
             resolve({
-                'statusCode': 1
+                'statusCode': 2
             })
         })
     },
     dislikeComment(commentId, dislikeAuthorId) {
         return new Promise((resolve) => {
-            if (comments[commentId - 1].likes_id.find(id => id === dislikeAuthorId)) {
-                comments[commentId - 1].likes_count -= 1
-                comments[commentId - 1].likes_id = comments[commentId - 1].likes_id.filter(id => id !== dislikeAuthorId)
-            }
-            if (comments[commentId - 1].dislike_id.find(id => id === dislikeAuthorId)) {
-                comments[commentId - 1].dislike_count -= 1
-                comments[commentId - 1].dislike_id = comments[commentId - 1].dislike_id.filter(id => id !== dislikeAuthorId)
-            } else {
-                comments[commentId - 1].dislike_count += 1
-                comments[commentId - 1].dislike_id.push(dislikeAuthorId)
+            const editingComment = comments.find(com => com.id === commentId)
+            if (editingComment) {
+                if (editingComment.likes_id.find(id => id === dislikeAuthorId)) {
+                    editingComment.likes_count -= 1
+                    editingComment.likes_id = editingComment.likes_id.filter(id => id !== dislikeAuthorId)
+                }
+                if (editingComment.dislike_id.find(id => id === dislikeAuthorId)) {
+                    editingComment.dislike_count -= 1
+                    editingComment.dislike_id = editingComment.dislike_id.filter(id => id !== dislikeAuthorId)
+                } else {
+                    editingComment.dislike_count += 1
+                    editingComment.dislike_id.push(dislikeAuthorId)
+                }
+                resolve({
+                    'statusCode': 1
+                })
+                return
             }
             resolve({
-                'statusCode': 1
+                'statusCode': 2
             })
         })
     },
-    removeComment(commentId, authId) {
+    removeCommentFromArticle(commentId, authId, authorId, articleId) {
         return new Promise((resolve) => {
             const findComment = comments.find(com => com.id === commentId && com.author_id === authId)
             if (findComment) {
                 for (let i = 0; i < comments.length; i++) {
                     if (comments[i].id === commentId) {
                         comments.splice(i, 1)
+                        break
+                    }
+                }
+                for (let i = 0; i <= articles[authorId].length - 1; i++) {
+                    if (articles[authorId][i].id === articleId) {
+                        articles[authorId][i].comments_id = articles[authorId][i].comments_id.filter(c => c !== commentId)
+                        articles[authorId][i].comments_count -= 1
+                        break
+                    }
+                }
+                resolve({
+                    'statusCode': 1
+                })
+                return
+            }
+            resolve({
+                'statusCode': 2
+            })
+        })
+    },
+    removeCommentFromPost(commentId, authId, authorId, articleId) {
+        return new Promise((resolve) => {
+            const findComment = comments.find(com => com.id === commentId && com.author_id === authId)
+            if (findComment) {
+                for (let i = 0; i < comments.length; i++) {
+                    if (comments[i].id === commentId) {
+                        comments.splice(i, 1)
+                        break
+                    }
+                }
+                for (let i = 0; i <= posts[authorId].length - 1; i++) {
+                    if (posts[authorId][i].id === articleId) {
+                        posts[authorId][i].comments_id = posts[authorId][i].comments_id.filter(c => c !== commentId)
+                        posts[authorId][i].comments_count -= 1
                         break
                     }
                 }

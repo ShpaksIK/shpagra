@@ -113,7 +113,11 @@ export const getMainPosts = (authId = null) => async (dispatch) => {
 
 export const getProfilePosts = (profileId) => async (dispatch) => {
     const data = await postsAPI.getProfilePosts(profileId)
-    dispatch(setProfilePostsAC(data))
+    if (data) {
+        dispatch(setProfilePostsAC(data))
+    } else {
+        dispatch(setProfilePostsAC([]))
+    }
 }
 
 export const sendPost = (text) => async (dispatch, getState) => {

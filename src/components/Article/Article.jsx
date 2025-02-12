@@ -22,10 +22,6 @@ const Article = (props) => {
         }
     }
 
-    const openArticleRedactor = () => {
-        props.saveCurrentArticleToDraft(props.articleData.id)
-    }
-
     const scopesElements = props.articleData.scopes.map((scop) => <div key={scop}>{scop}</div>)
 
     return (

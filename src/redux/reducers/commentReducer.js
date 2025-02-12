@@ -86,10 +86,14 @@ export const dislikeComment = (commentId, dislikeAuthorId) => async (dispatch, g
     }
 }
 
-export const removeComment = (commentId, commentsId, sendType, objectType, objectId) => async (dispatch, getState) => {
-    const data = await commentsAPI.removeComment(commentId, getState().auth.id)
+export const removeComment = (commentId, commentsId, sendType, objectType, objectId, authorId) => async (dispatch, getState) => {
+    let data
+    if (sendType === 'post') {
+        data = await commentsAPI.removeCommentFromPost(commentId, getState().auth.id, authorId, objectId)
+    } else {
+        data = await commentsAPI.removeCommentFromArticle(commentId, getState().auth.id, authorId, objectId)
+    }
     if (data.statusCode === 1) {
-        console.log(commentId, commentsId, sendType, objectType, objectId)
         commentsId = commentsId.filter(com => com !== commentId)
         if (sendType === 'post') {
             dispatch(getPostComments(commentsId, objectId, objectType))

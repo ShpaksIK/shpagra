@@ -228,7 +228,11 @@ export const getProfileArticles = (profileId) => async (dispatch, getState) => {
     // Получить статьи профиля (profileId берется из URL адреса)
     const data = await articlesAPI.getProfileArticles(profileId, getState().auth.id)
     if (data.statusCode === 1) {
-        dispatch(setProfileArticlesAC(data.profileArticles))
+        if (data.profileArticles) {
+            dispatch(setProfileArticlesAC(data.profileArticles))
+        } else {
+            dispatch(setProfileArticlesAC([]))
+        }
         if (profileId === getState().auth.id) {
             dispatch(setDraftArticles(data.draftArticles))
             dispatch(setModerationArticles(data.moderationArticles))

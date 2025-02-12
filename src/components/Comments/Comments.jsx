@@ -59,6 +59,7 @@ const Comments = (props) => {
                                     sendType={props.sendType}
                                     objectId={props.objectId}
                                     objectType={props.objectType}
+                                    authorId={props.authorId}
                                 />)
                             )}
                             {selectedFilter === 'new' && (
@@ -69,6 +70,7 @@ const Comments = (props) => {
                                     sendType={props.sendType}
                                     objectId={props.objectId}
                                     objectType={props.objectType}
+                                    authorId={props.authorId}
                                 />)
                             )}
                             {selectedFilter === 'old' && (
@@ -79,6 +81,7 @@ const Comments = (props) => {
                                     sendType={props.sendType}
                                     objectId={props.objectId}
                                     objectType={props.objectType}
+                                    authorId={props.authorId}
                                 />)
                             )}
                         </>
