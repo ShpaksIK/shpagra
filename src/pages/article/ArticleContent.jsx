@@ -37,7 +37,7 @@ const ArticleContent = (props) => {
 
     return (
         <div className={style.main_article}>
-            <div className={style.main_article_content_block}>
+            <div div className={style.main_article_content_block}>
                 <div className={style.main_article_content}>    
                     <div className={style.main_article_content_info}>
                         <div className={style.main_article_content_info_title}>
@@ -54,7 +54,7 @@ const ArticleContent = (props) => {
                                 <ArticleRender content={props.article.content} />
                             )}
                             {objectLength == 0 && (
-                                <p>Возможно, у данной статьи нет заголовков.</p>
+                                <p>Загрузка содержимого статьи...</p>
                             )}
                         </div>
                     </div>
@@ -75,7 +75,7 @@ const ArticleContent = (props) => {
                             ))
                         )}
                         {objectLength == 0 && (
-                            <Preloader />
+                            <p>Возможно, у данной статьи нет заголовков.</p>
                         )}
                         <ul>
                         </ul> 
