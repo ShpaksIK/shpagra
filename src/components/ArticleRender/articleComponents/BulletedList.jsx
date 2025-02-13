@@ -5,6 +5,7 @@ import style from '../style.module.scss'
 import garbageSVG from './../../../assets/svg/garbage.svg'
 import addParagraphSVG from './../../../assets/svg/add_paragraph.svg'
 import { updateElementToArticle, removeElementToArticle } from '../../../redux/reducers/articleReducer'
+import Dropdown from '../../Dropdown/Dropdown'
 
 
 export const BulletedListLi = (props) => {
@@ -12,9 +13,10 @@ export const BulletedListLi = (props) => {
     const [status, setStatus] = useState(props.text)
 
     const deactivateEditMode = () => {
+        let newText = status.replace(/\s+/g, ' ').trim()
         setEditMode(false)
-        props.updateElementList(status, props.textPosition)
-        setStatus(status)
+        setStatus(newText)
+        props.updateElementList(newText, props.textPosition)
     }
 
     const onStatusChange = (e) => {
@@ -49,15 +51,9 @@ const BulletedList = (props) => {
     const addElementToList = () => {
         props.updateElementToArticle({
             'position': props.position,
-            'list': [...props.list, 'Новый пункт']
-        })
-    }
-
-    // Удаление пункта из BulletedList
-    const removeElementToList = () => {
-        props.updateElementToArticle({
-            'position': props.position,
-            'list': [...props.list, 'Новый пункт']
+            'content': {
+                'list': [...props.list, 'Новый пункт']
+            }
         })
     }
     
@@ -65,7 +61,7 @@ const BulletedList = (props) => {
     const updateElementList = (newText, textPosition) => {
         let newList = []
         for (let i = 0; i < props.list.length; i++) {
-            if (i === textPosition && newText.replace(/ /g, '') != '') {
+            if (i == textPosition) {
                 newList.push(newText)
             } else {
                 newList.push(props.list[i])
@@ -73,10 +69,12 @@ const BulletedList = (props) => {
         }
         props.updateElementToArticle({
             'position': props.position,
-            'list': newList
+            'content': {
+                'list': newList.filter(l => l !== '')
+            }
         })
     }
-    
+
     return (
         <div className={style.text}>
             {props.type === 'view' && (
@@ -86,20 +84,25 @@ const BulletedList = (props) => {
             )}
             {props.type === 'editing' && (
                 <div className={style.editing_list}>
-                    <div className={style.garbage} onClick={removeElement}>
-                        <img src={garbageSVG} alt='Удалить' />
-                    </div>
-                    <div className={style.addParagraph} onClick={addElementToList}>
-                        <img src={addParagraphSVG} alt='Добавить пункт' />
-                    </div>
+                    <Dropdown>
+                        <div className={style.dropdown_block} onClick={removeElement}>
+                            <img src={garbageSVG} alt='Удалить' />
+                            <p>Удалить</p>
+                        </div>
+                        <div className={style.dropdown_block} onClick={addElementToList}>
+                            <img src={addParagraphSVG} alt='Добавить пункт' />
+                            <p>Добавить пункт</p>
+                        </div>
+                        <p className={style.dropdown_block_text}>Чтобы удалить пункт, сотрите текст</p>
+                    </Dropdown>
                     <ul className={style.ul}>
                         {props.list.map((l, i) => <li key={`bl-${i}`}>
                             <BulletedListLi 
                                 text={l} 
-                                position={props.position} 
-                                updateElementList={updateElementList}
+                                updateElementList={updateElementList} 
                                 textPosition={i}
-                        /></li>)}
+                            />
+                        </li>)}
                     </ul>
                 </div>
             )}

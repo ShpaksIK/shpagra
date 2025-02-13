@@ -122,7 +122,7 @@ const articleReducer = (state = defaultState, action) => {
                 if (i === action.payload.position) {
                     newContent.push({
                         ...state.editingArticle.content[i],
-                        ...action.payload
+                        ...action.payload.content
                     })
                 } else {
                     newContent.push(state.editingArticle.content[i])

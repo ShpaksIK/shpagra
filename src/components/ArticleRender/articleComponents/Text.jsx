@@ -22,7 +22,9 @@ const Text = (props) => {
             let newText = status.replace(/\s+/g, ' ').trim()
             props.updateElementToArticle({
                 'position': props.position,
-                'text': newText
+                'content': {
+                    'text': newText
+                }
             })
             setStatus(newText)
         }

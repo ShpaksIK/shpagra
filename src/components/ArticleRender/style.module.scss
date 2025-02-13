@@ -31,15 +31,15 @@
 
 .ol, .ul {
     padding: 5px 0;
-    list-style-position: inside;
     width: 100%;
+    margin-left: 20px;
 
     li {
         width: 100%;
     }
 
     p {
-        display: inline;
+        width: 100%;
     }
 }
 
@@ -53,6 +53,28 @@
     display: flex;
     gap: 10px;
     align-items: flex-start;
+}
+
+.dropdown_block {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px;
+
+    img {
+        height: 20px;
+    }
+}
+
+.dropdown_block:hover {
+    transition: .2s;
+    background-color: #e5e5e5;
+}
+
+.dropdown_block_text {
+    color: gray;
+    font-size: 15px;
 }
 
 .garbage, .addParagraph {
