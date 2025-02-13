@@ -32,6 +32,15 @@
 .ol, .ul {
     padding: 5px 0;
     list-style-position: inside;
+    width: 100%;
+
+    li {
+        width: 100%;
+    }
+
+    p {
+        display: inline;
+    }
 }
 
 .editing {
@@ -40,16 +49,32 @@
     align-items: center;
 }
 
-.garbage {
+.editing_list {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.garbage, .addParagraph {
     background-color: var(--color-light);
     border-radius: 5px;
-    padding: 5px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
 }
 
-.garbage:hover {
+.garbage:hover, .addParagraph:hover {
     transition: .2s;
     background-color: #d4d4d4;
+}
+
+.addParagraph {
+    img {
+        width: 25px;
+    }
 }
 
 input {
@@ -60,5 +85,13 @@ input {
 .input_title {
     font-size: 30px;
     font-weight: bold;
+    width: 100%;
+}
+
+.input_text {
+    width: 100%;
+}
+
+.input_list {
     width: 100%;
 }

@@ -40,7 +40,7 @@ const Title = (props) => {
             {props.type === 'editing' && (
                 <div className={style.editing}>
                     <div className={style.garbage} onClick={removeElement}>
-                        <img src={garbageSVG} />
+                        <img src={garbageSVG} alt='Удалить' />
                     </div>
                     {!editMode &&
                         <h2 id={props.hrefId} onClick={() => setEditMode(true)}>{props.text}</h2>

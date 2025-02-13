@@ -20,13 +20,14 @@ const ArticleSettings = ({ onSettingsClick, removeArticle }) => {
     const [isOpenArticlePreview, setIsOpenArticlePreview] = useState(false)
 
     return (
-        <div className={style.window_settings}>
-            {isOpenArticlePreview ? <ArticlePreview onClose={() => setIsOpenArticlePreview(false)} /> 
-            : <>
-                {isOpenConfirmWindow && (
-                    <ConfirmWindow onClick={removeArticleButton} onClose={() => setIsOpenConfirmWindow(false)} />
-                )}
-                {!isOpenConfirmWindow && (
+        <>
+        {isOpenConfirmWindow && (
+            <ConfirmWindow onClick={removeArticleButton} onClose={() => setIsOpenConfirmWindow(false)} />
+        )}
+        {!isOpenConfirmWindow && (
+            <div className={style.window_settings}>
+                {isOpenArticlePreview ? <ArticlePreview onClose={() => setIsOpenArticlePreview(false)} /> 
+                : <>
                     <div className={style.settings}>
                         <img src={closeSVG} onClick={onSettingsClick} alt='Закрыть' />
                         <div className={style.settings_block}>
@@ -37,9 +38,10 @@ const ArticleSettings = ({ onSettingsClick, removeArticle }) => {
                             </div>
                         </div>
                     </div>
-                )}
-            </>}
-        </div>
+                </>}
+            </div>
+        )}
+        </>
     )
 }
 
