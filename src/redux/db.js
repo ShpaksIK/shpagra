@@ -166,6 +166,11 @@ export let articles_draft = {
                     'type': 'text',
                     'text': 'Параграф 1'
                 },
+                {
+                    'type': 'img',
+                    'src': 'https://png.pngtree.com/thumb_back/fh260/background/20201015/pngtree-christmas-banner-background-with-black-snowflakes-and-green-pine-tree-merry-image_417517.jpg',
+                    'description': 'Моя первая картинка в статье'
+                },
             ],
             'scopes': ['#первый', '#рек'],
             'author': 'Shpaks',

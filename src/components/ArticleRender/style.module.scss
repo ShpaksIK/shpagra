@@ -16,17 +16,30 @@
     }
 }
 
-.img {
-    max-width: 500px;
-    padding: 5px 0;
+.image {
+    width: 100%;
+}
 
+.image_block {
     img {
-        max-width: 100%;
+        max-width: 500px;
     }
+
+    p {
+        color: gray;
+        font-style: italic;
+        text-align: center;
+    }
+}
+
+.image_block_editing {
+    display: flex;
+    gap: 10px;
 }
 
 .margin {
     padding: 10px 0;
+    display: flex;
 }
 
 .ol, .ul {
@@ -40,6 +53,17 @@
 
     p {
         width: 100%;
+    }
+}
+
+.quote {
+    border-left: 2px solid gray;
+    width: 100%;
+    padding: 10px;
+    
+    p {
+        width: 100%;
+        font-style: italic;
     }
 }
 
@@ -116,4 +140,19 @@ input {
 
 .input_list {
     width: 100%;
+}
+
+.input_img {
+    display: block;
+    color: gray;
+    width: 100%;
+}
+
+
+@media screen and (max-width: 750px) {
+    .image_block {
+        img {
+            width: 100%;
+        }
+    }
 }

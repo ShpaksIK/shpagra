@@ -38,7 +38,7 @@ const CreateArticleContent = (props) => {
                 props.addElementToArticle({'type': element, 'text': 'Параграф'})
                 break
             case 'img':
-                props.addElementToArticle({'type': element, 'src': uploadIMG})
+                props.addElementToArticle({'type': element, 'src': uploadIMG, 'description': ''})
                 break
             case 'indent':
                 props.addElementToArticle({'type': element})
@@ -48,6 +48,9 @@ const CreateArticleContent = (props) => {
                 break
             case 'ul':
                 props.addElementToArticle({'type': element, 'list': ['Маркированный список']})
+                break
+            case 'quote':
+                props.addElementToArticle({'type': element, 'text': 'Цитата великого человека...'})
                 break
         }
     }
@@ -80,7 +83,7 @@ const CreateArticleContent = (props) => {
                         <img src={marginSVG} />
                         <p>Отступ</p>
                     </div>
-                    <div className={style.content_option}>
+                    <div className={style.content_option} onClick={() => addElement('quote')}>
                         <img src={quoteSVG} />
                         <p>Цитата</p>
                     </div>

@@ -13,10 +13,10 @@ export const BulletedListLi = (props) => {
     const [status, setStatus] = useState(props.text)
 
     const deactivateEditMode = () => {
-        let newText = status.replace(/\s+/g, ' ').trim()
         setEditMode(false)
-        setStatus(newText)
+        let newText = status.replace(/\s+/g, ' ').trim()
         props.updateElementList(newText, props.textPosition)
+        setStatus(newText ? newText : props.text)
     }
 
     const onStatusChange = (e) => {
