@@ -18,6 +18,7 @@ const SET_MODERATION_ARTICLES = 'SET_MODERATION_ARTICLES'
 const ADD_ELEMENT_TO_ARTICLE = 'ADD_ELEMENT_TO_ARTICLE'
 const UPDATE_ELEMENT_TO_ARTICLE = 'UPDATE_ELEMENT_TO_ARTICLE'
 const REMOVE_ELEMENT_TO_ARTICLE = 'REMOVE_ELEMENT_TO_ARTICLE'
+const SET_ARTICLE_HASHTAGS = 'SET_ARTICLE_HASHTAGS'
 
 let defaultState = {
     mainArticles: [],
@@ -145,6 +146,14 @@ const articleReducer = (state = defaultState, action) => {
                     content: copyContent
                 }
             }
+        case SET_ARTICLE_HASHTAGS:
+            return {
+                ...state,
+                editingArticle: {
+                    ...state.editingArticle,
+                    scopes: [...action.payload]
+                }
+            } 
         default:
             return state
     }
@@ -215,6 +224,11 @@ const updateElementToArticleAC = (newElement) => ({
 const removeElementToArticleAC = (elementId) => ({
     type: REMOVE_ELEMENT_TO_ARTICLE,
     payload: elementId
+})
+
+const setArticleHashtagsAC = (hashtags) => ({
+    type: SET_ARTICLE_HASHTAGS,
+    payload: hashtags
 })
 
 // ======== Thunks ========
@@ -435,6 +449,10 @@ export const updateElementToArticle = (newElement) => async (dispatch) => {
 
 export const removeElementToArticle = (elementId) => async (dispatch) => {
     dispatch(removeElementToArticleAC(elementId))
+}
+
+export const updateArticleHashtags = (hashtags) => async (dispatch) => {
+    dispatch(setArticleHashtagsAC(hashtags))
 }
 
 

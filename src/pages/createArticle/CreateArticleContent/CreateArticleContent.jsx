@@ -95,7 +95,8 @@ const CreateArticleContent = (props) => {
                     {isOpenSettings && (
                         <ArticleSettings 
                             onSettingsClick={() => setIsOpenSettings(!isOpenSettings)} 
-                            removeArticle={() => props.removeArticle(props.article.id, props.type)}
+                            removeArticle={() => props.removeArticle(props.article.id, props.type)} 
+                            setIsOpenPreview={props.setIsOpenPreview}
                         />
                     )}
                 </div>

@@ -1,0 +1,130 @@
+.createArticle_noPerm {
+    display: flex;
+    height: calc(100vh - 385px);
+
+    p {
+        font-size: 25px;
+    }
+}
+
+.preview {
+    display: flex;
+    gap: 10px;
+    margin: 50px 10%;
+}
+
+.preview_content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    img {
+        max-width: 800px;
+        border-radius: 10px;
+    }
+}
+
+.preview_content_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    h2 {
+        font-size: 35px;
+        max-width: 600px;
+    }
+
+    p {
+        color: gray;
+    }
+}
+
+.preview_content_scopes {
+    display: flex;
+    gap: 5px;
+
+    div {
+        color: gray;
+    }
+}
+
+.preview_info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.preview_info_contentos {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    min-width: 400px;
+}
+
+.preview_info_contentos_header {
+    border-bottom: 1px solid var(--color-light);
+    padding-bottom: 10px;
+
+    b {
+        font-size: 25px;
+    }
+}
+
+.preview_info_contentos_titles {
+    margin-top: 10px;
+
+    ul {
+        list-style-position: inside;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+
+    a:hover {
+        color: var(--color-blue-dark);
+    }
+}
+
+.preview_info_settings {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.button {
+    background-color: var(--color-blue-light);
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    height: 35px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.button:hover {
+    transition: .2s;
+    background-color: var(--color-blue-dark);
+}
+
+.button_insert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid var(--color-blue-light);
+    outline: none;
+    color: var(--color-blue-dark);
+    height: 35px;
+    cursor: pointer;
+}
+
+.button_insert:hover {
+    transition: .2s;
+    background-color: #f3f3f3;
+}
