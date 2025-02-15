@@ -27,8 +27,4 @@ const ArticlePage = (props) => {
     )
 }
 
-const mapStateToProps = (state) => ({
-    article: state.article.fullArticleContent
-})
-
 export default connect(null, {getArticleContent})(ArticlePage)

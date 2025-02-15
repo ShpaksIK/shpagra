@@ -166,6 +166,11 @@ export let articles_draft = {
                     'type': 'text',
                     'text': 'Параграф 1'
                 },
+                {
+                    'type': 'img',
+                    'src': 'https://png.pngtree.com/thumb_back/fh260/background/20201015/pngtree-christmas-banner-background-with-black-snowflakes-and-green-pine-tree-merry-image_417517.jpg',
+                    'description': 'Моя первая картинка в статье'
+                },
             ],
             'scopes': ['#первый', '#рек'],
             'author': 'Shpaks',
@@ -186,7 +191,7 @@ export let articles = {
         'created_at': '09.01.2025 в 23:52',
         'likes_count': 2,
         'likes_id': [1, 3],
-        'comments_id': [1, 2],
+        'comments_id': [5436346, 632657],
         'comments_count': 2,
         'scopes': ['#первый', '#рек'],
         'author': 'Matvei',
@@ -214,7 +219,7 @@ export let articles = {
         'created_at': '09.01.2025 в 23:52',
         'likes_count': 0,
         'likes_id': [],
-        'comments_id': [3],
+        'comments_id': [373568756],
         'comments_count': 1,
         'scopes': ['#моя', '#статья'],
         'author': 'Shpaks',
@@ -330,7 +335,7 @@ export let articles_content = {
 // на сайте (статей и постов).
 export let comments = [
     {
-        'id': 1,
+        'id': 5436346,
         'text': 'Это лучшая статья на свете!!! Делайте вторую часть',
         'likes_count': 2,
         'likes_id': [5, 1],
@@ -341,7 +346,7 @@ export let comments = [
         'author_id': 3
     },
     {
-        'id': 2,
+        'id': 632657,
         'text': 'Я ифнух',
         'likes_count': 0,
         'likes_id': [],
@@ -352,8 +357,8 @@ export let comments = [
         'author_id': 3
     },
     {
-        'id': 3,
-        'text': 'Я ифнух',
+        'id': 373568756,
+        'text': 'Я ифнух 2',
         'likes_count': 0,
         'likes_id': [],
         'dislike_count': 1,

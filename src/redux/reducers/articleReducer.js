@@ -16,6 +16,9 @@ const SET_COMMENTS_FULL_ARTICLE = 'SET_COMMENTS_FULL_ARTICLE'
 const SET_DRAFT_ARTICLES = 'SET_DRAFT_ARTICLES'
 const SET_MODERATION_ARTICLES = 'SET_MODERATION_ARTICLES'
 const ADD_ELEMENT_TO_ARTICLE = 'ADD_ELEMENT_TO_ARTICLE'
+const UPDATE_ELEMENT_TO_ARTICLE = 'UPDATE_ELEMENT_TO_ARTICLE'
+const REMOVE_ELEMENT_TO_ARTICLE = 'REMOVE_ELEMENT_TO_ARTICLE'
+const SET_ARTICLE_HASHTAGS = 'SET_ARTICLE_HASHTAGS'
 
 let defaultState = {
     mainArticles: [],
@@ -114,6 +117,43 @@ const articleReducer = (state = defaultState, action) => {
                     content: [...state.editingArticle.content, action.payload]
                 }
             }
+        case UPDATE_ELEMENT_TO_ARTICLE:
+            const newContent = []
+            for (let i = 0; i <= state.editingArticle.content.length - 1; i++) {
+                if (i === action.payload.position) {
+                    newContent.push({
+                        ...state.editingArticle.content[i],
+                        ...action.payload.content
+                    })
+                } else {
+                    newContent.push(state.editingArticle.content[i])
+                }
+            }
+            return {
+                ...state,
+                editingArticle: {
+                    ...state.editingArticle,
+                    content: newContent
+                }
+            }
+        case REMOVE_ELEMENT_TO_ARTICLE:
+            const copyContent = [...state.editingArticle.content]
+            copyContent.splice(action.payload, 1)
+            return {
+                ...state,
+                editingArticle: {
+                    ...state.editingArticle,
+                    content: copyContent
+                }
+            }
+        case SET_ARTICLE_HASHTAGS:
+            return {
+                ...state,
+                editingArticle: {
+                    ...state.editingArticle,
+                    scopes: [...action.payload]
+                }
+            } 
         default:
             return state
     }
@@ -176,6 +216,21 @@ const setModerationArticles = (moderationArticles) => ({
     payload: moderationArticles
 })
 
+const updateElementToArticleAC = (newElement) => ({
+    type: UPDATE_ELEMENT_TO_ARTICLE,
+    payload: {...newElement}
+})
+
+const removeElementToArticleAC = (elementId) => ({
+    type: REMOVE_ELEMENT_TO_ARTICLE,
+    payload: elementId
+})
+
+const setArticleHashtagsAC = (hashtags) => ({
+    type: SET_ARTICLE_HASHTAGS,
+    payload: hashtags
+})
+
 // ======== Thunks ========
 export const getMainArticles = (authId = null) => async (dispatch) => {
     // Получить статьи главной ленты
@@ -187,7 +242,11 @@ export const getProfileArticles = (profileId) => async (dispatch, getState) => {
     // Получить статьи профиля (profileId берется из URL адреса)
     const data = await articlesAPI.getProfileArticles(profileId, getState().auth.id)
     if (data.statusCode === 1) {
-        dispatch(setProfileArticlesAC(data.profileArticles))
+        if (data.profileArticles) {
+            dispatch(setProfileArticlesAC(data.profileArticles))
+        } else {
+            dispatch(setProfileArticlesAC([]))
+        }
         if (profileId === getState().auth.id) {
             dispatch(setDraftArticles(data.draftArticles))
             dispatch(setModerationArticles(data.moderationArticles))
@@ -230,17 +289,15 @@ export const getArticleForEditing = (articleId, type) => async (dispatch, getSta
     // Получить статью для её редактирования
     // (без некоторых данных, например без комментариев)
     dispatch(setEditingArticleAC({}))
-    if (type !== 'public') {
+    if (type === 'redactor') {
         const isAuthor = await articlesAPI.isAuthorArticle(articleId, getState().auth.id, type)
         if (isAuthor.data.isAuthor) {
-            let fullArticleData
-            if (isAuthor.data.from === 'draft') {
-                fullArticleData = await articlesAPI.getArticleForEditingFormDraft(articleId)
-            } else {
-                fullArticleData = await articlesAPI.getArticleForEditingFormModer(articleId)
-            }
+            const fullArticleData = await articlesAPI.getArticleForEditingFormDraft(articleId)
             if (fullArticleData.statusCode === 1) {
-                dispatch(setEditingArticleAC(fullArticleData.data))
+                dispatch(setEditingArticleAC({
+                    ...fullArticleData.data,
+                    'editing_from': 'redactor'
+                }))
             } else {
                 dispatch(setError('Произошла ошибка при загрузке статьи'))
             }
@@ -250,8 +307,7 @@ export const getArticleForEditing = (articleId, type) => async (dispatch, getSta
                 'status_code': 403
             }))
         }
-    } else {
-        // Иначе добавляем публичную статью в черновик и открываем её
+    } else if (type === 'public') {
         const isAuthor = await articlesAPI.isAuthorPublicArticle(articleId, getState().auth.id)
         if (isAuthor.data.isAuthor) {
             const fullArticleData = await articlesAPI.getArticleForEditingFormMain(articleId, getState().auth.id)
@@ -260,18 +316,26 @@ export const getArticleForEditing = (articleId, type) => async (dispatch, getSta
                     ...fullArticleData.data,
                     'editing_from': 'public'
                 }))
-                // Добавление в черновик
-                // const data = await articlesAPI.saveArticleToDraft({
-                //     ...fullArticleData.data,
-                //     'created_at': formattedDateCreator(),
-                //     'old_id': fullArticleData.data.id
-                // }, getState().auth.id)
-                // if (data.statusCode === 1) {
-                // } else {
-                //     dispatch(setError('Произошла ошибка при сохранении статьи'))
-                // }
             } else {
-                dispatch(setError('Возникла непредвиденная ошибка'))
+                dispatch(setError('Произошла ошибка при загрузке статьи'))
+            }
+        } else {
+            dispatch(setError('Вы не можете редактировать эту статью'))
+            dispatch(setEditingArticleAC({
+                'status_code': 403
+            }))
+        }
+    } else if (type === 'moder') {
+        const isAuthor = await articlesAPI.isAuthorArticle(articleId, getState().auth.id, type)
+        if (isAuthor.data.isAuthor) {
+            const fullArticleData = await articlesAPI.getArticleForEditingFormModer(articleId)
+            if (fullArticleData.statusCode === 1) {
+                dispatch(setEditingArticleAC({
+                    ...fullArticleData.data,
+                    'editing_from': 'moder'
+                }))
+            } else {
+                dispatch(setError('Произошла ошибка при загрузке статьи'))
             }
         } else {
             dispatch(setError('Вы не можете редактировать эту статью'))
@@ -314,7 +378,7 @@ export const requestArticle = (article) => async (dispatch, getState) => {
 
 export const saveArticleToDraft = (article) => async (dispatch, getState) => {
     // Сохранение статьи в черновик пользователя (запрос в БД)
-    if (getState().article.editingArticle.editing_from !== 'public' && getState().article.editingArticle.id) {
+    if (getState().article.editingArticle.editing_from === 'redactor' && getState().article.editingArticle.id) {
         const data = await articlesAPI.updateArticleToDraft({
             ...getState().article.editingArticle,
             ...article,
@@ -341,8 +405,54 @@ export const saveArticleToDraft = (article) => async (dispatch, getState) => {
     }
 }
 
+export const removeArticle = (articleId, type) => async (dispatch, getState) => {
+    // Удаление статьи
+    let removeData
+    switch (type) {
+        case 'redactor':
+            removeData = await articlesAPI.removeDraftArticle(articleId, getState().auth.id)
+            break
+        case 'moder':
+            removeData = await articlesAPI.removeModerArticle(articleId, getState().auth.id)
+            break
+        case 'public':
+            removeData = await articlesAPI.removePublicArticle(articleId, getState().auth.id)
+            break
+    }
+    if (removeData.statusCode === 1) {
+        dispatch(clearEditingArticle())
+        switch (type) {
+            case 'redactor':
+                break
+            case 'moder':
+                dispatch(setModerationArticles(getState().article.moderationArticles.filter(art => art.id !== articleId)))
+                break
+            case 'public':
+                break
+        }
+    } else {
+        dispatch(setError('Вы не можете редактировать эту статью'))
+    }
+}
+
+export const clearEditingArticle = () => async (dispatch) => {
+    dispatch(setEditingArticleAC({}))
+}
+
 export const addElementToArticle = (element) => async (dispatch) => {
     dispatch(addElementToArticleAC(element))
+}
+
+export const updateElementToArticle = (newElement) => async (dispatch) => {
+    dispatch(updateElementToArticleAC(newElement))
+}
+
+export const removeElementToArticle = (elementId) => async (dispatch) => {
+    dispatch(removeElementToArticleAC(elementId))
+}
+
+export const updateArticleHashtags = (hashtags) => async (dispatch) => {
+    dispatch(setArticleHashtagsAC(hashtags))
 }
 
 

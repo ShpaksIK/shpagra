@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
 import style from '../style.module.scss'
@@ -13,6 +13,9 @@ import { ArticleRender } from '../../../components/ArticleRender/ArticleRender'
 import Preloader from '../../../components/Preloader/Preloader'
 import { addElementToArticle } from '../../../redux/reducers/articleReducer'
 import uploadIMG from './../../../assets/img/upload.jpg'
+import settingsSVG from './../../../assets/svg/settings.svg'
+import ArticleSettings from '../../../components/ArticleSettings/ArticleSettings'
+import { removeArticle } from '../../../redux/reducers/articleReducer'
 
 
 const CreateArticleContent = (props) => {
@@ -24,6 +27,8 @@ const CreateArticleContent = (props) => {
         return <Preloader />
     }
 
+    const [isOpenSettings, setIsOpenSettings] = useState(false)
+
     const addElement = (element) => {
         switch(element) {
             case 'title':
@@ -33,7 +38,7 @@ const CreateArticleContent = (props) => {
                 props.addElementToArticle({'type': element, 'text': 'Параграф'})
                 break
             case 'img':
-                props.addElementToArticle({'type': element, 'src': uploadIMG})
+                props.addElementToArticle({'type': element, 'src': uploadIMG, 'description': ''})
                 break
             case 'indent':
                 props.addElementToArticle({'type': element})
@@ -44,43 +49,60 @@ const CreateArticleContent = (props) => {
             case 'ul':
                 props.addElementToArticle({'type': element, 'list': ['Маркированный список']})
                 break
+            case 'quote':
+                props.addElementToArticle({'type': element, 'text': 'Цитата великого человека...'})
+                break
         }
     }
     
     return (
         <div className={style.content}>
-            <div className={style.content_options}>
-                <div className={style.content_option} onClick={() => addElement('title')}>
-                    <img src={titleSVG} />
-                    <p>Заголовок</p>
+            <div className={style.content_nav}>  
+                <div className={style.content_options}>
+                    <div className={style.content_option} onClick={() => addElement('title')}>
+                        <img src={titleSVG} />
+                        <p>Заголовок</p>
+                    </div>
+                    <div className={style.content_option} onClick={() => addElement('text')}>
+                        <img src={textSVG}/>
+                        <p>Параграф</p>
+                    </div>
+                    <div className={style.content_option} onClick={() => addElement('img')}>
+                        <img src={imgSVG}/>
+                        <p>Изображение</p>
+                    </div>
+                    <div className={style.content_option} onClick={() => addElement('ul')}>
+                        <img src={listBulletSVG} />
+                        <p>Маркированный список</p>
+                    </div>
+                    <div className={style.content_option} onClick={() => addElement('ol')}>
+                        <img src={listNumberSVG} />
+                        <p>Нумерованный список</p>
+                    </div>
+                    <div className={style.content_option} onClick={() => addElement('indent')}>
+                        <img src={marginSVG} />
+                        <p>Отступ</p>
+                    </div>
+                    <div className={style.content_option} onClick={() => addElement('quote')}>
+                        <img src={quoteSVG} />
+                        <p>Цитата</p>
+                    </div>
                 </div>
-                <div className={style.content_option} onClick={() => addElement('text')}>
-                    <img src={textSVG}/>
-                    <p>Параграф</p>
-                </div>
-                <div className={style.content_option} onClick={() => addElement('img')}>
-                    <img src={imgSVG}/>
-                    <p>Изображение</p>
-                </div>
-                <div className={style.content_option} onClick={() => addElement('ul')}>
-                    <img src={listBulletSVG} />
-                    <p>Маркированный список</p>
-                </div>
-                <div className={style.content_option} onClick={() => addElement('ol')}>
-                    <img src={listNumberSVG} />
-                    <p>Нумерованный список</p>
-                </div>
-                <div className={style.content_option} onClick={() => addElement('indent')}>
-                    <img src={marginSVG} />
-                    <p>Отступ</p>
-                </div>
-                <div className={style.content_option}>
-                    <img src={quoteSVG} />
-                    <p>Цитата</p>
+                <div className={style.content_settings}>
+                    <div className={style.content_settings_settings} onClick={() => setIsOpenSettings(!isOpenSettings)}>
+                        <img src={settingsSVG} />
+                    </div>
+                    {isOpenSettings && (
+                        <ArticleSettings 
+                            onSettingsClick={() => setIsOpenSettings(!isOpenSettings)} 
+                            removeArticle={() => props.removeArticle(props.article.id, props.type)} 
+                            setIsOpenPreview={props.setIsOpenPreview}
+                        />
+                    )}
                 </div>
             </div>
             <div className={style.content_content}>
-                <ArticleRender content={props.article.content} />
+                <ArticleRender content={props.article.content} type='editing' />
             </div>
         </div>
     )
@@ -90,4 +112,4 @@ const mapStateToProps = (state) => ({
     article: state.article.editingArticle
 })
 
-export default connect(mapStateToProps, {addElementToArticle})(CreateArticleContent)
+export default connect(mapStateToProps, {addElementToArticle, removeArticle})(CreateArticleContent)

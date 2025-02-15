@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
@@ -10,39 +10,18 @@ import Footer from '../../components/Footer/Footer'
 import Article from '../../components/Article/Article'
 import Post from '../../components/Post/Post'
 import CreatePostForm from './CreatePostForm/CreatePostForm'
-import { getProfileArticles } from '../../redux/reducers/articleReducer'
+import { getProfileArticles, clearEditingArticle } from '../../redux/reducers/articleReducer'
 import { getProfilePosts } from '../../redux/reducers/postReducer'
-import Preloader from '../../components/Preloader/Preloader'
 import ArticleDraft from '../../components/ArticleDraft/ArticleDraft'
+import ArticleModer from '../../components/ArticleModer/ArticleModer'
 
 
 const ProfilePage = (props) => {
-    // Состояния для изменения Preloader на надпись об отсутствии статей и постов
-    const [loadArticlesBlock, setLoadArticlesBlock] = useState(<Preloader />)
-    const [loadPostsBlock, setLoadPostsBlock] = useState(<Preloader />)
-    
-    // Тайм-ауты для показа надписи об отсутствии статей и постов после Preloader
-    setTimeout(() => {
-        setLoadArticlesBlock(
-            <div className={style.content_body_error}>
-                <b>Вы ещё ничего не добавили</b>
-                <Link to='/create-article' className={style.button}>Создать статью</Link>
-            </div>
-        )
-    }, 5000)
-    setTimeout(() => {
-        setLoadPostsBlock(
-            <div className={style.content_body_error}>
-                <b>У вас нет постов!</b>
-                <CreatePostForm />
-            </div>
-        )
-    }, 5000)
-
     // Получение статей и постов пользователя
     useEffect(() => {
         props.getProfileArticles(props.id)
         props.getProfilePosts(props.id)
+        props.clearEditingArticle()
     }, [])
 
     return (
@@ -99,9 +78,16 @@ const ProfilePage = (props) => {
                                 <b>Мои статьи</b>
                             </div>
                             <div className={style.content_body}>
-                                {props.articles ? <>
+                                {props.articles.length > 0 || props.moderation.length > 0 ? <>
+                                    {props.moderation.length > 0 && (
+                                        props.moderation.map(articleModer => <ArticleModer key={`art-moder-${articleModer.id}`} articleModerData={articleModer} />)
+                                    )}
                                     {props.articles.map(article => <Article key={`art-${article.id}`} className={style.article} articleData={article} objectType='profile' />)}
-                                </> : loadArticlesBlock}
+                                </> :
+                                <div className={style.content_body_error}>
+                                    <b>Вы ещё ничего не добавили</b>
+                                    <Link to='/article-creator' className={style.button}>Создать статью</Link>
+                                </div>}
                             </div>
                         </div>
                         {props.draft.length > 0 && (
@@ -114,24 +100,18 @@ const ProfilePage = (props) => {
                                 </div>
                             </div>
                         )}
-                        {props.moderation.length > 0 && (
-                            <div className={style.content_block}>
-                                <div className={style.content_title}>
-                                    <b>На проверке</b>
-                                </div>
-                                <div className={style.content_body}>
-                                    {props.moderation.map(article => <div key={article.id}>{article.title}</div>)}
-                                </div>
-                            </div>
-                        )}
                         <div className={style.content_block}>
                             <div className={style.content_title}>
                                 <b>Мои посты</b>
                             </div>
                             <div className={style.content_body}>
-                                {props.posts ? <>
+                                {props.posts.length > 0 ? <>
                                     {props.posts.map(post => <div key={post.id} className={style.post}><Post postData={post} objectType='profile' /></div>)}
-                                </> : loadPostsBlock}
+                                </> : 
+                                <div className={style.content_body_error}>
+                                    <b>У вас нет постов!</b>
+                                    <CreatePostForm />
+                                </div>}
                             </div>
                         </div>
                     </div>
@@ -162,4 +142,4 @@ const mapStateToProps = (state) => ({
     posts: state.post.profilePosts
 })
 
-export default connect(mapStateToProps, {getProfileArticles, getProfilePosts})(ProfilePage)
+export default connect(mapStateToProps, {getProfileArticles, getProfilePosts, clearEditingArticle})(ProfilePage)

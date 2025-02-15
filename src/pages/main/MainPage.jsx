@@ -28,13 +28,13 @@ const MainPage = (props) => {
         if (props.articles.length > 0) {
             articlesElementsIsLoad = true
         }
-        articlesElements = props.articles.map(article => <Article key={`art-${article.id}`} articleData={article} />)
+        articlesElements = props.articles.map(article => <Article key={`art-${article.id}`} articleData={article} objectType='main' />)
     }
     if (props.posts) {
         if (props.posts.length > 0) {
             postsElementsIsLoad = true
         }
-        postsElements = props.posts.map(post => <Post key={post.id} postData={post} />)
+        postsElements = props.posts.map(post => <Post key={post.id} postData={post} objectType='main' />)
     }
     
     return (

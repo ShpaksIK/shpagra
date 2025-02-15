@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 
@@ -8,9 +8,12 @@ import RegistrationForm from './RegistrationForm/RegistrationForm'
 
 const RegistrationPage = (props) => {
     const navigate = useNavigate()
-    if (props.isAuth) {
-        navigate('/')
-    }
+
+    useEffect(() => {
+        if (props.isAuth) {
+            navigate('/')
+        }
+    }, [props.isAuth])
 
     return (
         <div className={style.main}>

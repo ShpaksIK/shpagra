@@ -3,11 +3,12 @@ import { connect } from 'react-redux'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { TextareaAutosize } from '@mui/material'
 import * as Yup from 'yup'
+import { useNavigate } from 'react-router-dom'
 
 import style from '../style.module.scss'
 import removeSVG from './../../../assets/svg/remove.svg'
 import Preloader from '../../../components/Preloader/Preloader'
-import { saveArticleToDraft, requestArticle } from '../../../redux/reducers/articleReducer'
+import { saveArticleToDraft, requestArticle, updateArticleHashtags } from '../../../redux/reducers/articleReducer'
 
 
 const CreateArticleForm = (props) => {
@@ -15,6 +16,8 @@ const CreateArticleForm = (props) => {
     if (props.article.status_code == 403) {
         return
     }
+
+    const navigator = useNavigate()
 
     // Схема ошибок формы
     const CreateArticleSchema = Yup.object().shape({
@@ -46,13 +49,17 @@ const CreateArticleForm = (props) => {
     const addHashtag = () => {
         if (inputValue && !hashtags.includes(inputValue)) {
             if (inputValue.length <= 20) {
-                setHashtags([...hashtags, `#${inputValue.replace(/#/g, '')}`])
+                const newHashtags = [...hashtags, `#${inputValue.replace(/#/g, '')}`]
+                setHashtags(newHashtags)
+                props.updateArticleHashtags(newHashtags)
                 setInputValue('')
             }
         }
     }
     const delHashtag = (h) => {
-        setHashtags(hashtags.filter((i) => i !== h))
+        const newHashtags = hashtags.filter((i) => i !== h)
+        setHashtags(newHashtags)
+        props.updateArticleHashtags(newHashtags)
     }
 
     // Отправка формы
@@ -61,6 +68,7 @@ const CreateArticleForm = (props) => {
             ...values,
             'scopes': hashtags,
         })
+        navigator('/profile')
     }
 
     // Сохранение статьи в черновик
@@ -72,6 +80,7 @@ const CreateArticleForm = (props) => {
             ...values,
             'scopes': hashtags,
         })
+        navigator('/profile')
     }
 
     return (
@@ -135,4 +144,4 @@ const mapStateToProps = (state) => ({
     article: state.article.editingArticle
 })
 
-export default connect(mapStateToProps, {saveArticleToDraft, requestArticle})(CreateArticleForm)
+export default connect(mapStateToProps, {saveArticleToDraft, requestArticle, updateArticleHashtags})(CreateArticleForm)

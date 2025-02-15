@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -9,7 +9,6 @@ import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import Article from '../../components/Article/Article'
 import Post from '../../components/Post/Post'
-import Preloader from '../../components/Preloader/Preloader'
 import { getProfileArticles } from '../../redux/reducers/articleReducer'
 import { getProfilePosts } from '../../redux/reducers/postReducer'
 import { subscribe } from '../../redux/reducers/profileReducer'
@@ -17,26 +16,6 @@ import { subscribe } from '../../redux/reducers/profileReducer'
 
 const ProfileUserPage = (props) => {
     const navigate = useNavigate()
-
-    // Состояния для изменения Preloader на надпись об отсутствии статей и постов
-    const [loadArticlesBlock, setLoadArticlesBlock] = useState(<Preloader />)
-    const [loadPostsBlock, setLoadPostsBlock] = useState(<Preloader />)
-    
-    // Тайм-ауты для показа надписи об отсутствии статей и постов после Preloader
-    setTimeout(() => {
-        setLoadArticlesBlock(
-            <div className={style.content_body_error}>
-                <b>У пользователя нет статей.</b>
-            </div>
-        )
-    }, 5000)
-    setTimeout(() => {
-        setLoadPostsBlock(
-            <div className={style.content_body_error}>
-                <b>У пользователя нет постов.</b>
-            </div>
-        )
-    }, 5000)
     
     // Получение статей и постов пользователя
     useEffect(() => {
@@ -94,9 +73,12 @@ const ProfileUserPage = (props) => {
                                 <b>Статьи</b>
                             </div>
                             <div className={style.content_body}>
-                                {props.articles ? <>
+                                {props.articles.length > 0 ? <>
                                     {props.articles.map(article => <Article key={`art-${article.id}`} className={style.article} articleData={article} objectType='profile' />)}
-                                </> : loadArticlesBlock}
+                                </> : 
+                                <div className={style.content_body_error}>
+                                    <b>У пользователя нет статей.</b>
+                                </div>}
                             </div>
                         </div>
                         <div className={style.content_block}>
@@ -104,9 +86,12 @@ const ProfileUserPage = (props) => {
                                 <b>Посты</b>
                             </div>
                             <div className={style.content_body}>
-                                {props.posts ? <>
+                                {props.posts.length > 0 ? <>
                                     {props.posts.map(post => <div key={post.id} className={style.post}><Post postData={post} objectType='profile' /></div>)}
-                                </> : loadPostsBlock}
+                                </> :
+                                <div className={style.content_body_error}>
+                                    <b>У пользователя нет постов.</b>
+                                </div>}
                             </div>
                         </div>
                     </div>

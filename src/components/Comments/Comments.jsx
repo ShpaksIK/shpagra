@@ -13,7 +13,7 @@ import CommentsForm from './CommentsForm/CommentsForm'
 const Comments = (props) => {
     useEffect(() => {
         if (props.sendType === 'post') {
-            props.getPostComments(props.commentsId, props.objectId, props.objectType ? 'profile' : 'main')
+            props.getPostComments(props.commentsId, props.objectId, props.objectType)
         } else {
             props.getArticleComments(props.commentsId, props.objectId, props.objectType)
         }
@@ -52,13 +52,37 @@ const Comments = (props) => {
                                 <p>{props.commentsData.length} коммент.</p>
                             </div>
                             {selectedFilter === 'popular' && (
-                                popularComments.map(com => <Comment key={`com-${com.id}`} commentData={com} />)
+                                popularComments.map(com => <Comment 
+                                    key={`com-${com.id}`} 
+                                    commentData={com}
+                                    commentsId={props.commentsId} 
+                                    sendType={props.sendType}
+                                    objectId={props.objectId}
+                                    objectType={props.objectType}
+                                    authorId={props.authorId}
+                                />)
                             )}
                             {selectedFilter === 'new' && (
-                                newComments.reverse().map(com => <Comment key={`com-${com.id}`} commentData={com} />)
+                                newComments.reverse().map(com => <Comment 
+                                    key={`com-${com.id}`} 
+                                    commentData={com}
+                                    commentsId={props.commentsId} 
+                                    sendType={props.sendType}
+                                    objectId={props.objectId}
+                                    objectType={props.objectType}
+                                    authorId={props.authorId}
+                                />)
                             )}
                             {selectedFilter === 'old' && (
-                                oldComments.map(com => <Comment key={`com-${com.id}`} commentData={com} />)
+                                oldComments.map(com => <Comment 
+                                    key={`com-${com.id}`} 
+                                    commentData={com} 
+                                    commentsId={props.commentsId} 
+                                    sendType={props.sendType}
+                                    objectId={props.objectId}
+                                    objectType={props.objectType}
+                                    authorId={props.authorId}
+                                />)
                             )}
                         </>
                     )}

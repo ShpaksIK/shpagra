@@ -6,7 +6,7 @@ import garbageSVG from './../../../assets/svg/garbage.svg'
 import { updateElementToArticle, removeElementToArticle } from '../../../redux/reducers/articleReducer'
 
 
-const Text = (props) => {
+const Quote = (props) => {
     const [editMode, setEditMode] = useState(false)
     const [status, setStatus] = useState(props.text)
 
@@ -35,9 +35,11 @@ const Text = (props) => {
     }
 
     return (
-        <div className={style.text}>
+        <div className={style.quote}>
             {props.type === 'view' && (
-                <p>{props.text}</p>
+                <div className={style.quote_block}>
+                    <p>{props.text}</p> 
+                </div>
             )}
             {props.type === 'editing' && (
                 <div className={style.editing}>
@@ -45,10 +47,14 @@ const Text = (props) => {
                         <img src={garbageSVG} alt='Удалить' />
                     </div>
                     {!editMode &&
-                        <p onClick={() => setEditMode(true)}>{props.text}</p>
+                        <div className={style.quote_block}>
+                            <p onClick={() => setEditMode(true)}>{props.text}</p> 
+                        </div>
                     }
                     {editMode &&
-                        <input className={style.input_text} onChange={onStatusChange} autoFocus={true} onBlur={deactivateEditMode} value={status} />
+                        <div className={style.quote_block}>
+                            <input className={style.input_text} onChange={onStatusChange} autoFocus={true} onBlur={deactivateEditMode} value={status} />
+                        </div>
                     }
                 </div>
             )}
@@ -56,4 +62,4 @@ const Text = (props) => {
     )
 }
 
-export default connect(null, {updateElementToArticle, removeElementToArticle})(Text)
+export default connect(null, {updateElementToArticle, removeElementToArticle})(Quote)

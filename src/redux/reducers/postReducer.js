@@ -113,7 +113,11 @@ export const getMainPosts = (authId = null) => async (dispatch) => {
 
 export const getProfilePosts = (profileId) => async (dispatch) => {
     const data = await postsAPI.getProfilePosts(profileId)
-    dispatch(setProfilePostsAC(data))
+    if (data) {
+        dispatch(setProfilePostsAC(data))
+    } else {
+        dispatch(setProfilePostsAC([]))
+    }
 }
 
 export const sendPost = (text) => async (dispatch, getState) => {
@@ -139,6 +143,15 @@ export const likePost = (profileId, postId, authId) => async (dispatch) => {
     const data = await postsAPI.likePost(profileId, postId, authId)
     if (data.statusCode !== 1) {
         dispatch(setError('Невозможно поставить лайк'))
+    }
+}
+
+export const removePost = (postId) => async (dispatch, getState) => {
+    const data = await postsAPI.removePost(postId, getState().auth.id)
+    if (data.statusCode === 1) {
+        dispatch(setProfilePostsAC(getState().post.profilePosts.filter(post => post.id !== postId)))
+    } else {
+        dispatch(setError('Невозможно удалить пост'))
     }
 }
 

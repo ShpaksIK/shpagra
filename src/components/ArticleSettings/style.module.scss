@@ -1,0 +1,64 @@
+.window_settings {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #b3b3b3a2;
+    z-index: 10;
+}
+
+.settings {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    img {
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+    }
+}
+
+.settings_block {
+    b {
+        font-size: 30px;
+    }
+}
+
+.settings_blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.button {
+    width: 300px;
+    background-color: var(--color-blue-light);
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    height: 35px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.button:hover {
+    transition: .2s;
+    background-color: var(--color-blue-dark);
+}
+
+.button_danger {
+    background-color: var(--color-error);
+}
+
+.button_danger:hover {
+    background-color: rgb(200, 77, 77);
+}

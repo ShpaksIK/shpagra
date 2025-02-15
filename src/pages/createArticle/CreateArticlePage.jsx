@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -7,6 +7,7 @@ import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import CreateArticleForm from './CreateArticleForm/CreateArticleForm'
 import CreateArticleContent from './CreateArticleContent/CreateArticleContent'
+import CreateArticlePreview from './CreateArticlePreview/CreateArticlePreview'
 import { getArticleForEditing, createArticle } from '../../redux/reducers/articleReducer'
 
 
@@ -30,19 +31,25 @@ const CreateArticlePage = (props) => {
         }
     }, [])
 
+    // Состояние вкладки предварительного просмотра
+    const [isOpenPreview, setIsOpenPreview] = useState(false)
+
     return (
         <div className={style.main}>
             {!props.isAuth && (
                 <Navigate to='/login' />
             )}
             <Header />
-            <div className={style.createArticle_block}>
-                <h3>Создать новую статью</h3>
-                <div className={style.createArticle_block_flex}>
-                    <CreateArticleForm />
-                    <CreateArticleContent />
+            {isOpenPreview && <CreateArticlePreview setIsOpenPreview={setIsOpenPreview} />}
+            {!isOpenPreview && (
+                <div className={style.createArticle_block}>
+                    <h3>Создать новую статью</h3>
+                    <div className={style.createArticle_block_flex}>
+                        <CreateArticleForm />
+                        <CreateArticleContent type={props.type} setIsOpenPreview={setIsOpenPreview} />
+                    </div>
                 </div>
-            </div>
+            )}
             <Footer />
         </div>
     )
