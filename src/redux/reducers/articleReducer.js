@@ -19,6 +19,7 @@ const ADD_ELEMENT_TO_ARTICLE = 'ADD_ELEMENT_TO_ARTICLE'
 const UPDATE_ELEMENT_TO_ARTICLE = 'UPDATE_ELEMENT_TO_ARTICLE'
 const REMOVE_ELEMENT_TO_ARTICLE = 'REMOVE_ELEMENT_TO_ARTICLE'
 const SET_ARTICLE_HASHTAGS = 'SET_ARTICLE_HASHTAGS'
+const SET_ARTICLE_AVATAR = 'SET_ARTICLE_AVATAR'
 
 let defaultState = {
     mainArticles: [],
@@ -153,7 +154,19 @@ const articleReducer = (state = defaultState, action) => {
                     ...state.editingArticle,
                     scopes: [...action.payload]
                 }
-            } 
+            }
+        case SET_ARTICLE_AVATAR:
+            const newMainArticles = [
+                ...state.mainArticles.filter(a => a.id != action.payload.articleId),
+                {
+                    ...state.mainArticles.find(a => a.id == action.payload.articleId),
+                    'author_avatar': action.payload.file
+                }
+            ]
+            return {
+                ...state,
+                mainArticles: newMainArticles
+            }
         default:
             return state
     }
@@ -229,6 +242,11 @@ const removeElementToArticleAC = (elementId) => ({
 const setArticleHashtagsAC = (hashtags) => ({
     type: SET_ARTICLE_HASHTAGS,
     payload: hashtags
+})
+
+const setArticleAvatarAC = (articleId, file) => ({
+    type: SET_ARTICLE_AVATAR,
+    payload: {articleId, file}
 })
 
 // ======== Thunks ========
@@ -453,6 +471,10 @@ export const removeElementToArticle = (elementId) => async (dispatch) => {
 
 export const updateArticleHashtags = (hashtags) => async (dispatch) => {
     dispatch(setArticleHashtagsAC(hashtags))
+}
+
+export const setArticleAvatar = (articleId, file) => async (dispatch) => {
+    dispatch(setArticleAvatarAC(articleId, file))
 }
 
 

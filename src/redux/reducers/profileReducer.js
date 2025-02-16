@@ -1,4 +1,5 @@
 import { profileAPI } from "../../api/api"
+import { setArticleAvatar } from "./articleReducer"
 import { setError } from "./errorReducer"
 
 
@@ -11,6 +12,7 @@ let defaultState = {
     id: null,
     customId: null,
     username: null,
+    avatar: null,
     email: null,
     createdAt: null,
     followersCount: 0,
@@ -43,9 +45,9 @@ const profileReducer = (state = defaultState, action) => {
 }
 
 // ======== Action creators (AC) ========
-export const setProfileDataAC = (id, customId, username, email, createdAt, followersCount) => ({
+export const setProfileDataAC = (id, customId, username, avatar, email, createdAt, followersCount) => ({
     type: SET_PROFILE_DATA,
-    payload: {id, customId, username, email, createdAt, followersCount}
+    payload: {id, customId, username, avatar, email, createdAt, followersCount}
 })
 
 export const addFollowersCountAC = () => ({
@@ -60,7 +62,20 @@ export const subtractFollowersCountAC = () => ({
 export const getProfileData = (id) => async (dispatch) => {
     const data = await profileAPI.getProfile(id)
     if (data) {
-        dispatch(setProfileDataAC(data.id, data.custom_id, data.login, data.email, data.created_at, data.followers_count))
+        dispatch(setProfileDataAC(data.id, data.custom_id, data.login, data.avatar, data.email, data.created_at, data.followers_count))
+    }
+}
+
+export const getProfileAvatar = (id, toObject, objectId) => async (dispatch) => {
+    const data = await profileAPI.getProfileAvatar(id)
+    if (data.statusCode === 1) {
+        if (toObject === 'article') {
+            dispatch(setArticleAvatar(objectId, data.avatar))
+        } else if (toObject === 'post') {
+            dispatch()
+        } else if (toObject === 'comment') {
+            dispatch()
+        }
     }
 }
 

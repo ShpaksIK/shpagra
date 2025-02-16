@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import style from './style.module.scss'
+import avatarIMG from './../../assets/img/avatar.png'
 import emailSVG from './../../assets/svg/email.svg'
 import subscribeSVG from './../../assets/svg/subscribe.svg'
 import Header from '../../components/Header/Header'
@@ -12,6 +13,7 @@ import Post from '../../components/Post/Post'
 import CreatePostForm from './CreatePostForm/CreatePostForm'
 import { getProfileArticles, clearEditingArticle } from '../../redux/reducers/articleReducer'
 import { getProfilePosts } from '../../redux/reducers/postReducer'
+import { setUserAvatar } from '../../redux/reducers/authReducer'
 import ArticleDraft from '../../components/ArticleDraft/ArticleDraft'
 import ArticleModer from '../../components/ArticleModer/ArticleModer'
 
@@ -24,6 +26,13 @@ const ProfilePage = (props) => {
         props.clearEditingArticle()
     }, [])
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0]
+        if (file) {
+            props.setUserAvatar(file)
+        }
+    }
+    
     return (
         <div className={style.main}>
             <Header />
@@ -33,10 +42,22 @@ const ProfilePage = (props) => {
                     <div className={style.left_blocks}>
                         <div className={style.block1}>
                             <div className={style.info_title}>
-                                <img src='https://zornet.ru/_fr/19/0640572.png' />
+                                {props.avatar && <img src={URL.createObjectURL(props.avatar)} alt='Фото профиля' />}
+                                {!props.avatar &&  <img src={avatarIMG} />}
                                 <b>{props.username}</b>
                             </div>
                             <div className={style.info_body}>
+                                <div className={style.info_body_block}>
+                                    <div className={style.image_upload}>
+                                        <input
+                                            type='file'
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                            className={style.file_input}
+                                        />
+                                        <span className={style.upload_text}>Нажмите, чтобы сменить аватар</span>
+                                    </div>
+                                </div>
                                 <div className={style.info_body_block}>
                                     <div className={style.info_body_block_img}>
                                         <img src={emailSVG} />
@@ -63,10 +84,6 @@ const ProfilePage = (props) => {
                                 <CreatePostForm />
                                 <div className={style.info_body_block}>
                                     <Link to='/article-creator' className={style.button}>Создать статью</Link>
-                                </div>
-                                <div className={style.info_body_block}>
-                                    <label><b>Загрузить фото профиля:</b></label>
-                                    <input type='file' />
                                 </div>
                             </div>
                         </div>
@@ -134,6 +151,7 @@ const mapStateToProps = (state) => ({
     isAuth: state.auth.isAuth,
     id: state.auth.id,
     username: state.auth.username,
+    avatar: state.auth.avatar,
     email: state.auth.email,
     followersCount: state.auth.followersCount,
     articles: state.article.profileArticles,
@@ -142,4 +160,4 @@ const mapStateToProps = (state) => ({
     posts: state.post.profilePosts
 })
 
-export default connect(mapStateToProps, {getProfileArticles, getProfilePosts, clearEditingArticle})(ProfilePage)
+export default connect(mapStateToProps, {getProfileArticles, getProfilePosts, clearEditingArticle, setUserAvatar})(ProfilePage)

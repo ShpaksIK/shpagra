@@ -16,6 +16,21 @@ export const authAPI = {
         return new Promise((resolve) => {
             resolve(users['1'])
         })
+    },
+    setAvatar(file, authId) {
+        return new Promise((resolve) => {
+            if (!file) {
+                users[authId]['avatar'] = ''
+                resolve({
+                    'statusCode': 2
+                })
+                return
+            }
+            users[authId]['avatar'] = file
+            resolve({
+                'statusCode': 1
+            })
+        })
     }
 }
 
@@ -23,6 +38,14 @@ export const profileAPI = {
     getProfile(id) {
         return new Promise((resolve) => {
             resolve(users[id])
+        })
+    },
+    getProfileAvatar(id) {
+        return new Promise((resolve) => {
+            resolve({
+                'statusCode': 1,
+                'avatar': users[id].avatar
+            })
         })
     },
     subscribe(id, authId) {
