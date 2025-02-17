@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 
 import style from './style.module.scss'
+import bannerIMG from './../../assets/img/banner.jpg'
 import avatarIMG from './../../assets/img/avatar.png'
 import likeSVG from './../../assets/svg/like.svg'
 import commentSVG from './../../assets/svg/comment.svg'
@@ -29,7 +30,8 @@ const Article = (props) => {
         <div className={style.article}>
             <Link to={`/article/${props.articleData.id}`}>
                 <div className={style.picture}>
-                    <img src={props.articleData.banner} />
+                    {props.articleData.banner && <img src={URL.createObjectURL(props.articleData.banner)} alt={props.articleData.title} />}
+                    {!props.articleData.banner && <img src={bannerIMG} alt={props.articleData.title} />}
                 </div>
             </Link>
             <div className={style.info}>

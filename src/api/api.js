@@ -438,10 +438,12 @@ export const postsAPI = {
 export const commentsAPI = {
     getComments(commentsId) {
         return new Promise((resolve) => {
-            let parsedComments = []
+            const parsedComments = []
             for (let i = 0; i <= commentsId.length - 1; i++) {
                 parsedComments.push(comments.find(c => c.id === commentsId[i]))
-
+            }
+            for (let i = 0; i <= parsedComments.length - 1; i++) {
+                parsedComments[i].author_avatar = users[parsedComments[i].author_id].avatar
             }
             resolve({
                 'statusCode': 1,

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import style from './style.module.scss'
+import bannerIMG from './../../../assets/img/banner.jpg'
 import Preloader from '../../../components/Preloader/Preloader'
 import { ArticleRender } from '../../../components/ArticleRender/ArticleRender'
 import { saveArticleToDraft, requestArticle } from '../../../redux/reducers/articleReducer'
@@ -50,7 +51,8 @@ const CreateArticlePreview = (props) => {
                     {scopesElements}
                 </div>
                 <p>{props.article.description}</p>
-                <img src={props.article.banner} alt={props.article.title} />
+                {props.article.banner && <img src={URL.createObjectURL(props.article.banner)} alt={props.article.title} />}
+                {!props.article.banner && <img src={bannerIMG} alt={props.article.title} />}
                 <hr />
                 <ArticleRender content={props.article.content} />
             </div>

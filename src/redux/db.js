@@ -130,7 +130,7 @@ export let articles_to_moderation = [
         'id': 1,
         'title': 'Статья на проверку',
         'description': 'Что же написать во этой статье...',
-        'banner': 'https://png.pngtree.com/thumb_back/fh260/background/20201015/pngtree-christmas-banner-background-with-black-snowflakes-and-green-pine-tree-merry-image_417517.jpg',
+        'banner': '',
         'created_at': '09.01.2025 в 23:52',
         'content': [
             {
@@ -160,7 +160,7 @@ export let articles_draft = {
             'id': 1,
             'title': 'Моя вторая статья!',
             'description': 'Что же написать во второй статье...',
-            'banner': 'https://png.pngtree.com/thumb_back/fh260/background/20201015/pngtree-christmas-banner-background-with-black-snowflakes-and-green-pine-tree-merry-image_417517.jpg',
+            'banner': '',
             'created_at': '09.01.2025 в 23:52',
             'content': [
                 {
@@ -173,7 +173,7 @@ export let articles_draft = {
                 },
                 {
                     'type': 'img',
-                    'src': 'https://png.pngtree.com/thumb_back/fh260/background/20201015/pngtree-christmas-banner-background-with-black-snowflakes-and-green-pine-tree-merry-image_417517.jpg',
+                    'src': '',
                     'description': 'Моя первая картинка в статье'
                 },
             ],
@@ -192,7 +192,7 @@ export let articles = {
         'id': 2,
         'title': 'Как пукнуть так, чтобы было тихо?',
         'description': 'В этой статье вы узнаете как пукнуть тихо, чтобы вас никто не заметил и не наругал за ваши грешки)',
-        'banner': 'https://cs13.pikabu.ru/post_img/2022/12/17/9/og_og_1671286379260820250.jpg',
+        'banner': '',
         'created_at': '09.01.2025 в 23:52',
         'likes_count': 2,
         'likes_id': [1, 3],
@@ -206,7 +206,7 @@ export let articles = {
         'id': 3,
         'title': 'Как пукнуть так, чтобы было тихо? ЧАСТЬ 2',
         'description': 'В этой статье вы узнаете как пукнуть тихо, чтобы вас никто не заметил и не наругал за ваши грешки)',
-        'banner': 'https://cs13.pikabu.ru/post_img/2022/12/17/9/og_og_1671286379260820250.jpg',
+        'banner': '',
         'created_at': '09.01.2025 в 23:52',
         'likes_count': 0,
         'likes_id': [],
@@ -220,7 +220,7 @@ export let articles = {
         'id': 1,
         'title': 'Моя первая статья',
         'description': 'Что-то написано...',
-        'banner': 'https://thumbs.dreamstime.com/b/%D0%BF%D0%BB%D0%BE%D1%81%D0%BA%D0%B8%D0%B9-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B8%D0%B7%D0%BE%D0%B3%D0%BD%D1%83%D1%82%D0%BE%D0%B9-%D0%BA%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B9-%D0%BB%D0%B5%D0%BD%D1%82%D1%8B-%D0%B1%D0%B0%D0%BD%D0%BD%D0%B5%D1%80%D0%B0-%D0%BD%D0%B0-%D0%B1%D0%B5%D0%BB%D0%BE%D0%BC-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F-216494194.jpg',
+        'banner': '',
         'created_at': '09.01.2025 в 23:52',
         'likes_count': 0,
         'likes_id': [],
@@ -252,7 +252,7 @@ export let articles_content = {
             },
             {
                 'type': 'img',
-                'src': 'https://thumbs.dreamstime.com/b/%D0%BF%D0%BB%D0%BE%D1%81%D0%BA%D0%B8%D0%B9-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B8%D0%B7%D0%BE%D0%B3%D0%BD%D1%83%D1%82%D0%BE%D0%B9-%D0%BA%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B9-%D0%BB%D0%B5%D0%BD%D1%82%D1%8B-%D0%B1%D0%B0%D0%BD%D0%BD%D0%B5%D1%80%D0%B0-%D0%BD%D0%B0-%D0%B1%D0%B5%D0%BB%D0%BE%D0%BC-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F-216494194.jpg'
+                'src': ''
             },
             {
                 'type': 'indent'

@@ -20,6 +20,7 @@ const UPDATE_ELEMENT_TO_ARTICLE = 'UPDATE_ELEMENT_TO_ARTICLE'
 const REMOVE_ELEMENT_TO_ARTICLE = 'REMOVE_ELEMENT_TO_ARTICLE'
 const SET_ARTICLE_HASHTAGS = 'SET_ARTICLE_HASHTAGS'
 const SET_ARTICLE_AVATAR = 'SET_ARTICLE_AVATAR'
+const SET_EDITING_ARTICLE_BANNER = 'SET_EDITING_ARTICLE_BANNER'
 
 let defaultState = {
     mainArticles: [],
@@ -167,6 +168,14 @@ const articleReducer = (state = defaultState, action) => {
                 ...state,
                 mainArticles: newMainArticles
             }
+        case SET_EDITING_ARTICLE_BANNER:
+            return {
+                ...state,
+                editingArticle: {
+                    ...state.editingArticle,
+                    banner: action.payload
+                }
+            }
         default:
             return state
     }
@@ -247,6 +256,11 @@ const setArticleHashtagsAC = (hashtags) => ({
 const setArticleAvatarAC = (articleId, file) => ({
     type: SET_ARTICLE_AVATAR,
     payload: {articleId, file}
+})
+
+const setEditingArticleBannerAC = (file) => ({
+    type: SET_EDITING_ARTICLE_BANNER,
+    payload: file
 })
 
 // ======== Thunks ========
@@ -477,6 +491,10 @@ export const updateArticleHashtags = (hashtags) => async (dispatch) => {
 
 export const setArticleAvatar = (articleId, file) => async (dispatch) => {
     dispatch(setArticleAvatarAC(articleId, file))
+}
+
+export const setEditingArticleBanner = (file) => async (dispatch) => {
+    dispatch(setEditingArticleBannerAC(file))
 }
 
 

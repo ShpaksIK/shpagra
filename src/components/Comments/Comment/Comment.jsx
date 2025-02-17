@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 
 import style from '../style.module.scss'
+import avatarIMG from './../../../assets/img/avatar.png'
 import likeSVG from './../../../assets/svg/like.svg'
 import garbageSVG from './../../../assets/svg/garbage.svg'
 import { likeComment, dislikeComment, removeComment } from '../../../redux/reducers/commentReducer'
@@ -33,7 +34,10 @@ const Comment = (props) => {
         <div className={style.comment}>
             <div className={style.comment_header}>
                 <div className={style.comment_header_profile}>
-                    <Link to={`/profile/${props.commentData.author_id}`}><img /></Link>
+                    <Link to={`/profile/${props.commentData.author_id}`}>
+                        {props.commentData.author_avatar && <img src={URL.createObjectURL(props.commentData.author_avatar)} alt='Фото профиля' />}
+                        {!props.commentData.author_avatar && <img src={avatarIMG} />}
+                    </Link>
                     <Link to={`/profile/${props.commentData.author_id}`}><p>{props.commentData.author}</p></Link>
                 </div>
                 <div className={style.comment_header_date}>

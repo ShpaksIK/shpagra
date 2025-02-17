@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import style from './style.module.scss'
+import bannerIMG from './../../assets/img/banner.jpg'
 import avatarIMG from './../../assets/img/avatar.png'
 import settingsSVG from './../../assets/svg/settings.svg'
 
@@ -14,7 +15,8 @@ const ArticleDraft = (props) => {
         <div className={style.article}>
             <div className={style.picture}>
                 <Link to={`/article-creator/r/${props.articleDraftData.id}`}>
-                    <img src={props.articleDraftData.banner} />
+                    {props.articleDraftData.banner && <img src={URL.createObjectURL(props.articleDraftData.banner)} alt={props.articleDraftData.title} />}
+                    {!props.articleDraftData.banner && <img src={bannerIMG} alt={props.articleDraftData.title} />}
                 </Link>
             </div>
             <div className={style.info}>

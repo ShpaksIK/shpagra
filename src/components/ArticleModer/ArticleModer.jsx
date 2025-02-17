@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import style from './style.module.scss'
+import bannerIMG from './../../assets/img/banner.jpg'
 import avatarIMG from './../../assets/img/avatar.png'
 import settingsSVG from './../../assets/svg/settings.svg'
 
@@ -13,7 +14,8 @@ const ArticleModer = (props) => {
         <div className={style.article}>
             <div className={style.picture}>
                 <Link to={`/article-creator/m/${props.articleModerData.id}`}>
-                    <img src={props.articleModerData.banner} />
+                    {props.articleModerData.banner && <img src={URL.createObjectURL(props.articleModerData.banner)} alt={props.articleModerData.title} />}
+                    {!props.articleModerData.banner && <img src={bannerIMG} alt={props.articleModerData.title} />}
                 </Link>
             </div>
             <div className={style.info}>
