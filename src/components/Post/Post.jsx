@@ -15,10 +15,6 @@ import { removePost } from '../../redux/reducers/postReducer'
 
 
 const Post = (props) => {
-    useEffect(() => {
-        props.getProfileAvatar(props.postData.author_id, 'post', props.postData.id)
-    }, [])
-    
     const [isLike, setIsLike] = useState(props.postData.likes_id.filter(id => id === props.id).length === 1 ? true : false)
     const [isOpenComments, setIsOpenComments] = useState(false)
     const [isOpenConfirm, setIsOpenConfirm] = useState(false)
@@ -37,15 +33,8 @@ const Post = (props) => {
             )}
             <div className={style.post_author}>
                 <Link to={`/profile/${props.postData.author_id}`}>
-                    {props.objectType === 'profile' && (
-                        <img src={URL.createObjectURL(props.avatarProfile)} alt='Фото профиля' />
-                    )}
-                    {props.objectType !== 'profile' && (
-                        <>
-                            {props.postData.author_avatar && <img src={URL.createObjectURL(props.postData.author_avatar)} alt='Фото профиля' />}
-                            {!props.postData.author_avatar && <img src={avatarIMG} />}
-                        </>
-                    )}
+                    {props.postData.author_avatar && <img src={URL.createObjectURL(props.postData.author_avatar)} alt='Фото профиля' />}
+                    {!props.postData.author_avatar && <img src={avatarIMG} />}
                 </Link>
                 <Link className={style.linkAuthor} to={`/profile/${props.postData.author_id}`}>{props.postData.author}</Link>
             </div>

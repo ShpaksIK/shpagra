@@ -260,15 +260,15 @@ export const getProfileArticles = (profileId) => async (dispatch, getState) => {
     // Получить статьи профиля (profileId берется из URL адреса)
     const data = await articlesAPI.getProfileArticles(profileId, getState().auth.id)
     if (data.statusCode === 1) {
-        if (data.profileArticles) {
-            dispatch(setProfileArticlesAC(data.profileArticles))
-        } else {
-            dispatch(setProfileArticlesAC([]))
-        }
+        dispatch(setProfileArticlesAC(data.profileArticles))
         if (profileId === getState().auth.id) {
             dispatch(setDraftArticles(data.draftArticles))
             dispatch(setModerationArticles(data.moderationArticles))
         }
+    } else if (data.statusCode === 2) {
+        dispatch(setProfileArticlesAC([]))
+        dispatch(setDraftArticles([]))
+        dispatch(setModerationArticles([]))
     } else {
         dispatch(setError('Произошла ошибка при загрузке профиля'))
     }
@@ -278,7 +278,9 @@ export const likeArticle = (profileId, articleId, authId) => async (dispatch) =>
     // Поставить лайк / убрать лайк
     if (authId) {
         const data = await articlesAPI.likeArticle(profileId, articleId, authId)
-        if (data.statusCode !== 1) {
+        if (data.statusCode === 1) {
+
+        } else {
             dispatch(setError('Невозможно поставить лайк'))
         }
     } else {

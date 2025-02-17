@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
@@ -9,15 +9,10 @@ import likeSVG from './../../assets/svg/like.svg'
 import commentSVG from './../../assets/svg/comment.svg'
 import settingsSVG from './../../assets/svg/settings.svg'
 import { likeArticle } from '../../redux/reducers/articleReducer'
-import { getProfileAvatar } from '../../redux/reducers/profileReducer'
 import Comments from '../Comments/Comments'
 
 
 const Article = (props) => {
-    useEffect(() => {
-        props.getProfileAvatar(props.articleData.author_id, 'article', props.articleData.id)
-    }, [])
-
     const [isLike, setIsLike] = useState(props.articleData.likes_id.filter(id => id === props.id).length === 1 ? true : false)
     const [isOpenComments, setIsOpenComments] = useState(false)
 
@@ -41,15 +36,8 @@ const Article = (props) => {
                 <div className={style.author}>
                     <Link to={`/profile/${props.articleData.author_id}`}>
                         <div className={style.avatar}>
-                            {props.objectType === 'profile' && (
-                                <img src={URL.createObjectURL(props.avatarProfile)} alt='Фото профиля' />
-                            )}
-                            {props.objectType !== 'profile' && (
-                                <>
-                                    {props.articleData.author_avatar && <img src={URL.createObjectURL(props.articleData.author_avatar)} alt='Фото профиля' />}
-                                    {!props.articleData.author_avatar && <img src={avatarIMG} />}
-                                </>
-                            )}
+                            {props.articleData.author_avatar && <img src={URL.createObjectURL(props.articleData.author_avatar)} alt='Фото профиля' />}
+                            {!props.articleData.author_avatar && <img src={avatarIMG} />}
                         </div>
                     </Link>
                     <div className={style.author_info}>
@@ -116,9 +104,8 @@ const mapStateToProps = (state) => {
         isAuth: state.auth.isAuth,
         id: state.auth.id,
         mainArticles: state.article.mainArticles,
-        profileArticles: state.article.profileArticles,
-        avatarProfile: state.profile.avatar
+        profileArticles: state.article.profileArticles
     }
 }
 
-export default connect(mapStateToProps, {likeArticle, getProfileAvatar})(Article)
+export default connect(mapStateToProps, {likeArticle})(Article)
