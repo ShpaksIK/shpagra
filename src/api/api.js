@@ -13,7 +13,7 @@ import { randomIdGenerator } from '../utils/randomIdGenerator'
 export const authAPI = {
     me() {
         return new Promise((resolve) => {
-            resolve()
+            resolve(users['1'])
         })
     },
     setAvatar(file, authId) {

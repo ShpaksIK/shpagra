@@ -53,7 +53,7 @@ const MainPage = (props) => {
                 </div>
             </div>
             <div className={style.container + ' ' + style.content_title}>
-                <h3>Статьи:</h3>
+                <h3 id='articles'>Статьи:</h3>
                 <FilterArticles />
             </div>
             <div className={style.content_articles}>
@@ -61,7 +61,7 @@ const MainPage = (props) => {
             </div>
             
             <div className={style.container + ' ' + style.content_title}>
-                <h3>Посты:</h3>
+                <h3 id='posts'>Посты:</h3>
                 <FilterPosts />
             </div>
             <div className={style.content_posts}>
