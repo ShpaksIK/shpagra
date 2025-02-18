@@ -24,6 +24,7 @@
 
     img {
         max-width: 800px;
+        max-height: 500px;
         border-radius: 10px;
     }
 }
@@ -127,4 +128,18 @@
 .button_insert:hover {
     transition: .2s;
     background-color: #f3f3f3;
+}
+
+
+@media screen and (max-width: 1250px) {
+    .preview {
+        flex-wrap: wrap-reverse;
+    }
+    .preview_info {
+        width: 100%;
+    }
+    .preview_info_contentos {
+        min-width: 0;
+        width: 100%;
+    }
 }

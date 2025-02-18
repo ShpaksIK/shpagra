@@ -1,0 +1,28 @@
+.termsofuse_block {
+    margin: 50px 15%;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+
+    h2 {
+        font-size: 30px;
+        text-align: center;
+    }
+
+    h3 {
+        font-size: 20px;
+        margin-top: 20px;
+    }
+
+    div {
+        margin-top: 50px;
+        font-style: italic;
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    .termsofuse_block {
+        margin: 50px 5px;
+    }
+}

@@ -19,6 +19,8 @@ const ADD_ELEMENT_TO_ARTICLE = 'ADD_ELEMENT_TO_ARTICLE'
 const UPDATE_ELEMENT_TO_ARTICLE = 'UPDATE_ELEMENT_TO_ARTICLE'
 const REMOVE_ELEMENT_TO_ARTICLE = 'REMOVE_ELEMENT_TO_ARTICLE'
 const SET_ARTICLE_HASHTAGS = 'SET_ARTICLE_HASHTAGS'
+const SET_ARTICLE_AVATAR = 'SET_ARTICLE_AVATAR'
+const SET_EDITING_ARTICLE_BANNER = 'SET_EDITING_ARTICLE_BANNER'
 
 let defaultState = {
     mainArticles: [],
@@ -153,7 +155,27 @@ const articleReducer = (state = defaultState, action) => {
                     ...state.editingArticle,
                     scopes: [...action.payload]
                 }
-            } 
+            }
+        case SET_ARTICLE_AVATAR:
+            const newMainArticles = [
+                ...state.mainArticles.filter(a => a.id != action.payload.articleId),
+                {
+                    ...state.mainArticles.find(a => a.id == action.payload.articleId),
+                    'author_avatar': action.payload.file
+                }
+            ]
+            return {
+                ...state,
+                mainArticles: newMainArticles
+            }
+        case SET_EDITING_ARTICLE_BANNER:
+            return {
+                ...state,
+                editingArticle: {
+                    ...state.editingArticle,
+                    banner: action.payload
+                }
+            }
         default:
             return state
     }
@@ -231,6 +253,16 @@ const setArticleHashtagsAC = (hashtags) => ({
     payload: hashtags
 })
 
+const setArticleAvatarAC = (articleId, file) => ({
+    type: SET_ARTICLE_AVATAR,
+    payload: {articleId, file}
+})
+
+const setEditingArticleBannerAC = (file) => ({
+    type: SET_EDITING_ARTICLE_BANNER,
+    payload: file
+})
+
 // ======== Thunks ========
 export const getMainArticles = (authId = null) => async (dispatch) => {
     // Получить статьи главной ленты
@@ -242,16 +274,15 @@ export const getProfileArticles = (profileId) => async (dispatch, getState) => {
     // Получить статьи профиля (profileId берется из URL адреса)
     const data = await articlesAPI.getProfileArticles(profileId, getState().auth.id)
     if (data.statusCode === 1) {
-        if (data.profileArticles) {
-            dispatch(setProfileArticlesAC(data.profileArticles))
-        } else {
-            dispatch(setProfileArticlesAC([]))
-        }
+        dispatch(setProfileArticlesAC(data.profileArticles))
         if (profileId === getState().auth.id) {
             dispatch(setDraftArticles(data.draftArticles))
             dispatch(setModerationArticles(data.moderationArticles))
         }
     } else {
+        dispatch(setProfileArticlesAC([]))
+        dispatch(setDraftArticles([]))
+        dispatch(setModerationArticles([]))
         dispatch(setError('Произошла ошибка при загрузке профиля'))
     }
 }
@@ -260,7 +291,9 @@ export const likeArticle = (profileId, articleId, authId) => async (dispatch) =>
     // Поставить лайк / убрать лайк
     if (authId) {
         const data = await articlesAPI.likeArticle(profileId, articleId, authId)
-        if (data.statusCode !== 1) {
+        if (data.statusCode === 1) {
+
+        } else {
             dispatch(setError('Невозможно поставить лайк'))
         }
     } else {
@@ -453,6 +486,14 @@ export const removeElementToArticle = (elementId) => async (dispatch) => {
 
 export const updateArticleHashtags = (hashtags) => async (dispatch) => {
     dispatch(setArticleHashtagsAC(hashtags))
+}
+
+export const setArticleAvatar = (articleId, file) => async (dispatch) => {
+    dispatch(setArticleAvatarAC(articleId, file))
+}
+
+export const setEditingArticleBanner = (file) => async (dispatch) => {
+    dispatch(setEditingArticleBannerAC(file))
 }
 
 

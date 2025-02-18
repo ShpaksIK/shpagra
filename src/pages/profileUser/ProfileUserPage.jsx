@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import style from './style.module.scss'
+import avatarIMG from './../../assets/img/avatar.png'
 import subscribeSVG from './../../assets/svg/subscribe.svg'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
@@ -40,7 +41,8 @@ const ProfileUserPage = (props) => {
                     <div className={style.left_blocks}>
                         <div className={style.block1}>
                             <div className={style.info_title}>
-                                <img src='https://zornet.ru/_fr/19/0640572.png' />
+                                {props.avatar && <img src={URL.createObjectURL(props.avatar)} alt='Фото профиля' />}
+                                {!props.avatar && <img src={avatarIMG} />}
                                 <b>{props.username}</b>
                             </div>
                             <div className={style.info_body}>
@@ -107,6 +109,7 @@ const mapStateToProps = (state) => ({
     myId: state.auth.id,
     customId: state.profile.customId,
     username: state.profile.username,
+    avatar: state.profile.avatar,
     email: state.profile.email,
     createdAt: state.profile.createdAt,
     followersCount: state.profile.followersCount,

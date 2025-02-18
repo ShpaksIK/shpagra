@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import style from './style.module.scss'
+import bannerIMG from './../../assets/img/banner.jpg'
+import avatarIMG from './../../assets/img/avatar.png'
 import settingsSVG from './../../assets/svg/settings.svg'
 
 
@@ -13,14 +15,16 @@ const ArticleDraft = (props) => {
         <div className={style.article}>
             <div className={style.picture}>
                 <Link to={`/article-creator/r/${props.articleDraftData.id}`}>
-                    <img src={props.articleDraftData.banner} />
+                    {props.articleDraftData.banner && <img src={URL.createObjectURL(props.articleDraftData.banner)} alt={props.articleDraftData.title} />}
+                    {!props.articleDraftData.banner && <img src={bannerIMG} alt={props.articleDraftData.title} />}
                 </Link>
             </div>
             <div className={style.info}>
                 <div className={style.author}>
                     <Link to={`/profile/${props.articleDraftData.author_id}`}>
                         <div className={style.avatar}>
-                            <img />
+                            {props.articleDraftData.author_avatar && <img src={URL.createObjectURL(props.articleDraftData.author_avatar)} alt='Фото профиля' />}
+                            {!props.articleDraftData.author_avatar && <img src={avatarIMG} />}
                         </div>
                     </Link>
                     <div className={style.author_info}>

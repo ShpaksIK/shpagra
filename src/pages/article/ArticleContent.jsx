@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import classNames from 'classnames'
 
 import style from './style.module.scss'
+import bannerIMG from './../../assets/img/banner.jpg'
 import Preloader from './../../components/Preloader/Preloader'
 import Comments from '../../components/Comments/Comments'
 import { likeArticle } from '../../redux/reducers/articleReducer'
@@ -46,7 +47,8 @@ const ArticleContent = (props) => {
                         </div>
                         <div className={style.scopes}>{scopesElements}</div>
                         <p>{props.article.description}</p>
-                        <img src={props.article.banner} />
+                        {props.article.banner && <img src={URL.createObjectURL(props.article.banner)} alt={props.article.title} />}
+                        {!props.article.banner && <img src={bannerIMG} alt={props.article.title} />}
                     </div>
                     <div className={style.article_content}> 
                         <div className={style.content}>

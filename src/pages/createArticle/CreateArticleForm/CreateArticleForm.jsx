@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import style from '../style.module.scss'
 import removeSVG from './../../../assets/svg/remove.svg'
 import Preloader from '../../../components/Preloader/Preloader'
-import { saveArticleToDraft, requestArticle, updateArticleHashtags } from '../../../redux/reducers/articleReducer'
+import { saveArticleToDraft, requestArticle, updateArticleHashtags, setEditingArticleBanner } from '../../../redux/reducers/articleReducer'
 
 
 const CreateArticleForm = (props) => {
@@ -24,6 +24,8 @@ const CreateArticleForm = (props) => {
         title: Yup.string().min(1, 'Мин. длина заголовка - 1 символ').max(100, 'Макс. длина заголовка - 100 символов').required('Обязательное поле'),
         description: Yup.string().min(5, 'Мин. длина описания - 5 символов').max(2000, 'Макс. длина описания - 2000 символов').required('Обязательное поле'),
     })
+
+    const [bannerError, setBannerError] = useState() 
 
     // Хранение ошибки хештега
     const [hashtagError, setHashtagError] = useState()
@@ -64,6 +66,11 @@ const CreateArticleForm = (props) => {
 
     // Отправка формы
     const submitForm = (values) => {
+        if (!props.article.banner) {
+            setBannerError('Нужно загрузить баннер')
+            return
+        }
+        setBannerError('')
         props.requestArticle({
             ...values,
             'scopes': hashtags,
@@ -73,6 +80,11 @@ const CreateArticleForm = (props) => {
 
     // Сохранение статьи в черновик
     const saveArticleToDraft = (values) => {
+        if (!props.article.banner) {
+            setBannerError('Нужно загрузить баннер')
+            return
+        }
+        setBannerError('')
         if (values.submitBttn) {
             delete values['submitBttn']
         }
@@ -81,6 +93,14 @@ const CreateArticleForm = (props) => {
             'scopes': hashtags,
         })
         navigator('/profile')
+    }
+
+    // Загрузка баннера
+    const uploadBanner = (event) => {
+        const file = event.target.files[0]
+        if (file) {
+            props.setEditingArticleBanner(file)
+        }
     }
 
     return (
@@ -115,6 +135,20 @@ const CreateArticleForm = (props) => {
                                 <ErrorMessage name='description' component='div' className={style.error} />
                             </div>
                             <div className={style.input_block}>
+                                <p>Баннер (рекомендовано 400x200)</p>
+                                <div className={style.image_upload}>
+                                    <input
+                                        type='file'
+                                        accept='image/*'
+                                        onChange={uploadBanner}
+                                        className={style.file_input}
+                                    />
+                                    <span className={style.upload_text}>Загрузить изображение</span>
+                                </div>
+                                {props.article.banner && <img src={URL.createObjectURL(props.article.banner)} />}
+                                <div className={style.error}>{bannerError}</div>
+                            </div>
+                            <div className={style.input_block}>
                                 <p>#Хештег</p>
                                 <div className={style.input_flex}>
                                     <Field className={style.input_flexed} placeholder='Без #' value={inputValue} onChange={(e) => toggleSetInputValue(e.target.value)} name='hashtag' />
@@ -144,4 +178,4 @@ const mapStateToProps = (state) => ({
     article: state.article.editingArticle
 })
 
-export default connect(mapStateToProps, {saveArticleToDraft, requestArticle, updateArticleHashtags})(CreateArticleForm)
+export default connect(mapStateToProps, {saveArticleToDraft, requestArticle, updateArticleHashtags, setEditingArticleBanner})(CreateArticleForm)

@@ -38,7 +38,7 @@ const CreateArticleContent = (props) => {
                 props.addElementToArticle({'type': element, 'text': 'Параграф'})
                 break
             case 'img':
-                props.addElementToArticle({'type': element, 'src': uploadIMG, 'description': ''})
+                props.addElementToArticle({'type': element, 'src': '', 'description': ''})
                 break
             case 'indent':
                 props.addElementToArticle({'type': element})

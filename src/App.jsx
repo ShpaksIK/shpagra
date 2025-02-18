@@ -11,6 +11,8 @@ import CreateArticlePage from './pages/createArticle/CreateArticlePage'
 import ArticlePage from './pages/article/ArticlePage'
 import Preloader from './components/Preloader/Preloader'
 import Error from './components/Error/Error'
+import ConfidentialPage from './pages/confidential/ConfidentialPage'
+import TermsofusePage from './pages/termsofuse/TermsofusePage'
 
 
 const App = (props) => {
@@ -29,6 +31,8 @@ const App = (props) => {
           <Route path='/article-creator/r/:articleId' element={<CreateArticlePage type='redactor' />} />
           <Route path='/article-creator/m/:articleId' element={<CreateArticlePage type='moder' />} />
           <Route path='/article-creator' element={<CreateArticlePage />} />
+          <Route path='/termsofuse' element={<TermsofusePage />} exact />
+          <Route path='/confidential' element={<ConfidentialPage />} exact />
           <Route path='/' element={<MainPage />} exact />
         </Routes>
         <Error />

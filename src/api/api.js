@@ -7,7 +7,6 @@ import { randomIdGenerator } from '../utils/randomIdGenerator'
 //     withCredentials: true,
 //     baseURL: "",
 //     headers: {
-        
 //     }
 // })
 
@@ -16,6 +15,21 @@ export const authAPI = {
         return new Promise((resolve) => {
             resolve(users['1'])
         })
+    },
+    setAvatar(file, authId) {
+        return new Promise((resolve) => {
+            if (!file) {
+                users[authId]['avatar'] = ''
+                resolve({
+                    'statusCode': 2
+                })
+                return
+            }
+            users[authId]['avatar'] = file
+            resolve({
+                'statusCode': 1
+            })
+        })
     }
 }
 
@@ -23,6 +37,14 @@ export const profileAPI = {
     getProfile(id) {
         return new Promise((resolve) => {
             resolve(users[id])
+        })
+    },
+    getProfileAvatar(id) {
+        return new Promise((resolve) => {
+            resolve({
+                'statusCode': 1,
+                'avatar': users[id].avatar
+            })
         })
     },
     subscribe(id, authId) {
@@ -53,24 +75,42 @@ export const articlesAPI = {
             const outputArticles = Object.values(articles)
             .flatMap(articleArray => articleArray)
             .filter(article => article.author_id !== authId)
-            setTimeout(() => resolve(outputArticles), 0)
-            // resolve(outputArticles)
+            for (let i = 0; i <= outputArticles.length - 1; i++) {
+                outputArticles[i].author_avatar = users[outputArticles[i].author_id].avatar
+            }
+            resolve(outputArticles)
         })
     },
     getProfileArticles(profileId, authId) {
         return new Promise((resolve) => {
-            // setTimeout(() => resolve(articles[`${profileId}`]), 2000)
+            let profileArticles = articles[`${profileId}`]
+            if (!profileArticles) {
+                profileArticles = []
+            }
+            for (let i = 0; i <= profileArticles.length - 1; i++) {
+                profileArticles[i].author_avatar = users[profileArticles[i].author_id].avatar
+            }
             if (profileId === authId) {
+                const draftArticles = articles_draft[`${profileId}`]
+                if (draftArticles) {
+                    for (let i = 0; i <= draftArticles.length - 1; i++) {
+                        draftArticles[i].author_avatar = users[draftArticles[i].author_id].avatar
+                    }
+                }
+                const moderationArticles = [articles_to_moderation.find(art => art.author_id === profileId)].filter(a => a !== undefined)
+                for (let i = 0; i <= moderationArticles.length - 1; i++) {
+                    moderationArticles[i].author_avatar = users[moderationArticles[i].author_id].avatar
+                }
                 resolve({
                     'statusCode': 1,
-                    'profileArticles': articles[`${profileId}`],
-                    'draftArticles': articles_draft[`${profileId}`],
-                    'moderationArticles': [articles_to_moderation.find(art => art.author_id === profileId)].filter(a => a !== undefined)
+                    'profileArticles': profileArticles,
+                    'draftArticles': draftArticles ? draftArticles : [],
+                    'moderationArticles': moderationArticles
                 })
             } else {
                 resolve({
                     'statusCode': 1,
-                    'profileArticles': articles[`${profileId}`],
+                    'profileArticles': profileArticles
                 })
             }
         })
@@ -226,7 +266,11 @@ export const articlesAPI = {
             }
             let id = Object.values(articles_draft).reduce((accumulator, current) => accumulator + current.length, 0) + 1
             article.id = id
-            articles_draft[`${authId}`] = [article, ...articles_draft[`${authId}`]]
+            if (articles_draft[`${authId}`]) {
+                articles_draft[`${authId}`] = [article, ...articles_draft[`${authId}`]]
+            } else {
+                articles_draft[`${authId}`] = [article]
+            }
             users[`${authId}`].draft_articles.push(id)
             resolve({
                 'statusCode': 1
@@ -249,13 +293,11 @@ export const articlesAPI = {
                 })
                 return
             }
-            const id = articles_to_moderation.length    
+            const id = randomIdGenerator()
             articles_to_moderation.push({
                 ...article,
                 'id': id
             })
-            article.id = articles_to_moderation.length + 1
-            articles_to_moderation.push(article)
             users[`${article.author_id}`].moderation_articles.push(id)
             resolve({
                 'statusCode': 1
@@ -322,20 +364,39 @@ export const postsAPI = {
             const outputPosts = Object.values(posts)
             .flatMap(postArray => postArray)
             .filter(post => post.author_id !== authId)
-            setTimeout(() => resolve(outputPosts), 2000)
-            // resolve(outputPosts)
+            for (let i = 0; i <= outputPosts.length - 1; i++) {
+                outputPosts[i].author_avatar = users[outputPosts[i].author_id].avatar
+            }
+            resolve(outputPosts)
         })
     },
     getProfilePosts(profileId) {
         return new Promise((resolve) => {
-            setTimeout(() => resolve(posts[`${profileId}`]), 0)
-            // resolve(posts[`${profileId}`])
+            const profilePosts = posts[`${profileId}`]
+            if (profilePosts) {
+                for (let i = 0; i <= profilePosts.length - 1; i++) {
+                    profilePosts[i].author_avatar = users[profilePosts[i].author_id].avatar
+                }
+                resolve({
+                    'statusCode': 1,
+                    'data': profilePosts
+                })
+                return
+            }
+            resolve({
+                'statusCode': 2
+            })
         })
     },
     sendPost(post, authId) {
         return new Promise((resolve) => {
-            post.id = Object.values(posts).reduce((accumulator, current) => accumulator + current.length, 0) + 1
-            posts[`${authId}`] = [post, ...posts[authId]]
+            post.id = randomIdGenerator()
+            if (posts[`${authId}`]) {
+                posts[`${authId}`] = [post, ...posts[authId]]
+            } else {
+                posts[`${authId}`] = [post]
+            }
+            users[authId].posts_id = [...users[authId].posts_id, post.id]
             resolve({
                 'statusCode': 1
             })
@@ -381,10 +442,12 @@ export const postsAPI = {
 export const commentsAPI = {
     getComments(commentsId) {
         return new Promise((resolve) => {
-            let parsedComments = []
+            const parsedComments = []
             for (let i = 0; i <= commentsId.length - 1; i++) {
                 parsedComments.push(comments.find(c => c.id === commentsId[i]))
-
+            }
+            for (let i = 0; i <= parsedComments.length - 1; i++) {
+                parsedComments[i].author_avatar = users[parsedComments[i].author_id].avatar
             }
             resolve({
                 'statusCode': 1,

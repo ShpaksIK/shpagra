@@ -113,8 +113,8 @@ export const getMainPosts = (authId = null) => async (dispatch) => {
 
 export const getProfilePosts = (profileId) => async (dispatch) => {
     const data = await postsAPI.getProfilePosts(profileId)
-    if (data) {
-        dispatch(setProfilePostsAC(data))
+    if (data.statusCode === 1) {
+        dispatch(setProfilePostsAC(data.data))
     } else {
         dispatch(setProfilePostsAC([]))
     }

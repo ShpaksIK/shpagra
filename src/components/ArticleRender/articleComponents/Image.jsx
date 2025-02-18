@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
 import style from '../style.module.scss'
+import uploadIMG from './../../../assets/img/upload.jpg'
 import garbageSVG from './../../../assets/svg/garbage.svg'
 import addDescriptionSVG from './../../../assets/svg/add_description.svg'
 import removeDescriptionSVG from './../../../assets/svg/remove_description.svg'
@@ -12,6 +13,8 @@ import Dropdown from '../../Dropdown/Dropdown'
 const Image = (props) => {
     const [editMode, setEditMode] = useState(false)
     const [status, setStatus] = useState(props.description)
+
+    const [isOpenImage, setIsOpenImage] = useState(false)
 
     const removeElement = () => {
         props.removeElementToArticle(props.position)
@@ -38,11 +41,29 @@ const Image = (props) => {
         setStatus(e.currentTarget.value)
     }
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0]
+        if (file) {
+            props.updateElementToArticle({
+                'position': props.position,
+                'content': {
+                    'src': file
+                }
+            })
+        }
+    }
+
     return (
         <div className={style.image}>
             {props.type === 'view' && (
                 <div className={style.image_block}>
-                    <img src={props.src} alt={props.description} />
+                    {isOpenImage && (
+                        <div className={style.image_block_open}  onClick={() => setIsOpenImage(false)}>
+                            <img src={URL.createObjectURL(props.src)} alt={props.description} />
+                        </div>
+                    )}
+                    {props.src && <img src={URL.createObjectURL(props.src)} alt={props.description} onClick={() => setIsOpenImage(true)} />}
+                    {!props.src &&  <img src={uploadIMG} alt={props.description} />}
                     {props.description !== '' && (
                         <p>{props.description}</p>
                     )}
@@ -55,6 +76,17 @@ const Image = (props) => {
                             <img src={garbageSVG} alt='Удалить' />
                             <p>Удалить</p>
                         </div>
+                        <div className={style.dropdown_block}>
+                            <div className={style.image_upload}>
+                                <input
+                                    type='file'
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    className={style.file_input}
+                                />
+                                <span className={style.upload_text}>Загрузить изображение</span>
+                            </div>
+                        </div>
                         <div className={style.dropdown_block} onClick={() => updateDescription(props.description ? props.description : 'Описание к картинке')}>
                             <img src={addDescriptionSVG} alt='Добавить описание' />
                             <p>Добавить описание</p>
@@ -65,7 +97,8 @@ const Image = (props) => {
                         </div>
                     </Dropdown>
                     <div className={style.image_block}>
-                        <img src={props.src} alt={props.description} />
+                        {props.src && <img src={URL.createObjectURL(props.src)} alt={props.description} />}
+                        {!props.src &&  <img src={uploadIMG} alt={props.description} />}
                         {!editMode &&
                             props.description !== '' && <p onClick={() => setEditMode(true)}>{props.description}</p>
                         }

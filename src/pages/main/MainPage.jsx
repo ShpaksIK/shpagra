@@ -9,7 +9,6 @@ import Article from '../../components/Article/Article'
 import FilterArticles from '../../components/FilterArticles/FilterArticles'
 import FilterPosts from '../../components/FilterPosts/FilterPosts'
 import Post from '../../components/Post/Post'
-import Error from './../../components/Error/Error'
 import Preloader from '../../components/Preloader/Preloader'
 import { getMainArticles } from '../../redux/reducers/articleReducer'
 import { getMainPosts } from '../../redux/reducers/postReducer'
@@ -54,7 +53,7 @@ const MainPage = (props) => {
                 </div>
             </div>
             <div className={style.container + ' ' + style.content_title}>
-                <h3>Статьи:</h3>
+                <h3 id='articles'>Статьи:</h3>
                 <FilterArticles />
             </div>
             <div className={style.content_articles}>
@@ -62,7 +61,7 @@ const MainPage = (props) => {
             </div>
             
             <div className={style.container + ' ' + style.content_title}>
-                <h3>Посты:</h3>
+                <h3 id='posts'>Посты:</h3>
                 <FilterPosts />
             </div>
             <div className={style.content_posts}>

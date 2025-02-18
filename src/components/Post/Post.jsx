@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 
 import style from './style.module.scss'
+import avatarIMG from './../../assets/img/avatar.png'
 import likeSVG from './../../assets/svg/like.svg'
 import garbageSVG from './../../assets/svg/garbage.svg'
 import commentSVG from './../../assets/svg/comment.svg'
@@ -31,7 +32,10 @@ const Post = (props) => {
                 <ConfirmWindow onClick={() => props.removePost(props.postData.id)} onClose={() => setIsOpenConfirm(false)} />
             )}
             <div className={style.post_author}>
-                <Link to={`/profile/${props.postData.author_id}`}><img src='https://zornet.ru/_fr/19/0640572.png' /></Link>
+                <Link to={`/profile/${props.postData.author_id}`}>
+                    {props.postData.author_avatar && <img src={URL.createObjectURL(props.postData.author_avatar)} alt='Фото профиля' />}
+                    {!props.postData.author_avatar && <img src={avatarIMG} />}
+                </Link>
                 <Link className={style.linkAuthor} to={`/profile/${props.postData.author_id}`}>{props.postData.author}</Link>
             </div>
             <div className={style.post_info}>

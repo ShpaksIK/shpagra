@@ -1,6 +1,7 @@
 .article {
     max-width: 500px;
     min-width: 300px;
+    width: 100%;
     height: 100%;
     background-color: #fff;
     border-radius: 10px;
@@ -12,10 +13,16 @@
     height: 50%;
 }
 
-.picture > img {
+.picture {
     width: 100%;
-    height: 100%;
-    border-radius: 10px;
+    height: 200px;
+
+    img {
+        height: 100%;
+        max-width: 100%;
+        width: 100%;
+        border-radius: 10px;
+    }
 }
 
 .info {
@@ -36,6 +43,12 @@
     height: 50px;
     background-color: rgb(157, 196, 196);
     border-radius: 50%;
+
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
 }
 
 .articleLikes > p {
@@ -120,7 +133,7 @@
 
 @media screen and (max-width: 500px) {
     .article {
-        max-width: 0;
+        max-width: 100vw;
         width: 100%;
     }
 }
