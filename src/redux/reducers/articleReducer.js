@@ -279,11 +279,10 @@ export const getProfileArticles = (profileId) => async (dispatch, getState) => {
             dispatch(setDraftArticles(data.draftArticles))
             dispatch(setModerationArticles(data.moderationArticles))
         }
-    } else if (data.statusCode === 2) {
+    } else {
         dispatch(setProfileArticlesAC([]))
         dispatch(setDraftArticles([]))
         dispatch(setModerationArticles([]))
-    } else {
         dispatch(setError('Произошла ошибка при загрузке профиля'))
     }
 }
