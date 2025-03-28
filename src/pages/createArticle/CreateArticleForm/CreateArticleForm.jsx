@@ -80,10 +80,6 @@ const CreateArticleForm = (props) => {
 
     // Сохранение статьи в черновик
     const saveArticleToDraft = (values) => {
-        if (!props.article.banner) {
-            setBannerError('Нужно загрузить баннер')
-            return
-        }
         setBannerError('')
         if (values.submitBttn) {
             delete values['submitBttn']

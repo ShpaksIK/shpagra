@@ -113,12 +113,6 @@ main {
         transition: .2s;
         color: var(--color-blue-dark);
     }
-
-    // input {
-    //     background-color: #fff;
-    //     border: 1px solid #000;
-    //     border-radius: 5px;
-    // }
 }
 
 .info_body_block_img {
@@ -161,6 +155,7 @@ main {
     height: 35px;
     color: #fff;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 .button:hover {
