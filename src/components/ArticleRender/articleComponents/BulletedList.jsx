@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import classNames from 'classnames'
 
 import style from '../style.module.scss'
 import garbageSVG from './../../../assets/svg/garbage.svg'
 import addParagraphSVG from './../../../assets/svg/add_paragraph.svg'
-import { updateElementToArticle, removeElementToArticle } from '../../../redux/reducers/articleReducer'
+import { updateElementToArticle, removeElementToArticle, updatePositionElement } from '../../../redux/reducers/articleReducer'
 import Dropdown from '../../Dropdown/Dropdown'
+import arrowIMG from './../../../assets/img/arrow.png'
 
 
 export const BulletedListLi = (props) => {
@@ -75,6 +77,20 @@ const BulletedList = (props) => {
         })
     }
 
+    // Сдвиг элемента вверх
+    const liftUpElement = () => {
+            if (props.position > 0) {
+                props.updatePositionElement(props.position, 'up')
+            }
+        }
+    
+    // Сдвиг элемента вниз
+    const liftDownElement = () => {
+        if (props.position < props.contentElementsCount - 1) {
+            props.updatePositionElement(props.position, 'down')
+        }
+    }
+
     return (
         <div className={style.text}>
             {props.type === 'view' && (
@@ -89,6 +105,18 @@ const BulletedList = (props) => {
                             <img src={garbageSVG} alt='Удалить' />
                             <p>Удалить</p>
                         </div>
+                        {props.position > 0 && (
+                            <div className={style.dropdown_block} onClick={liftUpElement}>
+                                <img src={arrowIMG} alt='Поднять' />
+                                <p>Поднять</p>
+                            </div>
+                        )}
+                        {props.position < props.contentElementsCount - 1 && (
+                            <div className={classNames(style.dropdown_block, style.dropdown_block_arrowReverse)} onClick={liftDownElement}>
+                                <img src={arrowIMG} alt='Опустить' />
+                                <p>Опустить</p>
+                            </div>
+                        )}
                         <div className={style.dropdown_block} onClick={addElementToList}>
                             <img src={addParagraphSVG} alt='Добавить пункт' />
                             <p>Добавить пункт</p>
@@ -110,4 +138,4 @@ const BulletedList = (props) => {
     )
 }
 
-export default connect(null, {updateElementToArticle, removeElementToArticle})(BulletedList)
+export default connect(null, {updateElementToArticle, removeElementToArticle, updatePositionElement})(BulletedList)

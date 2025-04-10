@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import classNames from 'classnames'
 
 import style from '../style.module.scss'
 import garbageSVG from './../../../assets/svg/garbage.svg'
-import { updateElementToArticle, removeElementToArticle } from '../../../redux/reducers/articleReducer'
+import { updateElementToArticle, removeElementToArticle, updatePositionElement } from '../../../redux/reducers/articleReducer'
+import Dropdown from '../../Dropdown/Dropdown'
+import arrowIMG from './../../../assets/img/arrow.png'
 
 
 const Quote = (props) => {
@@ -34,6 +37,20 @@ const Quote = (props) => {
         setStatus(e.currentTarget.value)
     }
 
+    // Сдвиг элемента вверх
+    const liftUpElement = () => {
+        if (props.position > 0) {
+            props.updatePositionElement(props.position, 'up')
+        }
+        }
+        
+    // Сдвиг элемента вниз
+    const liftDownElement = () => {
+        if (props.position < props.contentElementsCount - 1) {
+            props.updatePositionElement(props.position, 'down')
+        }
+    }
+
     return (
         <div className={style.quote}>
             {props.type === 'view' && (
@@ -43,9 +60,24 @@ const Quote = (props) => {
             )}
             {props.type === 'editing' && (
                 <div className={style.editing}>
-                    <div className={style.garbage} onClick={removeElement}>
-                        <img src={garbageSVG} alt='Удалить' />
-                    </div>
+                    <Dropdown>
+                        <div className={style.dropdown_block} onClick={removeElement}>
+                            <img src={garbageSVG} alt='Удалить' />
+                            <p>Удалить</p>
+                        </div>
+                        {props.position > 0 && (
+                            <div className={style.dropdown_block} onClick={liftUpElement}>
+                                <img src={arrowIMG} alt='Поднять' />
+                                <p>Поднять</p>
+                            </div>
+                        )}
+                        {props.position < props.contentElementsCount - 1 && (
+                            <div className={classNames(style.dropdown_block, style.dropdown_block_arrowReverse)} onClick={liftDownElement}>
+                                <img src={arrowIMG} alt='Опустить' />
+                                <p>Опустить</p>
+                            </div>
+                        )}
+                    </Dropdown>
                     {!editMode &&
                         <div className={style.quote_block}>
                             <p onClick={() => setEditMode(true)}>{props.text}</p> 
@@ -62,4 +94,4 @@ const Quote = (props) => {
     )
 }
 
-export default connect(null, {updateElementToArticle, removeElementToArticle})(Quote)
+export default connect(null, {updateElementToArticle, removeElementToArticle, updatePositionElement})(Quote)

@@ -151,6 +151,12 @@
     background-color: #e5e5e5;
 }
 
+.dropdown_block_arrowReverse {
+    img {
+        transform: rotate(180deg);
+    }
+}
+
 .dropdown_block_text {
     color: gray;
     font-size: 15px;

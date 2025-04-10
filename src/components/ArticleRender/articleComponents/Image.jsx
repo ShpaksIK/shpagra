@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import classNames from 'classnames'
 
 import style from '../style.module.scss'
 import uploadIMG from './../../../assets/img/upload.jpg'
 import garbageSVG from './../../../assets/svg/garbage.svg'
 import addDescriptionSVG from './../../../assets/svg/add_description.svg'
 import removeDescriptionSVG from './../../../assets/svg/remove_description.svg'
-import { removeElementToArticle, updateElementToArticle } from '../../../redux/reducers/articleReducer'
+import { removeElementToArticle, updateElementToArticle, updatePositionElement } from '../../../redux/reducers/articleReducer'
 import Dropdown from '../../Dropdown/Dropdown'
+import arrowIMG from './../../../assets/img/arrow.png'
 
 
 const Image = (props) => {
@@ -53,6 +55,20 @@ const Image = (props) => {
         }
     }
 
+    // Сдвиг элемента вверх
+    const liftUpElement = () => {
+        if (props.position > 0) {
+            props.updatePositionElement(props.position, 'up')
+        }
+        }
+        
+    // Сдвиг элемента вниз
+    const liftDownElement = () => {
+        if (props.position < props.contentElementsCount - 1) {
+            props.updatePositionElement(props.position, 'down')
+        }
+    }
+
     return (
         <div className={style.image}>
             {props.type === 'view' && (
@@ -76,6 +92,18 @@ const Image = (props) => {
                             <img src={garbageSVG} alt='Удалить' />
                             <p>Удалить</p>
                         </div>
+                        {props.position > 0 && (
+                            <div className={style.dropdown_block} onClick={liftUpElement}>
+                                <img src={arrowIMG} alt='Поднять' />
+                                <p>Поднять</p>
+                            </div>
+                        )}
+                        {props.position < props.contentElementsCount - 1 && (
+                            <div className={classNames(style.dropdown_block, style.dropdown_block_arrowReverse)} onClick={liftDownElement}>
+                                <img src={arrowIMG} alt='Опустить' />
+                                <p>Опустить</p>
+                            </div>
+                        )}
                         <div className={style.dropdown_block}>
                             <div className={style.image_upload}>
                                 <input
@@ -112,4 +140,4 @@ const Image = (props) => {
     )
 }
 
-export default connect(null, {removeElementToArticle, updateElementToArticle})(Image)
+export default connect(null, {removeElementToArticle, updateElementToArticle, updatePositionElement})(Image)

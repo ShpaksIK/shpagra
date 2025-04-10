@@ -21,6 +21,7 @@ const REMOVE_ELEMENT_TO_ARTICLE = 'REMOVE_ELEMENT_TO_ARTICLE'
 const SET_ARTICLE_HASHTAGS = 'SET_ARTICLE_HASHTAGS'
 const SET_ARTICLE_AVATAR = 'SET_ARTICLE_AVATAR'
 const SET_EDITING_ARTICLE_BANNER = 'SET_EDITING_ARTICLE_BANNER'
+const UPDATE_POSITION_ELEMENT = 'UPDATE_POSITION_ELEMENT'
 
 let defaultState = {
     mainArticles: [],
@@ -148,6 +149,25 @@ const articleReducer = (state = defaultState, action) => {
                     content: copyContent
                 }
             }
+        case UPDATE_POSITION_ELEMENT:
+            let copyContentForUpdatePosition = [...state.editingArticle.content]
+            let temp
+            if (action.payload.direction === 'up') {
+                temp = copyContentForUpdatePosition[action.payload.fromPosition]
+                copyContentForUpdatePosition[action.payload.fromPosition] = copyContentForUpdatePosition[action.payload.fromPosition - 1]
+                copyContentForUpdatePosition[action.payload.fromPosition - 1] = temp
+            } else {
+                temp = copyContentForUpdatePosition[action.payload.fromPosition]
+                copyContentForUpdatePosition[action.payload.fromPosition] = copyContentForUpdatePosition[action.payload.fromPosition + 1]
+                copyContentForUpdatePosition[action.payload.fromPosition + 1] = temp
+            }
+            return {
+                ...state,
+                editingArticle: {
+                    ...state.editingArticle,
+                    content: copyContentForUpdatePosition
+                }
+            }
         case SET_ARTICLE_HASHTAGS:
             return {
                 ...state,
@@ -180,7 +200,6 @@ const articleReducer = (state = defaultState, action) => {
             return state
     }
 }
-
 
 // ======== Action creators (AC) ========
 const setMainArticlesAC = (data) => ({
@@ -216,6 +235,11 @@ export const setCommentsProfileArticleAC = (comments, articleId) => ({
 export const setCommentsViewArticleAC = (comments) => ({
     type: SET_COMMENTS_FULL_ARTICLE,
     payload: comments
+})
+
+export const updatePositionElementAC = (fromPosition, direction) => ({
+    type: UPDATE_POSITION_ELEMENT,
+    payload: {fromPosition, direction}
 })
 
 const addElementToArticleAC = (element) => ({
@@ -494,6 +518,10 @@ export const setArticleAvatar = (articleId, file) => async (dispatch) => {
 
 export const setEditingArticleBanner = (file) => async (dispatch) => {
     dispatch(setEditingArticleBannerAC(file))
+}
+
+export const updatePositionElement = (fromPosition, direction) => async (dispatch) => {
+    dispatch(updatePositionElementAC(fromPosition, direction))
 }
 
 
