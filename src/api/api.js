@@ -3,12 +3,11 @@ import { users, articles, posts, comments, articles_content, articles_to_moderat
 import { randomIdGenerator } from '../utils/randomIdGenerator'
 
 
-// const instance = axios.create({
-//     withCredentials: true,
-//     baseURL: "",
-//     headers: {
-//     }
-// })
+const instance = axios.create({
+    withCredentials: true,
+    baseURL: "http://localhost:5000",
+    headers: {}
+})
 
 export const authAPI = {
     me() {
@@ -71,49 +70,10 @@ export const profileAPI = {
 
 export const articlesAPI = {
     getMainArticles(authId) {
-        return new Promise((resolve) => {
-            const outputArticles = Object.values(articles)
-            .flatMap(articleArray => articleArray)
-            .filter(article => article.author_id !== authId)
-            for (let i = 0; i <= outputArticles.length - 1; i++) {
-                outputArticles[i].author_avatar = users[outputArticles[i].author_id].avatar
-            }
-            resolve(outputArticles)
-        })
+        return instance.get('/')
     },
     getProfileArticles(profileId, authId) {
-        return new Promise((resolve) => {
-            let profileArticles = articles[`${profileId}`]
-            if (!profileArticles) {
-                profileArticles = []
-            }
-            for (let i = 0; i <= profileArticles.length - 1; i++) {
-                profileArticles[i].author_avatar = users[profileArticles[i].author_id].avatar
-            }
-            if (profileId === authId) {
-                const draftArticles = articles_draft[`${profileId}`]
-                if (draftArticles) {
-                    for (let i = 0; i <= draftArticles.length - 1; i++) {
-                        draftArticles[i].author_avatar = users[draftArticles[i].author_id].avatar
-                    }
-                }
-                const moderationArticles = [articles_to_moderation.find(art => art.author_id === profileId)].filter(a => a !== undefined)
-                for (let i = 0; i <= moderationArticles.length - 1; i++) {
-                    moderationArticles[i].author_avatar = users[moderationArticles[i].author_id].avatar
-                }
-                resolve({
-                    'statusCode': 1,
-                    'profileArticles': profileArticles,
-                    'draftArticles': draftArticles ? draftArticles : [],
-                    'moderationArticles': moderationArticles
-                })
-            } else {
-                resolve({
-                    'statusCode': 1,
-                    'profileArticles': profileArticles
-                })
-            }
-        })
+        return instance.get(`/profile/${profileId}`)
     },
     likeArticle(profileId, articleId, authId) {
         return new Promise((resolve) => {

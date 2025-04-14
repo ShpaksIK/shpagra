@@ -267,17 +267,17 @@ const setEditingArticleBannerAC = (file) => ({
 export const getMainArticles = (authId = null) => async (dispatch) => {
     // Получить статьи главной ленты
     const data = await articlesAPI.getMainArticles(authId)
-    dispatch(setMainArticlesAC(data))
+    dispatch(setMainArticlesAC(data.data.articles))
 }
 
 export const getProfileArticles = (profileId) => async (dispatch, getState) => {
     // Получить статьи профиля (profileId берется из URL адреса)
     const data = await articlesAPI.getProfileArticles(profileId, getState().auth.id)
-    if (data.statusCode === 1) {
-        dispatch(setProfileArticlesAC(data.profileArticles))
+    if (data.status === 200) {
+        dispatch(setProfileArticlesAC(data.data.profileArticles))
         if (profileId === getState().auth.id) {
-            dispatch(setDraftArticles(data.draftArticles))
-            dispatch(setModerationArticles(data.moderationArticles))
+            dispatch(setDraftArticles(data.data.draftArticles))
+            dispatch(setModerationArticles(data.data.moderationArticles))
         }
     } else {
         dispatch(setProfileArticlesAC([]))
