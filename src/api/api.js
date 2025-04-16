@@ -76,22 +76,8 @@ export const articlesAPI = {
         return instance.get(`/profile/${profileId}`)
     },
     likeArticle(profileId, articleId, authId) {
-        return new Promise((resolve) => {
-            for (let i = 0; i <= articles[`${profileId}`].length; i++) {
-                if (articles[`${profileId}`][i].id == articleId) {
-                    if (articles[`${profileId}`][i].likes_id.filter(id => id === authId).length === 1) {
-                        articles[`${profileId}`][i].likes_count -= 1
-                        articles[`${profileId}`][i].likes_id = articles[`${profileId}`][i].likes_id.filter(id => id !== authId)
-                        break
-                    }
-                    articles[`${profileId}`][i].likes_count += 1
-                    articles[`${profileId}`][i].likes_id = [authId, ...articles[`${profileId}`][i].likes_id]
-                    break
-                }
-            }
-            resolve({
-                'statusCode': 1
-            })
+        return instance.post(`/article/like`, {
+            profileId, articleId, authId
         })
     },
     getFullArticle(articleId) {
