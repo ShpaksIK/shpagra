@@ -2,7 +2,7 @@ export let users = {
     '1': {
         'id': 1,
         'custom_id': '1',
-        'login': 'Shpaks',
+        'login': 'Maksim',
         'password': '123456',
         'email': 'test@mail.ru',
         'created_at': '01.01.2025',
@@ -34,9 +34,9 @@ export let users = {
     '3': {
         'id': 3,
         'custom_id': '3',
-        'login': 'Ifnuh',
+        'login': 'Test',
         'password': '123456',
-        'email': 'ifnuh@mail.ru',
+        'email': 'Test2@mail.ru',
         'created_at': '24.02.2022',
         'avatar': '',
         'articles_id': [],
@@ -50,9 +50,9 @@ export let users = {
     '4': {
         'id': 4,
         'custom_id': '4',
-        'login': 'Boss KFS',
+        'login': 'Test3',
         'password': '123456',
-        'email': 'boss@gmail.ru',
+        'email': 'Test3@gmail.ru',
         'created_at': '01.01.2025',
         'avatar': '',
         'articles_id': [],
@@ -66,9 +66,9 @@ export let users = {
     '5': {
         'id': 5,
         'custom_id': '5',
-        'login': 'Sigma boy',
+        'login': 'Test4',
         'password': '123456',
-        'email': 'yashalava@xui.ru',
+        'email': 'Test4@test.ru',
         'created_at': '01.01.2007',
         'avatar': '',
         'articles_id': [],
@@ -90,7 +90,7 @@ export let posts = {
         'likes_id': [],
         'comments_id': [],
         'comments_count': 0,
-        'author': 'Shpaks',
+        'author': 'Maksim',
         'author_id': 1
     }],
     '3': [{
@@ -101,7 +101,7 @@ export let posts = {
         'likes_id': [5],
         'comments_id': [],
         'comments_count': 0,
-        'author': 'Ifnuh',
+        'author': 'Test',
         'author_id': 3
     },
     {
@@ -112,7 +112,7 @@ export let posts = {
         'likes_id': [],
         'comments_id': [],
         'comments_count': 0,
-        'author': 'Ifnuh',
+        'author': 'Test',
         'author_id': 3
     },],
 }
@@ -143,7 +143,7 @@ export let articles_to_moderation = [
             },
         ],
         'scopes': ['#рек'],
-        'author': 'Shpaks',
+        'author': 'Maksim',
         'author_id': 1,
         'is_update': false
     }
@@ -178,7 +178,7 @@ export let articles_draft = {
                 },
             ],
             'scopes': ['#первый', '#рек'],
-            'author': 'Shpaks',
+            'author': 'Maksim',
             'author_id': 1
         }
     ]
@@ -190,8 +190,8 @@ export let articles_draft = {
 export let articles = {
     '2': [{
         'id': 2,
-        'title': 'Как пукнуть так, чтобы было тихо?',
-        'description': 'В этой статье вы узнаете как пукнуть тихо, чтобы вас никто не заметил и не наругал за ваши грешки)',
+        'title': 'Тестовая статья',
+        'description': 'В этой статье я продемонстрировал возможности редактора статей.',
         'banner': '',
         'created_at': '09.01.2025 в 23:52',
         'likes_count': 2,
@@ -204,8 +204,8 @@ export let articles = {
     },
     {
         'id': 3,
-        'title': 'Как пукнуть так, чтобы было тихо? ЧАСТЬ 2',
-        'description': 'В этой статье вы узнаете как пукнуть тихо, чтобы вас никто не заметил и не наругал за ваши грешки)',
+        'title': 'Тестовая статья 2',
+        'description': 'В этой статье я продемонстрировал возможности редактора статей.',
         'banner': '',
         'created_at': '09.01.2025 в 23:52',
         'likes_count': 0,
@@ -227,7 +227,7 @@ export let articles = {
         'comments_id': [373568756],
         'comments_count': 1,
         'scopes': ['#моя', '#статья'],
-        'author': 'Shpaks',
+        'author': 'Maksim',
         'author_id': 1
     }],
 }
@@ -309,11 +309,11 @@ export let articles_content = {
         'content': [
             {
                 'type': 'title',
-                'text': 'ЧАСТЬ 2. Как это сделать?'
+                'text': 'ЧАСТЬ 2.'
             },
             {
                 'type': 'text',
-                'text': 'Берем и делаем!'
+                'text': 'Текст!'
             },
             {
                 'type': 'title',
@@ -329,7 +329,7 @@ export let articles_content = {
             },
             {
                 'type': 'title',
-                'text': 'Збазибо за внимание'
+                'text': 'Спасибо за внимание'
             },
         ]
     },
@@ -347,29 +347,29 @@ export let comments = [
         'dislike_count': 0,
         'dislike_id': [],
         'created_at': '09.01.2025 в 23:53',
-        'author': 'Ifnuh',
+        'author': 'Test',
         'author_id': 3
     },
     {
         'id': 632657,
-        'text': 'Я ифнух',
+        'text': 'Тестовый комментарий',
         'likes_count': 0,
         'likes_id': [],
         'dislike_count': 1,
         'dislike_id': [1],
         'created_at': '09.01.2025 в 23:53',
-        'author': 'Ifnuh',
+        'author': 'Test',
         'author_id': 3
     },
     {
         'id': 373568756,
-        'text': 'Я ифнух 2',
+        'text': 'Я человек',
         'likes_count': 0,
         'likes_id': [],
         'dislike_count': 1,
         'dislike_id': [1],
         'created_at': '09.01.2025 в 23:53',
-        'author': 'Ifnuh',
+        'author': 'Test',
         'author_id': 3
     },
 ]

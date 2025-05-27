@@ -17,7 +17,7 @@ const Header = (props) => {
                         <Link className={style.link} to='/'>Главная</Link>
                         <Link className={style.link} to='/#articles'>Рекомендации</Link>
                     </div>
-                    <h1>Shpagra</h1>
+                    <h1>Сеть</h1>
                     <div className={style.right}>
                     {props.isAuth && (
                         <Link className={style.link} to='/profile'>Профиль</Link>
